@@ -1,6 +1,5 @@
 export default {
   extends: ['@commitlint/config-conventional'],
-
   rules: {
     /**
      * type(scope): <subject>
