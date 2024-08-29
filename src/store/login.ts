@@ -10,6 +10,7 @@ export const useLoginStore = defineStore('login', () => {
   const qrIsExpired = ref(false) // 二维码是否过期
   let timer: NodeJS.Timeout | null = null // 轮询检查二维码状态的定时器
 
+  // 获取二维码及二维码登录逻辑
   async function getQRCode() {
     qrIsExpired.value = false // 重置二维码过期状态
     try {
@@ -35,7 +36,7 @@ export const useLoginStore = defineStore('login', () => {
           console.log('授权登录成功')
           clearInterval(timer!)
           const { cookie } = statusRes // 拿到 cookie
-          await loginApi.getLoginStatus(cookie)
+          await getLoginStatus(cookie) // 获取登录状态
           loginLocalStorage.setCookie(cookie) // 持久化存储 cookie
         } else if (code === 800) {
           console.log('二维码已过期')
@@ -50,9 +51,21 @@ export const useLoginStore = defineStore('login', () => {
     }
   }
 
-  async function getLoginStatus() {
-    const cookie = loginLocalStorage.getCookie() ?? ''
-    await loginApi.getLoginStatus(cookie)
+  // 获取登录状态
+  async function getLoginStatus(cookie?: string) {
+    try {
+      cookie = cookie || (loginLocalStorage.getCookie() ?? '')
+      const {
+        data: { account, profile },
+      } = await loginApi.getLoginStatus(cookie)
+
+      loginLocalStorage.setUser({
+        account,
+        profile,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return {
