@@ -1,5 +1,5 @@
 <template>
-  <cloud-button type="play">播放全部</cloud-button>
+  <cloud-button type="play" v-model="isPlay"></cloud-button>
   <div class="logo">
     <ra-icon size="10rem">
       <Search />
@@ -10,6 +10,9 @@
 <script setup lang="ts">
 import { RaIcon } from '@capybara-plus/vue'
 import { Search } from './icons'
+import { ref } from 'vue'
+
+const isPlay = ref(false)
 </script>
 
 <style scoped>
