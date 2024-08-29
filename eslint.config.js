@@ -18,6 +18,7 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // 允许显性的any类型
+      'vue/multi-word-component-names': 'off', // 允许单个单词的组件名
     },
   },
   {

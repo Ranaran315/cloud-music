@@ -2,14 +2,14 @@
   <cloud-button type="primary">播放全部</cloud-button>
   <div class="logo">
     <ra-icon size="10rem">
-      <LogoWithName />
+      <Search />
     </ra-icon>
   </div>
 </template>
 
 <script setup lang="ts">
 import { RaIcon } from '@capybara-plus/vue'
-import { LogoWithName } from './icons'
+import { Search } from './icons'
 </script>
 
 <style scoped>

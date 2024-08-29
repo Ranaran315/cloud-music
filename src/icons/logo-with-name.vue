@@ -34,9 +34,3 @@
     ></path>
   </svg>
 </template>
-
-<script setup lang="ts">
-defineOptions({
-  name: 'LogoWithName',
-})
-</script>
