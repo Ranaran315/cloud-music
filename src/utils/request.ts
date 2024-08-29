@@ -4,9 +4,22 @@ const server = axios.create({
   baseURL: import.meta.env.VITE_APP_URL,
 })
 
+const isCache = false
+
 // 请求拦截器
 server.interceptors.request.use(
   (config) => {
+    console.log('request', config)
+
+    // 是否缓存
+    if (!isCache) {
+      config.params = {
+        ...config.params,
+        timestamp: new Date(),
+      }
+    }
+
+    // 添加请求头
     config.headers['withCredentials'] = true
     return config
   },
@@ -17,15 +30,8 @@ server.interceptors.request.use(
 
 server.interceptors.response.use(
   (res) => {
-    const {
-      data: { code, data },
-    } = res
     console.log('response', res)
-    if (code == 200) {
-      return Promise.resolve(data)
-    } else {
-      return Promise.reject({ code, data })
-    }
+    return res.data
   },
   (err) => {
     return Promise.reject(err)

@@ -6,23 +6,21 @@
     <li>2</li>
   </ul>
   <button @click="handleClick">点击</button>
+  <button @click="handleClick2">检查登录状态</button>
   <img :src="qrImg" alt="" />
 </template>
 
 <script setup lang="ts">
-import loginApi from '@/api/login'
-import { ref } from 'vue'
+import { useLoginStore } from '@/store'
+import { computed } from 'vue'
 
-const qrImg = ref('')
-
+const loginStore = useLoginStore()
+const qrImg = computed(() => loginStore.qrImg)
 const handleClick = async () => {
-  try {
-    const { unikey } = (await loginApi.getKey()) as any
-    const { qrimg } = (await loginApi.getQR(unikey, true)) as any
-    qrImg.value = qrimg
-  } catch (error) {
-    console.log(error)
-  }
+  loginStore.getQRCode()
+}
+const handleClick2 = async () => {
+  loginStore.getLoginStatus()
 }
 </script>
 
