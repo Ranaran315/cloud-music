@@ -1,0 +1,101 @@
+@use './config.scss' as config;
+@forward './config.scss' as config-*;
+
+$block: '' !default;
+
+@function generateBem($blockSuffix, $element, $modifier) {
+  $name: #{config.$namespace} + #{config.$common-sperator} + #{$block};
+  @if $blockSuffix != '' {
+    $name: #{$name} + #{config.$common-sperator} + #{$blockSuffix};
+  }
+  @if $element != '' {
+    $name: #{$name} + #{config.$element-sperator} + $element;
+  }
+  @if $modifier != '' {
+    $name: #{$name} + #{config.$modifier-sperator} + $modifier;
+  }
+  @return '.' + #{$name};
+}
+
+@function b($blockSuffix: '') {
+  @return generateBem($blockSuffix, '', '');
+}
+
+@function e($element) {
+  @return generateBem('', $element, '');
+}
+
+@function m($modifier) {
+  @return generateBem('', '', $modifier);
+}
+
+@function be($blockSuffix, $element) {
+  @return generateBem($blockSuffix, $element, '');
+}
+
+@function em($element, $modifier) {
+  @return generateBem('', $element, $modifier);
+}
+
+@function bm($blockSuffix, $modifier) {
+  @return generateBem($blockSuffix, '', $modifier);
+}
+
+@function bem($blockSuffix, $element, $modifier) {
+  @return generateBem($blockSuffix, $element, $modifier);
+}
+
+@mixin b($blockSuffix: '') {
+  $name: b($blockSuffix);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin e($element) {
+  $name: e($element);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin m($modifier) {
+  $name: m($modifier);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin be($blockSuffix, $element) {
+  $name: be($blockSuffix, $element);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin em($element, $modifier) {
+  $name: em($element, $modifier);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin bm($blockSuffix, $modifier) {
+  $name: bm($blockSuffix, $modifier);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin bem($blockSuffix, $element, $modifier) {
+  $name: bem($blockSuffix, $element, $modifier);
+  #{$name} {
+    @content;
+  }
+}
+
+@mixin is($state, $parent: b()) {
+  #{$parent}.is-#{$state + ''} {
+    @content;
+  }
+}

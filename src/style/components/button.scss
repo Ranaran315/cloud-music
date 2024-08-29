@@ -1,0 +1,22 @@
+@use '../var' as *;
+@use '../bem' as * with (
+  $block: 'button'
+);
+
+@mixin button($bc, $color: getTextColor()) {
+  background-color: $bc;
+  color: $color;
+  &:hover:not(:disabled) {
+    background-color: rgba($color: $bc, $alpha: 0.85);
+  }
+}
+@include b() {
+  @include button(getColor());
+  &:active:not(:disabled) {
+    transform: scale(1);
+  }
+}
+
+@include m('primary') {
+  @include button(getColor('primary'), getFillColor());
+}

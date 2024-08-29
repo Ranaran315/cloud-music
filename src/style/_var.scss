@@ -1,5 +1,10 @@
+@use 'sass:map';
+
 $color: (
-  'primary': #fc3d49,
+  'theme': (
+    'default': #e4e8ec,
+    'primary': #fc3d49,
+  ),
   'fill': (
     'primary': #f7f9fc,
     'secondary': #f0f3f6,
@@ -10,3 +15,15 @@ $color: (
     'third': #50576a,
   ),
 );
+
+@function getColor($type: 'default') {
+  @return map.get($color, 'theme', $type);
+}
+
+@function getFillColor($type: 'primary') {
+  @return map.get($color, 'fill', $type);
+}
+
+@function getTextColor($type: 'primary') {
+  @return map.get($color, 'text', $type);
+}
