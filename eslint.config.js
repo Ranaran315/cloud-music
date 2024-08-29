@@ -15,11 +15,11 @@ export default [
     files: ['**/*.vue'],
     languageOptions: { parserOptions: { parser: tseslint.parser } },
   },
-  // {
-  //   rules: {
-  //     '@typescript-eslint/no-explicit-any': 'off', // 允许显性的any类型
-  //   },
-  // },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off', // 允许显性的any类型
+    },
+  },
   {
     ignores: [
       'node_modules',

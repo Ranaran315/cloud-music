@@ -17,6 +17,7 @@ export default {
         'revert', // 还原以前的提交
         'merge', // 分支代码合并
         'chore', // 构建过程或辅助工具的变动
+        'api', // 接口
       ],
     ],
     'scope-enum': [
