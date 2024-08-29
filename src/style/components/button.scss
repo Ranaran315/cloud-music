@@ -15,8 +15,15 @@
   &:active:not(:disabled) {
     transform: scale(1);
   }
+  .ra-icon {
+    margin-left: 0;
+  }
 }
 
 @include m('primary') {
+  @include button(getColor('primary'), getFillColor());
+}
+
+@include m('play') {
   @include button(getColor('primary'), getFillColor());
 }

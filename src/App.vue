@@ -1,5 +1,5 @@
 <template>
-  <cloud-button type="primary">播放全部</cloud-button>
+  <cloud-button type="play">播放全部</cloud-button>
   <div class="logo">
     <ra-icon size="10rem">
       <Search />

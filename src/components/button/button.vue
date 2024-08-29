@@ -1,12 +1,19 @@
 <template>
-  <ra-button :class="[ucn.b(), ucn.m(type)]">
+  <ra-button :class="[ucn.b(), ucn.m(type)]" shape="round">
+    <template v-if="type == 'play'">
+      <ra-icon>
+        <Play />
+      </ra-icon>
+    </template>
     <slot></slot>
   </ra-button>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { RaButton } from '@capybara-plus/vue'
+import { RaIcon, RaButton } from '@capybara-plus/vue'
+import { Play } from '@/icons'
+import { definePropType } from '@/utils/props'
 
 const ucn = useClassName('button')
 
@@ -14,11 +21,14 @@ defineOptions({
   name: 'CloudButton',
 })
 
+interface CloudButtonConsts {
+  type: 'default' | 'primary' | 'play'
+}
+
 defineProps({
   type: {
-    type: String,
+    type: definePropType<CloudButtonConsts['type']>(String),
     default: 'default',
-    validate: (value: string) => ['primary', 'default'].includes(value),
   },
 })
 </script>
