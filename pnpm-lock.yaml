@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@capybara-plus/vue':
-    specifier: ^0.0.1
-    version: 0.0.1
+    specifier: ^0.0.2
+    version: 0.0.2
   axios:
     specifier: ^1.7.5
     version: 1.7.5
@@ -124,8 +124,8 @@ packages:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  /@capybara-plus/vue@0.0.1:
-    resolution: {integrity: sha512-oRzU9lgBTAv9MyCCZRF5/5jmhjuIkmCP5WcL1/TDpGm7dnt5hg0zIni2ZLsJEdr4f52nsAj5DmWGuxv689qNhw==}
+  /@capybara-plus/vue@0.0.2:
+    resolution: {integrity: sha512-2EYXLxZPhjfLmp+HK8WkD0cg3jQRqpmycwzYdQVqHyQEvV6RhWUchrr8bKEfrUTAC81XWJS/A08Hw5fC5FxgHw==}
     dev: false
 
   /@commitlint/cli@19.4.1(@types/node@22.5.1)(typescript@5.5.4):

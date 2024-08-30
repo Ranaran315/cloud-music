@@ -39,9 +39,13 @@ server.interceptors.response.use(
 )
 
 const useRequest = (baseURL: string) => {
-  return ({ url, ...config }: AxiosRequestConfig<any>) => {
+  return ({
+    url,
+    resetUrl,
+    ...config
+  }: AxiosRequestConfig<any> & { resetUrl?: string }) => {
     return server({
-      url: `${baseURL}/${url}`,
+      url: `${resetUrl || baseURL + '/' + url}`,
       ...config,
     })
   }

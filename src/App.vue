@@ -5,15 +5,25 @@
       <Search />
     </ra-icon>
   </div>
-  <cloud-search></cloud-search>
+  <cloud-search v-model="keywords" @keydown.enter="search"></cloud-search>
 </template>
 
 <script setup lang="ts">
 import { RaIcon } from '@capybara-plus/vue'
 import { Search } from './icons'
 import { ref } from 'vue'
+import searchApi from '@/api/search'
 
 const isPlay = ref(false)
+
+const keywords = ref('')
+
+const search = async () => {
+  const res = await searchApi.search({
+    keywords: keywords.value,
+  })
+  console.log(res)
+}
 </script>
 
 <style scoped>
