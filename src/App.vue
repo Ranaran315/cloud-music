@@ -5,6 +5,7 @@
       <Search />
     </ra-icon>
   </div>
+  <cloud-search></cloud-search>
 </template>
 
 <script setup lang="ts">

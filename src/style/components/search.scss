@@ -1,0 +1,44 @@
+@use '../bem' as * with (
+  $block: 'search'
+);
+
+@use '../var' as *;
+
+$size: 50px;
+@mixin active {
+  width: 300px;
+  border-radius: $size;
+  padding-right: 10px;
+}
+
+@include b() {
+  display: flex;
+  align-items: center;
+
+  .ra-input {
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    padding: 0;
+    transition: width 0.3s, border-radius 0.3s;
+    outline-color: getColor('primary');
+    caret-color: getColor('primary');
+    &:focus-within {
+      @include active();
+    }
+    &:hover {
+      @include active();
+    }
+    .ra-button {
+      max-width: $size;
+      width: $size;
+      height: $size;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      background-color: getColor('primary');
+      &:active:not(:disabled) {
+        transform: scale(1);
+      }
+    }
+  }
+}

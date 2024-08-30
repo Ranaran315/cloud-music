@@ -6,14 +6,17 @@
 @mixin button($bc, $color: getTextColor()) {
   background-color: $bc;
   color: $color;
+
   &:hover:not(:disabled) {
     background-color: rgba($color: $bc, $alpha: 0.85);
   }
 }
 @include b() {
+  box-shadow: 0 4px 0px 0px getTextColor();
   @include button(getColor());
   &:active:not(:disabled) {
-    transform: scale(1);
+    transform: scale(1) translateY(4px);
+    box-shadow: none;
   }
 }
 
