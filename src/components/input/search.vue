@@ -1,18 +1,20 @@
 <template>
   <div ref="searchRef" :class="ucn.b()" @mouseover="handleMouseover">
-    <ra-tooltip
-      trigger="click"
-      :trigger-el="searchRef"
+    <n-popover
+      trigger="manual"
+      :show="showPopover"
+      raw
+      :scrollable="false"
       :show-arrow="false"
-      transition="expand"
     >
-      <template #default>
+      <template #trigger>
         <ra-input
           :placeholder="placeholder"
           v-model="modelValue"
           ref="RaInputRef"
           clearable
           @focus="handleFocus"
+          @blur="handleBlur"
           @keydown.tab="handleKeydownTab"
           @input="handleChange"
         >
@@ -23,7 +25,7 @@
           </template>
         </ra-input>
       </template>
-      <template #content>
+      <div :class="ucn.e('popover')">
         <ul :class="ucn.e('search-list')">
           <template v-if="showHotlist">
             <div class="title">推荐热搜</div>
@@ -47,13 +49,14 @@
             </li>
           </template>
         </ul>
-      </template>
-    </ra-tooltip>
+      </div>
+    </n-popover>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RaButton, RaIcon, RaInput, RaTooltip } from '@capybara-plus/vue'
+import { RaButton, RaIcon, RaInput } from '@capybara-plus/vue'
+import { NPopover } from 'naive-ui'
 import { Search } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -71,6 +74,13 @@ const searchRef = ref(null)
 const RaInputRef = ref<typeof RaInput | null>(null)
 const handleMouseover = () => {
   RaInputRef.value?.focus()
+  showPopover.value = true
+}
+
+const showPopover = ref(false)
+
+const handleBlur = () => {
+  showPopover.value = false
 }
 
 // 获取默认搜索
@@ -95,6 +105,7 @@ const handleKeydownTab = (e: KeyboardEvent) => {
 const hotlist = ref<any>([])
 let throllte = 0 // 节流
 const handleFocus = async () => {
+  if (!showHotlist.value) return
   try {
     if (parseInt(Date.now().toString()) - throllte < 1000 * 60 * 2) return
     const res = await searchApi.hotDetail()
