@@ -54,6 +54,7 @@
                 :class="ucn.e('search-item')"
                 v-for="(item, index) of searchlist[order]"
                 :key="index"
+                @click="doSearch(item.id)"
               >
                 <div class="word">{{ item.name }}</div>
               </div>
@@ -71,7 +72,7 @@ import { NPopover } from 'naive-ui'
 import { Album, Artist, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
-import searchApi from '@/api/search'
+import { searchApi, songApi } from '@/api'
 
 const ucn = useClassName('search')
 
@@ -201,6 +202,11 @@ watch(
     }
   }
 )
+
+const doSearch = async (id: number) => {
+  const res = await songApi.getSongUrl(id.toString())
+  console.log('getSongUrl', res)
+}
 </script>
 
 <style scoped src="@/style/components/search.scss"></style>

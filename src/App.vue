@@ -1,27 +1,27 @@
 <template>
-  <cloud-button type="play" v-model="isPlay"></cloud-button>
+  <cloud-button
+    @click="handleClick"
+    type="play"
+    v-model="isPlay"
+  ></cloud-button>
   <div class="logo">
     <ra-icon size="10rem">
       <Search />
     </ra-icon>
   </div>
-  <cloud-search v-model="keywords" @keydown.enter="search"></cloud-search>
+  <cloud-search></cloud-search>
 </template>
 
 <script setup lang="ts">
 import { RaIcon } from '@capybara-plus/vue'
 import { Search } from './icons'
 import { ref } from 'vue'
-import searchApi from '@/api/search'
+import bannerApi from '@/api/banner'
 
 const isPlay = ref(false)
 
-const keywords = ref('')
-
-const search = async () => {
-  const res = await searchApi.search({
-    keywords: keywords.value,
-  })
+const handleClick = async () => {
+  const res = await bannerApi.getIcon()
   console.log(res)
 }
 </script>
