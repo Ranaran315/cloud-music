@@ -17,6 +17,14 @@ $size: 50px;
   align-items: center;
   width: fit-content;
 
+  @include e('trigger') {
+    width: 0;
+    position: relative;
+    &:hover {
+      width: $width;
+    }
+  }
+
   .ra-input {
     width: $size;
     height: $size;
@@ -54,13 +62,22 @@ $size: 50px;
     padding: 10px 0;
     margin: 0;
     overflow: auto;
-    .title {
+    @include e('title') {
       width: 100%;
       text-align: left;
       padding: 5px 20px;
       font-weight: 700;
       font-size: 1.2rem;
       box-sizing: border-box;
+    }
+    @include e('subtitle') {
+      width: 100%;
+      text-align: left;
+      padding: 5px 20px;
+      box-sizing: border-box;
+      font-weight: 700;
+      color: getTextColor('third');
+      background-color: getFillColor('third');
     }
     @include e('search-item') {
       width: 100%;
