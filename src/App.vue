@@ -5,8 +5,8 @@
     v-model="isPlay"
   ></cloud-button>
   <div class="logo">
-    <ra-icon size="10rem">
-      <Search />
+    <ra-icon size="2rem">
+      <Message />
     </ra-icon>
   </div>
   <cloud-navbar></cloud-navbar>
@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { RaIcon } from '@capybara-plus/vue'
-import { Search } from './icons'
+import { Message } from './icons'
 import { ref } from 'vue'
 import bannerApi from '@/api/banner'
 

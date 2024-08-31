@@ -79,7 +79,7 @@ import { searchApi, songApi } from '@/api'
 const ucn = useClassName('search')
 
 defineOptions({
-  name: 'cloud-search',
+  name: 'CloudSearch',
 })
 
 const modelValue = ref('')
@@ -211,4 +211,4 @@ const doSearch = async (id: number) => {
 }
 </script>
 
-<style scoped src="@/style/components/search.scss"></style>
+<style scoped src="@/style/components/navbar/search.scss"></style>

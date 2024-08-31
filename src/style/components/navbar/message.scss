@@ -1,0 +1,9 @@
+@use '../../bem' as * with (
+  $block: 'message'
+);
+
+@use '../../navbar' as navbar;
+
+@include b() {
+  @include navbar.button();
+}

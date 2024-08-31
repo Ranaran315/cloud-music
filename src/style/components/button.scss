@@ -13,6 +13,7 @@
 }
 @include b() {
   box-shadow: 0 4px 0px 0px getTextColor();
+  transition: transform 0.3s, box-shadow 0.3s;
   @include button(getColor());
   &:active:not(:disabled) {
     transform: scale(1) translateY(4px);
@@ -24,6 +25,6 @@
   @include button(getColor('primary'), getFillColor());
 }
 
-@include m('play') {
-  @include button(getColor('primary'), getFillColor());
+.ra-button--circle {
+  border-radius: 50% !important;
 }

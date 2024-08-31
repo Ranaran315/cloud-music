@@ -1,7 +1,7 @@
-@use '../bem' as * with (
+@use '../../bem' as * with (
   $block: 'navbar'
 );
-@use '../var' as *;
+@use '../../var' as *;
 
 @include b() {
   position: relative;
@@ -21,5 +21,15 @@
     align-items: center;
     font-size: 12rem;
     margin-right: 30px;
+  }
+  @include e('menu') {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    @include e('menu-item') {
+      .ra-button {
+        font-size: 1.5rem !important;
+      }
+    }
   }
 }
