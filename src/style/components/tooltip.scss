@@ -1,0 +1,15 @@
+@use '../bem' as * with (
+  $block: 'tooltip'
+);
+@use '../var' as *;
+
+@include b() {
+  background-color: getFillColor();
+  color: getTextColor();
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+@include e('arrow') {
+  background-color: getFillColor() !important;
+}

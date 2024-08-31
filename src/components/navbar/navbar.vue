@@ -6,7 +6,9 @@
       </ra-icon>
     </div>
     <div :class="ucn.e('menu')">
-      <Search />
+      <cloud-tooltip content="搜索">
+        <Search />
+      </cloud-tooltip>
     </div>
   </div>
 </template>
@@ -14,6 +16,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
+import { CloudTooltip } from '../tooltip'
 import { LogoWithName } from '@/icons'
 import Search from './search.vue'
 

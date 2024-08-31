@@ -7,6 +7,7 @@
       :scrollable="false"
       :show-arrow="false"
       placement="bottom"
+      to="#app"
     >
       <template #trigger>
         <div :class="ucn.e('trigger')">
