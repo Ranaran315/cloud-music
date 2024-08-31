@@ -1,5 +1,10 @@
 <template>
-  <ra-button :class="[ucn.b(), ucn.m(type)]" :shape="shape" :size="size">
+  <ra-button
+    :class="[ucn.b(), ucn.m(type)]"
+    :shape="shape"
+    :size="size"
+    :loading="loading"
+  >
     <slot></slot>
   </ra-button>
 </template>
@@ -25,6 +30,7 @@ defineProps({
   },
   shape: definePropType<ButtonProps['shape']>(String),
   size: definePropType<ButtonProps['size']>(String),
+  loading: Boolean,
 })
 </script>
 

@@ -16,3 +16,4 @@ export default {
 export * from './button'
 export * from './navbar'
 export * from './tooltip'
+export { default as useLogin } from './login/function'

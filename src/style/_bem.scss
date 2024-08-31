@@ -99,3 +99,7 @@ $block: '' !default;
     @content;
   }
 }
+
+@function is($state) {
+  @return '.is-' + $state;
+}

@@ -11,6 +11,10 @@ li {
   list-style: none;
 }
 
+.n-scrollbar-container div[aria-hidden='true'][tabindex='0'] {
+  display: none !important;
+}
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
 /* Document

@@ -1,0 +1,79 @@
+@use '../bem' as * with (
+  $block: 'login'
+);
+@use '../var' as *;
+
+@include b() {
+  width: 600px;
+  height: 400px;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  background-color: getFillColor();
+  border-radius: 10px;
+  background: linear-gradient(145deg, getFillColor(), getColor('primary'));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  @include e('header') {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include e('close') {
+      cursor: pointer;
+      transition: transform 0.3s;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  @include e('center') {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    @include e('left') {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      @include e('example') {
+        height: 300px;
+      }
+    }
+    @include e('right') {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      @include e('qr-code') {
+        position: relative;
+        border-radius: 20px;
+        .n-image {
+          border-radius: inherit;
+          &#{is('expired')} {
+            filter: blur(5px);
+          }
+        }
+        @include e('refresh') {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: getColor('primary');
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: transform 0.3s;
+        }
+      }
+      @include e('qr-status') {
+        font-size: 1.2rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+    }
+  }
+}
