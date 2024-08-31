@@ -22,8 +22,8 @@
             @input="handleChange"
           >
             <template #prefix>
-              <cloud-button shape="circle" type="primary">
-                <ra-icon> <Search /> </ra-icon>
+              <cloud-button shape="circle" type="primary" size="medium">
+                <ra-icon size="1.5rem"> <Search /> </ra-icon>
               </cloud-button>
             </template>
           </ra-input>

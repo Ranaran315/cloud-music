@@ -1,5 +1,5 @@
 <template>
-  <ra-button :class="[ucn.b(), ucn.m(type)]" :shape="shape">
+  <ra-button :class="[ucn.b(), ucn.m(type)]" :shape="shape" :size="size">
     <slot></slot>
   </ra-button>
 </template>
@@ -23,9 +23,8 @@ defineProps({
     type: definePropType<CloudButtonConsts['type']>(String),
     default: 'default',
   },
-  shape: {
-    type: definePropType<ButtonProps['shape']>(String),
-  },
+  shape: definePropType<ButtonProps['shape']>(String),
+  size: definePropType<ButtonProps['size']>(String),
 })
 </script>
 

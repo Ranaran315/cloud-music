@@ -11,7 +11,7 @@
         :key="index"
         :class="ucn.e('menu-item')"
       >
-        <cloud-tooltip :content="item.name">
+        <cloud-tooltip :content="item.name" placement="top">
           <component :is="item.component"></component>
         </cloud-tooltip>
       </div>
@@ -28,14 +28,13 @@ import CloudSearch from './search.vue'
 import CloudMessage from './message.vue'
 import CloudSkin from './skin.vue'
 import CloudSetting from './setting.vue'
-import { reactive } from 'vue'
 
 const ucn = useClassName('navbar')
 defineOptions({
   name: 'CloudNavbar',
 })
 
-const menuItem = reactive([
+const menuItem = [
   {
     name: '通知',
     component: CloudMessage,
@@ -52,7 +51,7 @@ const menuItem = reactive([
     name: '设置',
     component: CloudSetting,
   },
-])
+]
 </script>
 
 <style scoped src="@/style/components/navbar/navbar.scss"></style>

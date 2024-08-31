@@ -2,8 +2,7 @@
   $block: 'skin'
 );
 
-@use '../../navbar' as navbar;
 
 @include b() {
-  @include navbar.button();
+
 }

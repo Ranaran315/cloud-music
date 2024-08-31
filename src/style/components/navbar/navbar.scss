@@ -5,7 +5,7 @@
 
 @include b() {
   position: relative;
-  $height: 80px;
+  $height: 60px;
   width: 100%;
   height: $height;
   border-radius: $height;
@@ -27,9 +27,6 @@
     align-items: center;
     gap: 20px;
     @include e('menu-item') {
-      .ra-button {
-        font-size: 1.5rem !important;
-      }
     }
   }
 }

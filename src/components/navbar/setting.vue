@@ -1,7 +1,7 @@
 <template>
   <div :class="ucn.b()">
-    <cloud-button type="primary" shape="circle">
-      <ra-icon>
+    <cloud-button type="primary" shape="circle" size="medium">
+      <ra-icon size="1.5rem">
         <Setting />
       </ra-icon>
     </cloud-button>

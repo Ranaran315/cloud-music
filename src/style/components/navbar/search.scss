@@ -2,10 +2,9 @@
   $block: 'search'
 );
 @use '../../var' as *;
-@use '../../navbar' as navbar;
 
 $width: 300px;
-$size: 50px;
+$size: 40px;
 @mixin active {
   width: $width;
   border-radius: $size;
@@ -36,10 +35,9 @@ $size: 50px;
     &:hover {
       @include active();
     }
-    @include navbar.button() {
+    .ra-button {
       &:active:not(:disabled) {
         transform: scale(1);
-        box-shadow: none;
       }
     }
   }
