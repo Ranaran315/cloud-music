@@ -1,8 +1,8 @@
 import { App } from 'vue'
 import { CloudButton } from './button'
-import { CloudSearch } from './input'
+import { CloudNavbar } from './navbar'
 
-const components = [CloudButton, CloudSearch]
+const components = [CloudButton, CloudNavbar]
 
 export default {
   install: (app: App) => {
@@ -13,4 +13,4 @@ export default {
 }
 
 export * from './button'
-export * from './input'
+export * from './navbar'

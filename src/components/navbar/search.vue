@@ -21,9 +21,9 @@
             @input="handleChange"
           >
             <template #prefix>
-              <ra-button shape="circle">
+              <cloud-button shape="circle" type="primary">
                 <ra-icon> <Search /> </ra-icon>
-              </ra-button>
+              </cloud-button>
             </template>
           </ra-input>
         </div>
@@ -67,7 +67,8 @@
 </template>
 
 <script setup lang="ts">
-import { RaButton, RaIcon, RaInput } from '@capybara-plus/vue'
+import { RaIcon, RaInput } from '@capybara-plus/vue'
+import { CloudButton } from '../button'
 import { NPopover } from 'naive-ui'
 import { Album, Artist, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'

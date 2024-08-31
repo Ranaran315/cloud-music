@@ -1,0 +1,25 @@
+@use '../bem' as * with (
+  $block: 'navbar'
+);
+@use '../var' as *;
+
+@include b() {
+  position: relative;
+  $height: 80px;
+  width: 100%;
+  height: $height;
+  border-radius: $height;
+  background-color: getColor('primary');
+  padding: 10px 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  @include e('logo') {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 12rem;
+    margin-right: 30px;
+  }
+}

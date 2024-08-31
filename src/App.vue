@@ -9,7 +9,7 @@
       <Search />
     </ra-icon>
   </div>
-  <cloud-search></cloud-search>
+  <cloud-navbar></cloud-navbar>
 </template>
 
 <script setup lang="ts">
