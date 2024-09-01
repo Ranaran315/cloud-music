@@ -206,6 +206,7 @@ watch(
   }
 )
 
+// 点击搜索列表项时搜索
 const doSearch = async (id: number) => {
   const res = await songApi.getSongUrl(id.toString())
   console.log('getSongUrl', res)
@@ -261,6 +262,8 @@ $size: 40px;
 @include e('popover') {
   width: $width;
   background-color: getFillColor();
+  box-shadow: getBoxShadow();
+  border-radius: 3px;
   @include e('search-list') {
     width: 100%;
     max-height: 300px;

@@ -2,6 +2,8 @@ import axios, { AxiosRequestConfig } from 'axios'
 
 const server = axios.create({
   baseURL: import.meta.env.VITE_APP_URL,
+  withCredentials: true,
+  timeout: 60000,
 })
 
 const isCache = false
@@ -9,8 +11,6 @@ const isCache = false
 // 请求拦截器
 server.interceptors.request.use(
   (config) => {
-    console.log('request', config)
-
     // 是否缓存
     if (!isCache) {
       config.params = {
@@ -18,9 +18,7 @@ server.interceptors.request.use(
         timestamp: new Date(),
       }
     }
-
     // 添加请求头
-    config.headers['withCredentials'] = true
     return config
   },
   (error) => {
@@ -30,8 +28,11 @@ server.interceptors.request.use(
 
 server.interceptors.response.use(
   (res) => {
-    console.log('response', res)
-    return res.data
+    const { code, data } = res as any
+    if (code && code == 301) {
+      console.log('需要登录')
+    }
+    return data
   },
   (err) => {
     return Promise.reject(err)

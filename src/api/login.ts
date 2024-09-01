@@ -38,4 +38,10 @@ export default {
       },
     })
   },
+  // 退出登录
+  logout() {
+    return request({
+      resetUrl: 'logout',
+    })
+  },
 }

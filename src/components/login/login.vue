@@ -96,6 +96,7 @@ const statusMessage = computed(() => {
     case QRCodeStatus.SCAN_SUCCESS:
       return '扫描成功，请在App中确认登录'
     case QRCodeStatus.AUTH_SUCCESS:
+      close()
       return '授权成功，正在登录'
     case QRCodeStatus.EXPIRED:
       return '二维码已过期，请刷新'

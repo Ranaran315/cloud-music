@@ -12,9 +12,7 @@
         :key="index"
         :class="ucn.e('menu-item')"
       >
-        <cloud-tooltip :content="item.name" placement="top">
-          <component :is="item.component"></component>
-        </cloud-tooltip>
+        <component :is="item.component"></component>
       </div>
     </div>
   </div>
@@ -23,7 +21,6 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
-import { CloudTooltip } from '../tooltip'
 import { LogoWithName } from '@/icons'
 import CloudSearch from './search.vue'
 import CloudMessage from './message.vue'
@@ -75,6 +72,7 @@ const menuItem = [
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: getBoxShadow();
   @include e('logo') {
     width: 200px;
     height: 100%;

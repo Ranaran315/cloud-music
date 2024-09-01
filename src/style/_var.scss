@@ -15,6 +15,9 @@ $color: (
     'secondary': #7c828f,
     'third': #50576a,
   ),
+  'box-shadow': (
+    'primary': 0 5px 10px 3px rgba(0, 0, 0, 0.3),
+  ),
 );
 
 @function getColor($type: 'default') {
@@ -27,4 +30,8 @@ $color: (
 
 @function getTextColor($type: 'primary') {
   @return map.get($color, 'text', $type);
+}
+
+@function getBoxShadow($type: 'primary') {
+  @return map.get($color, 'box-shadow', $type);
 }

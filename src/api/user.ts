@@ -19,6 +19,16 @@ export default {
     })
   },
   // 获取用户歌单、收藏等数量信息
+  /**
+   * artistCount:
+   * createDjRadioCount:
+   * createdPlaylistCount: 创建的歌单数量
+   * djRadioCount: 电台数量
+   * mvCount: mv 数量
+   * newProgramCount: 新建的节目数量
+   * programCount: 节目数量
+   * subPlaylistCount:
+   */
   getSubcount() {
     return request({
       url: 'subcount',
