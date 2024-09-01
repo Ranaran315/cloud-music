@@ -1,0 +1,22 @@
+@use './var' as *;
+
+body {
+  background-color: getFillColor();
+}
+
+#app {
+  max-width: 1280px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout {
+  padding: 20px;
+  box-sizing: border-box;
+  flex: 1;
+}

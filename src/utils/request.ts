@@ -44,8 +44,9 @@ const useRequest = (baseURL: string) => {
     resetUrl,
     ...config
   }: AxiosRequestConfig<any> & { resetUrl?: string }) => {
+    url = resetUrl ? resetUrl : url ? baseURL + '/' + url : baseURL
     return server({
-      url: `${resetUrl || baseURL + '/' + url}`,
+      url,
       ...config,
     })
   }

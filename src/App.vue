@@ -1,21 +1,10 @@
 <template>
   <cloud-navbar></cloud-navbar>
-  <cloud-button class="test" type="primary" @click="handleClick"
-    >点击</cloud-button
-  >
+  <div class="layout">
+    <router-view></router-view>
+  </div>
 </template>
 
-<script setup lang="ts">
-// import bannerApi from '@/api/banner'
-import { useLogin } from '@/components'
+<script setup lang="ts"></script>
 
-const handleClick = async () => {
-  useLogin()
-}
-</script>
-
-<style scoped>
-.test {
-  margin: 20px;
-}
-</style>
+<style src="@/style/app.scss"></style>
