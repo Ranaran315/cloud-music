@@ -22,12 +22,21 @@
           ></li>
         </ul>
       </template>
-      <div class="banner__item" v-for="item of bannerList" :key="item.targetId">
+      <div
+        class="banner__item"
+        v-for="(item, index) of bannerList"
+        :key="item.targetId"
+      >
         <router-link to="#">
-          <img class="banner__item__img" :src="item.imageUrl" />
+          <img
+            class="banner__item__img"
+            :src="item.imageUrl"
+            @load="(e) => getImageColor(index, e)"
+            crossorigin="anonymous"
+          />
           <div
             class="type-title"
-            :style="{ '--type-title-color': item.titleColor }"
+            :style="{ '--type-title-color': item.imageColor }"
           >
             {{ item.typeTitle }}
           </div>
@@ -43,6 +52,8 @@ import { NCarousel } from 'naive-ui'
 import { RaIcon } from '@capybara-plus/vue'
 import { Prev, Next } from '@/icons'
 import { onMounted, ref } from 'vue'
+import ColorThief from 'colorthief'
+import { rgbToHex } from '@/utils/color'
 
 defineOptions({
   name: 'Banner',
@@ -50,6 +61,7 @@ defineOptions({
 
 const bannerList = ref<any[]>([])
 
+// 获取banner列表
 async function getBannerList() {
   try {
     const res = (await bannerApi.getBannerList()) as any
@@ -57,6 +69,14 @@ async function getBannerList() {
   } catch (error) {
     console.log(error)
   }
+}
+
+// 获取图片主色调
+const colorthief = new ColorThief()
+async function getImageColor(index: number, e: Event) {
+  const result = colorthief.getColor(e.target as HTMLImageElement)
+  const resultHex = rgbToHex(result)
+  bannerList.value[index].imageColor = resultHex
 }
 
 onMounted(() => {
