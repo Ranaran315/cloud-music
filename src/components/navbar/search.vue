@@ -22,9 +22,11 @@
             @input="handleChange"
           >
             <template #prefix>
-              <cloud-button shape="circle" type="primary" size="medium">
-                <ra-icon size="1.5rem"> <Search /> </ra-icon>
-              </cloud-button>
+              <div class="search-icon">
+                <ra-icon size="1.5rem">
+                  <Search />
+                </ra-icon>
+              </div>
             </template>
           </ra-input>
         </div>
@@ -69,17 +71,16 @@
 
 <script setup lang="ts">
 import { RaIcon, RaInput } from '@capybara-plus/vue'
-import { CloudButton } from '../button'
 import { NPopover } from 'naive-ui'
 import { Album, Artist, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { searchApi, songApi } from '@/api'
 
-const ucn = useClassName('search')
+const ucn = useClassName('navbar-search', false)
 
 defineOptions({
-  name: 'CloudSearch',
+  name: 'NavbarSearch',
 })
 
 const modelValue = ref('')
@@ -211,4 +212,104 @@ const doSearch = async (id: number) => {
 }
 </script>
 
-<style scoped src="@/style/components/navbar/search.scss"></style>
+<style scoped lang="scss">
+@use '@/style/bem' as * with (
+  $block: 'navbar-search',
+  $use-namespace: false
+);
+
+$width: 300px;
+$size: 40px;
+
+@include b() {
+  display: flex;
+  align-items: center;
+  width: $width;
+
+  @include e('trigger') {
+    width: $width;
+    position: relative;
+    .search-icon {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      border-radius: 50%;
+      color: getFillColor();
+      background-color: getColor('primary');
+      box-sizing: border-box;
+    }
+  }
+
+  .ra-input {
+    width: $width;
+    height: $size;
+    border-radius: $size;
+    padding: 0;
+    padding-right: 10px;
+    transition: width 0.3s, border-radius 0.3s;
+    outline-color: getColor('primary');
+    caret-color: getColor('primary');
+    .ra-button {
+      &:active:not(:disabled) {
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+@include e('popover') {
+  width: $width;
+  background-color: getFillColor();
+  @include e('search-list') {
+    width: 100%;
+    max-height: 300px;
+    padding: 10px 0;
+    margin: 0;
+    overflow: auto;
+    @include e('title') {
+      width: 100%;
+      text-align: left;
+      padding: 5px 20px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-sizing: border-box;
+    }
+    @include e('subtitle') {
+      width: 100%;
+      text-align: left;
+      padding: 5px 20px;
+      box-sizing: border-box;
+      font-weight: 700;
+      color: getTextColor('third');
+      background-color: getFillColor('third');
+    }
+    @include e('search-item') {
+      width: 100%;
+      padding: 10px 20px;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .index {
+        margin-right: 15px;
+        color: getTextColor('secondary');
+      }
+      &:hover {
+        background-color: getFillColor('secondary');
+        .word {
+          color: getColor('primary');
+        }
+      }
+      &:nth-child(-n + 4) {
+        .index {
+          color: getColor('primary');
+        }
+      }
+    }
+  }
+}
+</style>

@@ -5,6 +5,7 @@
         <LogoWithName />
       </ra-icon>
     </div>
+    <cloud-search />
     <div :class="ucn.e('menu')">
       <div
         v-for="(item, index) of menuItem"
@@ -28,21 +29,23 @@ import CloudSearch from './search.vue'
 import CloudMessage from './message.vue'
 import CloudSkin from './skin.vue'
 import CloudSetting from './setting.vue'
+import CloudUser from './user.vue'
 
-const ucn = useClassName('navbar')
+const ucn = useClassName('navbar', false)
 defineOptions({
   name: 'CloudNavbar',
 })
 
 const menuItem = [
   {
+    name: '用户',
+    component: CloudUser,
+  },
+  {
     name: '通知',
     component: CloudMessage,
   },
-  {
-    name: '搜索',
-    component: CloudSearch,
-  },
+
   {
     name: '皮肤',
     component: CloudSkin,
@@ -54,4 +57,41 @@ const menuItem = [
 ]
 </script>
 
-<style scoped src="@/style/components/navbar/navbar.scss"></style>
+<style scoped lang="scss">
+@use '@/style/bem' as * with (
+  $block: 'navbar',
+  $use-namespace: false
+);
+
+@include b() {
+  position: relative;
+  $height: 60px;
+  width: 100%;
+  height: $height;
+  border-radius: $height;
+  background-color: getColor('primary');
+  padding: 10px 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include e('logo') {
+    width: 200px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 12rem;
+    margin-right: 30px;
+  }
+  @include e('menu') {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    @include e('menu-item') {
+      $size: 40px;
+      min-width: $size;
+      height: $size;
+    }
+  }
+}
+</style>

@@ -13,11 +13,11 @@ import { RaIcon } from '@capybara-plus/vue'
 import { Message } from '@/icons'
 import { useClassName } from '@/hooks'
 
-const ucn = useClassName('message')
+const ucn = useClassName('navbar-message', false)
 
 defineOptions({
-  name: 'CloudMessage',
+  name: 'NavbarMessage',
 })
 </script>
 
-<style scoped src="@/style/components/navbar/message.scss"></style>
+<style scoped lang="scss"></style>

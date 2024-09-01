@@ -13,11 +13,11 @@ import { RaIcon } from '@capybara-plus/vue'
 import { Setting } from '@/icons'
 import { useClassName } from '@/hooks'
 
-const ucn = useClassName('setting')
+const ucn = useClassName('navbar-setting', false)
 
 defineOptions({
-  name: 'CloudSetting',
+  name: 'NavbarSetting',
 })
 </script>
 
-<style scoped src="@/style/components/navbar/setting.scss"></style>
+<style scoped></style>

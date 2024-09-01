@@ -7,6 +7,13 @@ export default defineConfig({
   server: {
     port: 5000,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/style/var" as *;`,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': '/src',

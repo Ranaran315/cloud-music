@@ -13,11 +13,11 @@ import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
 import { Skin } from '@/icons'
 
-const ucn = useClassName('skin')
+const ucn = useClassName('navbar-skin', false)
 
 defineOptions({
-  name: 'CloudSkin',
+  name: 'NavbarSkin',
 })
 </script>
 
-<style scoped src="@/style/components/navbar/skin.scss"></style>
+<style scoped></style>

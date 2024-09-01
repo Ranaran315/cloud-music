@@ -2,9 +2,15 @@
 @forward './config.scss' as config-*;
 
 $block: '' !default;
+$use-namespace: true !default;
 
 @function generateBem($blockSuffix, $element, $modifier) {
-  $name: #{config.$namespace} + #{config.$common-sperator} + #{$block};
+  $name: '';
+  @if $use-namespace {
+    $name: #{config.$namespace} + #{config.$common-sperator} + #{$block};
+  } @else {
+    $name: $block;
+  }
   @if $blockSuffix != '' {
     $name: #{$name} + #{config.$common-sperator} + #{$blockSuffix};
   }

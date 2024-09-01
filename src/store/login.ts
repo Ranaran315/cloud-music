@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import loginApi from '@/api/login'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useLoginLocalStorage } from '@/utils/localstorage'
 import { RaMessage } from '@capybara-plus/vue'
 
@@ -17,6 +17,7 @@ export enum QRCodeStatus {
 export const useLoginStore = defineStore('login', () => {
   const qrImg = ref('') // 二维码图片 base64 格式
   const qrStatus = ref<QRCodeStatus>(QRCodeStatus.OTHER) // 二维码是否过期
+  const userInfo = computed(() => loginLocalStorage.getUser()) // 用户信息
   let timer: any = null // 轮询检查二维码状态的定时器
 
   // 获取二维码及二维码登录逻辑
@@ -51,7 +52,6 @@ export const useLoginStore = defineStore('login', () => {
           RaMessage.success('登录成功')
         } else if (code === 800) {
           console.log('二维码已过期')
-          RaMessage.error('二维码已过期')
           qrStatus.value = QRCodeStatus.EXPIRED
           clearInterval(timer!)
         } else {
@@ -93,5 +93,6 @@ export const useLoginStore = defineStore('login', () => {
     getLoginStatus,
     qrStatus,
     stopCheck,
+    userInfo,
   }
 })
