@@ -31,7 +31,7 @@ export default {
   // 根据 cookie 获取登录状态
   getLoginStatus(cookie: string) {
     return request({
-      url: `status?timestamp=${new Date()}`,
+      url: `status`,
       method: 'post',
       data: {
         cookie,

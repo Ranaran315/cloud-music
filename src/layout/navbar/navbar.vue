@@ -1,10 +1,10 @@
 <template>
   <div :class="ucn.b()">
-    <div :class="ucn.e('logo')">
+    <router-link to="/" :class="ucn.e('logo')">
       <ra-icon>
         <LogoWithName />
       </ra-icon>
-    </div>
+    </router-link>
     <cloud-search />
     <div :class="ucn.e('menu')">
       <div
@@ -61,12 +61,13 @@ const menuItem = [
 );
 
 @include b() {
-  position: relative;
-  $height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: $height;
-  border-radius: $height;
-  background-color: getColor('primary');
+  height: var(--navbar-height);
+  background-color: getFillColor();
+  color: getTextColor();
   padding: 10px 30px;
   box-sizing: border-box;
   display: flex;

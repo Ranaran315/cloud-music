@@ -1,9 +1,8 @@
 import { App } from 'vue'
 import { CloudButton } from './button'
-import { CloudNavbar } from './navbar'
 import { CloudTooltip } from './tooltip'
 
-const components = [CloudButton, CloudNavbar, CloudTooltip]
+const components = [CloudButton, CloudTooltip]
 
 export default {
   install: (app: App) => {
@@ -14,6 +13,5 @@ export default {
 }
 
 export * from './button'
-export * from './navbar'
 export * from './tooltip'
 export { default as useLogin } from './login/function'

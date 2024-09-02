@@ -67,7 +67,7 @@ import { useLoginStore } from '@/store'
 import { computed, onMounted, ref } from 'vue'
 import { NPopover } from 'naive-ui'
 import { useLogin } from '@/components'
-import useUserStore from '@/store/user'
+import { useUserStore } from '@/store'
 
 const ucn = useClassName('navbar-user', false)
 
@@ -120,7 +120,6 @@ const logout = async () => {
   height: 100%;
   display: flex;
   align-items: center;
-  color: getFillColor();
   @include e('base-info') {
     display: flex;
     align-items: center;

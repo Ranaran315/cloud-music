@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useLoginStore } from './login'
 
-const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore('user', () => {
   const userInfo = ref<any>({}) // 用户信息
   const profile = computed(() => userInfo.value?.profile)
 
@@ -27,5 +27,3 @@ const useUserStore = defineStore('user', () => {
     profile,
   }
 })
-
-export default useUserStore

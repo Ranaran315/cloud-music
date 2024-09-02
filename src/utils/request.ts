@@ -15,7 +15,7 @@ server.interceptors.request.use(
     if (!isCache) {
       config.params = {
         ...config.params,
-        timestamp: new Date(),
+        timestamp: Date.now(),
       }
     }
     // 添加请求头
