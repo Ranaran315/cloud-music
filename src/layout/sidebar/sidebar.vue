@@ -1,17 +1,22 @@
 <template>
   <div :class="ucn.b()">
-    <div v-for="(s, index) of sidebar" :key="index" :class="ucn.e('menu')">
-      <div :class="ucn.e('menu-title')">{{ s.title }}</div>
-      <div
-        v-for="(item, index) of s.list"
+    <div
+      v-for="(s, index) of sidebarRoutes"
+      :key="index"
+      :class="ucn.e('menu')"
+    >
+      <div :class="ucn.e('menu-title')">{{ s.meta?.title }}</div>
+      <router-link
+        :to="item.path"
+        v-for="(item, index) of s.children"
         :key="index"
-        :class="ucn.e('menu-item')"
+        :class="[ucn.e('menu-item'), ucn.is(item.name == route.name, 'active')]"
       >
         <ra-icon :class="ucn.e('menu-icon')" size="1.5em">
-          <component :is="item.icon" />
+          <component :is="item.meta?.icon" />
         </ra-icon>
-        {{ item.name }}
-      </div>
+        {{ item.meta?.name }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -19,84 +24,16 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
-import {
-  Home,
-  Like,
-  Podcast,
-  Music,
-  Download,
-  Collect,
-  Wander,
-  Community,
-  Cloud,
-  Recent,
-} from '@/icons'
-import Dir from '@/icons/dir.vue'
+import { sidebarRoutes } from '@/route/routes'
+import { useRoute } from 'vue-router'
 
 const ucn = useClassName('sidebar', false)
 defineOptions({
   name: 'Sidebar',
 })
 
-const sidebar = [
-  {
-    list: [
-      {
-        name: '首页',
-        icon: Home,
-      },
-      {
-        name: '云音乐精选',
-        icon: Music,
-      },
-      {
-        name: '播客',
-        icon: Podcast,
-      },
-      {
-        name: '私人漫游',
-        icon: Wander,
-      },
-      {
-        name: '社区',
-        icon: Community,
-      },
-    ],
-  },
-  {
-    title: '我的',
-    list: [
-      {
-        name: '我喜欢的音乐',
-        icon: Like,
-      },
-      {
-        name: '我的收藏',
-        icon: Collect,
-      },
-      {
-        name: '下载管理',
-        icon: Download,
-      },
-      {
-        name: '最近播放',
-        icon: Recent,
-      },
-      {
-        name: '我的播客',
-        icon: Podcast,
-      },
-      {
-        name: '本地音乐',
-        icon: Dir,
-      },
-      {
-        name: '我的音乐云盘',
-        icon: Cloud,
-      },
-    ],
-  },
-]
+const route = useRoute()
+console.log(route)
 </script>
 
 <style scoped lang="scss">
@@ -117,6 +54,7 @@ const sidebar = [
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
+  box-sizing: border-box;
   @include e('menu') {
     width: 100%;
     @include e('menu-title') {
@@ -137,8 +75,13 @@ const sidebar = [
       border-radius: 10px;
       box-sizing: border-box;
       cursor: pointer;
+      transition: background 0.3s;
       &:hover {
         background-color: getFillColor('third');
+      }
+      &.is-active {
+        background-color: getColor('primary');
+        color: getFillColor();
       }
       @include e('menu-icon') {
         margin-right: 10px;

@@ -1,5 +1,5 @@
 <template>
-  <div ref="searchRef" :class="ucn.b()" @mouseover="handleMouseover">
+  <div :class="ucn.b()">
     <n-popover
       trigger="manual"
       :show="showPopover"
@@ -84,15 +84,8 @@ defineOptions({
 })
 
 const modelValue = ref('')
-const searchRef = ref(null)
 
 const RaInputRef = ref<typeof RaInput | null>(null)
-const handleMouseover = () => {
-  RaInputRef.value?.focus()
-  nextTick(() => {
-    showPopover.value = true
-  })
-}
 
 // 是否展示 popover
 const showPopover = ref(false)
@@ -133,6 +126,7 @@ const handleKeydownTab = (e: KeyboardEvent) => {
 const hotlist = ref<any[]>([])
 let throllte = 0 // 节流
 const handleFocus = async () => {
+  showPopover.value = true
   if (!showHotlist.value) return
   try {
     if (parseInt(Date.now().toString()) - throllte < 1000 * 60 * 2) return
@@ -219,7 +213,7 @@ const doSearch = async (id: number) => {
   $use-namespace: false
 );
 
-$width: 300px;
+$width: 400px;
 $size: 40px;
 
 @include b() {
@@ -262,7 +256,6 @@ $size: 40px;
 @include e('popover') {
   width: $width;
   background-color: getFillColor();
-  box-shadow: getBoxShadow();
   border-radius: 3px;
   @include e('search-list') {
     width: 100%;

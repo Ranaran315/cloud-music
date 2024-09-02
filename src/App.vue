@@ -1,7 +1,9 @@
 <template>
   <Navbar />
   <Sidebar />
-  <div class="layout"></div>
+  <div class="layout">
+    <router-view />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -24,12 +26,13 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
   --navbar-height: 60px;
-  --sidebar-width: 200px;
+  --sidebar-width: 220px;
 }
+
 .layout {
   margin-top: var(--navbar-height);
   margin-left: var(--sidebar-width);
-  padding: 20px;
+  padding: 20px 50px;
   box-sizing: border-box;
   flex: 1;
 }

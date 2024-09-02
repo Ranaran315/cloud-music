@@ -6,18 +6,9 @@ const server = axios.create({
   timeout: 60000,
 })
 
-const isCache = false
-
 // 请求拦截器
 server.interceptors.request.use(
   (config) => {
-    // 是否缓存
-    if (!isCache) {
-      config.params = {
-        ...config.params,
-        timestamp: Date.now(),
-      }
-    }
     // 添加请求头
     return config
   },
@@ -43,13 +34,13 @@ const useRequest = (baseURL: string) => {
   return ({
     url,
     resetUrl,
+    timestamp,
     ...config
-  }: AxiosRequestConfig<any> & { resetUrl?: string }) => {
+  }: AxiosRequestConfig<any> & { resetUrl?: string; timestamp?: boolean }) => {
     url = resetUrl ? resetUrl : url ? baseURL + '/' + url : baseURL
-    return server({
-      url,
-      ...config,
-    })
+    const request: any = { url, ...config }
+    if (timestamp) request.timestamp = Date.now()
+    return server(request)
   }
 }
 
