@@ -1,6 +1,6 @@
 <template>
   <div class="banner">
-    <n-carousel autoplay dot-type="line" mousewheel :interval="3000" show-arrow>
+    <n-carousel autoplay dot-type="line" :interval="3000" show-arrow>
       <template #arrow="{ prev, next }">
         <div class="custom-arrow">
           <div class="custom-arrow__prev" @click="prev">

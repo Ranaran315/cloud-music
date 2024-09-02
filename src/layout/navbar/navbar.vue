@@ -62,6 +62,7 @@ const menuItem = [
 
 @include b() {
   position: fixed;
+  z-index: var(--navbar-z-index);
   top: 0;
   left: 0;
   width: 100%;

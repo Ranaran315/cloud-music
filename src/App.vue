@@ -2,7 +2,7 @@
   <Navbar />
   <Sidebar />
   <div class="layout">
-    <router-view />
+    <div class="layout-main"><router-view /></div>
   </div>
 </template>
 
@@ -13,6 +13,8 @@ import { Navbar, Sidebar } from '@/layout/index.ts'
 <style lang="scss">
 body {
   background-color: getFillColor();
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 #app {
@@ -27,6 +29,8 @@ body {
   overflow-x: hidden;
   --navbar-height: 60px;
   --sidebar-width: 220px;
+  --navbar-z-index: 3000;
+  --sidebar-z-index: 3000;
 }
 
 .layout {
@@ -35,6 +39,11 @@ body {
   padding: 20px 50px;
   box-sizing: border-box;
   flex: 1;
+  display: flex;
+  justify-content: center;
+  &-main {
+    max-width: 1280px;
+  }
 }
 
 // 滚动条整体

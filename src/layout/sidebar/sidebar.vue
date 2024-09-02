@@ -33,7 +33,6 @@ defineOptions({
 })
 
 const route = useRoute()
-console.log(route)
 </script>
 
 <style scoped lang="scss">
@@ -44,6 +43,7 @@ console.log(route)
 
 @include b() {
   position: fixed;
+  z-index: var(--sidebar-z-index);
   top: var(--navbar-height);
   left: 0;
   width: var(--sidebar-width);
