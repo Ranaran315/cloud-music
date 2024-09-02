@@ -73,7 +73,6 @@ const menuItem = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: getBoxShadow();
   @include e('logo') {
     width: 200px;
     height: 100%;

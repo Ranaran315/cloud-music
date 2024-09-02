@@ -12,7 +12,7 @@ body {
 }
 
 #app {
-  max-width: 1280px;
+  width: 100vw;
   min-height: 100vh;
   margin: 0 auto;
   padding: 2rem;
@@ -20,6 +20,8 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  overflow-x: hidden;
   --navbar-height: 60px;
 }
 
