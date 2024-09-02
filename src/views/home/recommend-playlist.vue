@@ -22,20 +22,20 @@
         </div>
         <div :class="ucn.e('content')">
           <div :class="ucn.e('name')">{{ item.name }}</div>
-          <div :class="ucn.e('creator')">
+          <div :class="ucn.e('creator')" v-if="item.id != -1">
             <n-image
               :class="ucn.e('creator-avatar')"
-              :src="item.creator.avatarUrl"
+              :src="item.creator!.avatarUrl"
               preview-disabled
               lazy
             ></n-image>
             <div :class="ucn.e('creator-name')">
-              {{ item.creator.nickname }}
+              {{ item.creator!.nickname }}
             </div>
           </div>
-          <div :class="ucn.e('meta')">
-            <span>{{ formatNumber(item.playCount) }} 次播放</span>
-            <span>{{ formatTime(item.createTime) }} </span>
+          <div :class="ucn.e('meta')" v-if="item.id != -1">
+            <span>{{ formatNumber(item.playCount!) }} 次播放</span>
+            <span>{{ formatTime(item.createTime!) }} </span>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@ onMounted(() => {
         bottom: 0;
         left: 0;
         padding: 5px;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.3);
         color: getFillColor();
         font-size: 0.85rem;
         border-radius: inherit;

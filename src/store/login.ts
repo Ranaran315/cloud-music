@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import loginApi from '@/api/login'
 import { computed, ref } from 'vue'
-import { useLoginLocalStorage } from '@/utils/localstorage'
+import { useLoginStorage } from '@/utils/storage'
 
-const loginLocalStorage = useLoginLocalStorage()
+const loginLocalStorage = useLoginStorage()
 
 export enum QRCodeStatus {
   WAIT_SCAN = 801,

@@ -1,7 +1,7 @@
 const cookieKey = 'cookie'
 const userKey = 'user'
 
-export const useLoginLocalStorage = () => {
+const useLoginLocalStorage = () => {
   // cookie 信息
   function setCookie(cookie: string) {
     localStorage.setItem(cookieKey, cookie)
@@ -31,3 +31,5 @@ export const useLoginLocalStorage = () => {
     clear,
   }
 }
+
+export default useLoginLocalStorage

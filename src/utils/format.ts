@@ -28,8 +28,8 @@ export const formatTime = (time: number | string) => {
     time = new Date(time).getTime()
   }
 
-  const pastedTime = currentTime - time
-  console.log(pastedTime)
+  const pastedTime = currentTime - time // 过去的时间
+
   let timeUnit = 1000 * 60 * 60 * 24 * 30 * 12
 
   if (pastedTime > timeUnit) {
