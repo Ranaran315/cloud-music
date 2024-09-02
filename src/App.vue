@@ -1,9 +1,11 @@
 <template>
-  <Layout />
+  <Navbar />
+  <Sidebar />
+  <div class="layout"></div>
 </template>
 
 <script setup lang="ts">
-import Layout from '@/layout/layout.vue'
+import { Navbar, Sidebar } from '@/layout/index.ts'
 </script>
 
 <style lang="scss">
@@ -15,7 +17,6 @@ body {
   width: 100vw;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
   box-sizing: border-box;
   display: flex;
@@ -23,6 +24,14 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
   --navbar-height: 60px;
+  --sidebar-width: 200px;
+}
+.layout {
+  margin-top: var(--navbar-height);
+  margin-left: var(--sidebar-width);
+  padding: 20px;
+  box-sizing: border-box;
+  flex: 1;
 }
 
 // 滚动条整体

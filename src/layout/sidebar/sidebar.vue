@@ -109,13 +109,14 @@ const sidebar = [
   position: fixed;
   top: var(--navbar-height);
   left: 0;
-  width: 200px;
+  width: var(--sidebar-width);
   height: calc(100vh - var(--navbar-height));
   background-color: getFillColor();
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
   @include e('menu') {
     width: 100%;
     @include e('menu-title') {
