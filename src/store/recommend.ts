@@ -8,6 +8,7 @@ interface RecommendPlaylist {
   coverImgUrl: string
   playCount: number
   detailPageTitle: string
+  createTime: string
   creator: {
     userId: number
     nickname: string
@@ -28,6 +29,7 @@ export const useRecommendStore = defineStore('recommend', () => {
           playCount,
           detailPageTitle,
           creator,
+          createTime,
         },
       } = (await playlistApi.getPlaylistDetail(item.id)) as any
       recommendlist.value.push({
@@ -37,6 +39,7 @@ export const useRecommendStore = defineStore('recommend', () => {
         playCount,
         detailPageTitle,
         creator,
+        createTime,
       })
     })
   }
