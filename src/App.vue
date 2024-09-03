@@ -42,6 +42,7 @@ body {
   display: flex;
   justify-content: center;
   &-main {
+    flex: 1;
     max-width: 1280px;
   }
 }

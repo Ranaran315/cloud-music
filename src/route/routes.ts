@@ -142,6 +142,14 @@ export const sidebarRoutes: RouteRecordRaw[] = [
 const routes: RouteRecordRaw[] = [
   ...sidebarRoutes,
   {
+    path: '/playlist/:id',
+    name: 'Playlist',
+    component: () => import('@/views/playlist/playlist.vue'),
+    meta: {
+      title: '歌单',
+    },
+  },
+  {
     path: '/profile',
     name: 'Profile',
     component: () => import('@/views/profile/profile.vue'),

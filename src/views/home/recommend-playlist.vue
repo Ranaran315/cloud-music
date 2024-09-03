@@ -3,6 +3,7 @@
     <div :class="ucn.e('title')">推荐歌单</div>
     <div :class="ucn.e('list')">
       <div
+        @click="toPlaylistDetail(item.id, item.name)"
         :class="ucn.e('item')"
         v-for="item of recommendStore.recommendlist"
         :key="item.id"
@@ -34,7 +35,7 @@
             </div>
           </div>
           <div :class="ucn.e('meta')" v-if="item.id != -1">
-            <span>{{ formatNumber(item.playCount!) }} 次播放</span>
+            <span>{{ formatCount(item.playCount!) }} 次播放</span>
             <span>{{ formatTime(item.createTime!) }} </span>
           </div>
         </div>
@@ -45,10 +46,11 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { useRecommendStore } from '@/store'
-import { onMounted } from 'vue'
+import { useRecommendStore, usePlaylistStore } from '@/store'
+import { onMounted, nextTick } from 'vue'
 import { NImage } from 'naive-ui'
-import { formatNumber, formatTime } from '@/utils/format'
+import { formatCount, formatTime } from '@/utils/format'
+import { useRouter } from 'vue-router'
 
 const ucn = useClassName('recommend-playlist', false)
 
@@ -56,10 +58,23 @@ defineOptions({
   name: 'RecommendPlaylist',
 })
 
+const router = useRouter()
+
 const recommendStore = useRecommendStore()
+const playlistStore = usePlaylistStore()
 onMounted(() => {
   recommendStore.getRecommendList()
 })
+
+// 跳转到歌单详情页
+const toPlaylistDetail = (id: number, name: string) => {
+  playlistStore.setCurrentPlaylistId(id)
+  nextTick(() => {
+    router.push({
+      path: `/playlist/${name}`,
+    })
+  })
+}
 </script>
 
 <style scoped lang="scss">

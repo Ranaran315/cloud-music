@@ -12,6 +12,7 @@ export default {
    *  - updateTime: 更新时间
    *  - trackUpdateTime: 歌曲更新时间
    *  - playCount: 播放次数
+   *  - trackCount: 歌曲数量
    *  - subscribedCount: 收藏次数
    *  - shareCount: 分享次数
    *  - commentCount: 评论次数

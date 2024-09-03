@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 const server = axios.create({
   baseURL: import.meta.env.VITE_APP_URL,
@@ -36,7 +36,10 @@ const useRequest = (baseURL: string) => {
     resetUrl,
     timestamp,
     ...config
-  }: AxiosRequestConfig<any> & { resetUrl?: string; timestamp?: boolean }) => {
+  }: AxiosRequestConfig<any> & {
+    resetUrl?: string
+    timestamp?: boolean
+  }): Promise<AxiosResponse<any, any>['data']> => {
     url = resetUrl ? resetUrl : url ? baseURL + '/' + url : baseURL
     const request: any = { url, ...config }
     if (timestamp) request.timestamp = Date.now()
