@@ -20,6 +20,7 @@ import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like } from '@/icons'
+import { useSongStore } from '@/store'
 
 const ucn = useClassName('songlist')
 defineOptions({
@@ -29,6 +30,8 @@ defineOptions({
 defineProps({
   data: Object,
 })
+
+const songStore = useSongStore()
 
 // 列渲染
 const columns: DataTableColumns<Song> = [
@@ -98,7 +101,7 @@ const rowProps = (row: any) => {
   return {
     class: ucn.e('row'),
     onClick: () => {
-      console.log(row)
+      songStore.setCurrentSong(row)
     },
   }
 }

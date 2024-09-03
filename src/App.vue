@@ -4,10 +4,11 @@
   <div class="layout">
     <div class="layout-main"><router-view /></div>
   </div>
+  <Player />
 </template>
 
 <script setup lang="ts">
-import { Navbar, Sidebar } from '@/layout/index.ts'
+import { Navbar, Sidebar, Player } from '@/layout/index.ts'
 import { useLoginStore } from '@/store'
 
 useLoginStore().getLoginStatus()
@@ -32,14 +33,16 @@ body {
   overflow-x: hidden;
   --navbar-height: 60px;
   --sidebar-width: 220px;
-  --navbar-z-index: 1000;
-  --sidebar-z-index: 1000;
+  --player-height: 80px;
+  --layout-z-index: 1000;
 }
 
 .layout {
   margin-top: var(--navbar-height);
   margin-left: var(--sidebar-width);
+  margin-bottom: var(--player-height);
   padding: 20px 50px;
+  padding-left: 30px;
   box-sizing: border-box;
   flex: 1;
   display: flex;

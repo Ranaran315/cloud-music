@@ -43,7 +43,7 @@ const route = useRoute()
 
 @include b() {
   position: fixed;
-  z-index: var(--sidebar-z-index);
+  z-index: var(--layout-z-index);
   top: var(--navbar-height);
   left: 0;
   width: var(--sidebar-width);
