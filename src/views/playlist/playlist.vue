@@ -53,6 +53,7 @@
         </div>
       </div>
     </div>
+    <cloud-songlist :data="playlistStore.currentSonglist"></cloud-songlist>
   </div>
 </template>
 

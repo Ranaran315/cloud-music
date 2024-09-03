@@ -25,6 +25,7 @@ export default {
    *  - picUrl: 专辑封面
    * - alia: 别名（数组）
    * - publishTime: 发行时间
+   * - dt: 时长（毫秒）
    */
   getRecommendSongs() {
     return request({

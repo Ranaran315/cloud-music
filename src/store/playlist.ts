@@ -1,5 +1,6 @@
 import { playlistApi } from '@/api'
 import usePlaylistStorage from '@/utils/storage/playlist'
+import { Song } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -29,11 +30,13 @@ interface Playlist {
     nickname: string
   }
 }
+
 const playlistStorage = usePlaylistStorage()
 export const usePlaylistStore = defineStore('playlist', () => {
   // 当前歌单 id
   const currentPlaylistId = ref<number | null>(playlistStorage.getPlaylistId())
   const currentPlaylist = ref<Playlist | any>({})
+  const currentSonglist = ref<Song[]>([])
 
   // 设置当前歌单 id
   const setCurrentPlaylistId = (id: number) => {
@@ -55,10 +58,8 @@ export const usePlaylistStore = defineStore('playlist', () => {
       )
       currentPlaylist.value = playlist
       // 获取歌单的所有歌曲
-      const { privileges, songs } = await playlistApi.getPlaylistAllTracks(
-        playlist.id
-      )
-      console.log(playlist, privileges, songs)
+      const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
+      currentSonglist.value = songs
     } catch (error) {
       console.log(error)
     }
@@ -69,5 +70,6 @@ export const usePlaylistStore = defineStore('playlist', () => {
     setCurrentPlaylistId,
     currentPlaylist,
     getPlaylistDetail,
+    currentSonglist,
   }
 })

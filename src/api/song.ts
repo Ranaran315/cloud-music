@@ -39,4 +39,28 @@ export default {
       },
     })
   },
+  /**
+   * 喜欢音乐
+   * @param id 音乐id
+   * @param like 是否喜欢
+   * @returns
+   */
+  like(id: number, like: boolean) {
+    return request({
+      resetUrl: 'like',
+      params: {
+        id,
+        like,
+      },
+    })
+  },
+  // 获取用户喜欢的音乐列表
+  getSongLikedList(uid: number) {
+    return request({
+      resetUrl: 'likelist',
+      params: {
+        uid,
+      },
+    })
+  },
 }

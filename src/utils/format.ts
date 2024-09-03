@@ -46,3 +46,20 @@ export const formatTime = (time: number | string) => {
     return '刚刚'
   }
 }
+
+/**
+ * format duration to 'xx:xx
+ * @param duration 毫秒时间单位
+ * @returns
+ */
+export const formatDuration = (duration: number) => {
+  const seconds = duration / 1000
+  const minutes = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, '0')
+  const second = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, '0')
+
+  return `${minutes}:${second}`
+}

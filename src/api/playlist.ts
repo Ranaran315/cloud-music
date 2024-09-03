@@ -26,6 +26,7 @@ export default {
    *   - avatarUrl: 用户头像
    *   - nickname: 用户昵称
    *  - privileges：vip 歌曲列表
+   *  - subscribed: 是否已收藏
    * @param id 歌单id
    * @returns
    */
