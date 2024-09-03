@@ -32,7 +32,7 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
   --navbar-height: 60px;
-  --sidebar-width: 220px;
+  --sidebar-width: 250px;
   --player-height: 80px;
   --layout-z-index: 1000;
 }

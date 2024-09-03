@@ -84,7 +84,7 @@ const columns: DataTableColumns<Song> = [
     title: '喜欢',
     key: 'like',
     render: () => {
-      return h(RaIcon, [h(Like)])
+      return h(RaIcon, {}, { default: () => h(Like) })
     },
   },
   {

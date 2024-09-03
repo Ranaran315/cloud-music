@@ -52,7 +52,8 @@ export const formatTime = (time: number | string) => {
  * @param duration 毫秒时间单位
  * @returns
  */
-export const formatDuration = (duration: number) => {
+export const formatDuration = (duration?: number) => {
+  if (!duration) return '00:00'
   const seconds = duration / 1000
   const minutes = Math.floor(seconds / 60)
     .toString()

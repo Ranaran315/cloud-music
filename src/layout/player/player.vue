@@ -11,7 +11,13 @@
         </div>
       </div>
     </div>
-    <div :class="ucn.e('controller')">
+    <div :class="ucn.e('controls')">
+      <audio
+        ref="audioRef"
+        :src="song.url"
+        @loadedmetadata="handleLoadedMetadata"
+        @timeupdate.stop="handleTimeUpdate"
+      ></audio>
       <div :class="ucn.e('button-group')">
         <ra-icon :class="ucn.e('prev-next-button')">
           <PrevSong />
@@ -24,7 +30,7 @@
         </ra-icon>
       </div>
       <div :class="ucn.e('progress')">
-        <div :class="ucn.e('time')">00:00</div>
+        <div :class="ucn.e('time')">{{ currentTime }}</div>
         <div
           :class="ucn.e('progress-track')"
           ref="progressTrackRef"
@@ -37,7 +43,7 @@
             ></div>
           </div>
         </div>
-        <div :class="ucn.e('time')">04:03</div>
+        <div :class="ucn.e('time')">{{ duration }}</div>
       </div>
     </div>
     <h2>占位符</h2>
@@ -47,9 +53,10 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { useSongStore } from '@/store'
-import { computed, CSSProperties, ref } from 'vue'
+import { computed, CSSProperties, onBeforeUnmount, onMounted, ref } from 'vue'
 import { RaIcon } from '@capybara-plus/vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
+import { formatDuration } from '@/utils/format'
 
 const ucn = useClassName('player', false)
 defineOptions({
@@ -57,9 +64,27 @@ defineOptions({
 })
 
 // 播放控制
-const isPlaying = ref(false)
+const audioRef = ref(null)
+const isPlaying = ref(false) // 是否正在播放
+const duration = computed(() => formatDuration(song.value.dt)) // 歌曲总时长
+const currentTime = ref('00:00') // 当前播放时间
 const play = () => {
+  const audio = audioRef.value as unknown as HTMLAudioElement
+  if (isPlaying.value) {
+    audio.pause()
+  } else {
+    audio.play()
+  }
   isPlaying.value = !isPlaying.value
+}
+const handleLoadedMetadata = () => {
+  console.log('加载音乐完成')
+}
+// 处理 audio 播放时间更新时
+const handleTimeUpdate = (e: Event) => {
+  const currentTimeMs = (e.target as HTMLAudioElement).currentTime * 1000
+  currentTime.value = formatDuration(currentTimeMs)
+  progressBarWidth.value = (currentTimeMs / song.value.dt!) * 100
 }
 
 // 进度条
@@ -101,6 +126,20 @@ const handleClick = (e: MouseEvent) => {
 
 const songStore = useSongStore()
 const song = computed(() => songStore.currentSong)
+
+// 空格播放
+const handleSpace = (e: KeyboardEvent) => {
+  if (e.code === 'Space') {
+    e.preventDefault()
+    play()
+  }
+}
+onMounted(() => {
+  window.addEventListener('keydown', handleSpace)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleSpace)
+})
 </script>
 
 <style scoped lang="scss">
@@ -118,7 +157,6 @@ const song = computed(() => songStore.currentSong)
   left: 0;
   background-color: getFillColor('secondary');
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   box-sizing: border-box;
@@ -126,6 +164,12 @@ const song = computed(() => songStore.currentSong)
     display: flex;
     align-items: center;
     gap: 10px;
+    @include e('content') {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
     @include e('pic') {
       width: 40px;
       height: 40px;
@@ -134,10 +178,11 @@ const song = computed(() => songStore.currentSong)
       background-color: #000;
     }
   }
-  @include e('controller') {
+  @include e('controls') {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto;
     gap: 5px;
     @include e('button-group') {
       display: flex;

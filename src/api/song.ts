@@ -13,7 +13,12 @@ type SongLevel =
   | 'jymaster'
 
 export default {
-  // 获取歌曲url
+  /**
+   * 获取歌曲 url
+   * - id: 歌曲 id
+   * - url: 歌曲的 url
+   * - time: 歌曲时长
+   */
   getSongUrl(id: string | string[], br: number = 999000) {
     if (Array.isArray(id)) {
       id = id.join(',')

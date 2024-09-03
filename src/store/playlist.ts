@@ -45,6 +45,7 @@ export const usePlaylistStore = defineStore(
       currentPlaylistId.value = id
     }
 
+    // 获取歌单详情
     const getPlaylistDetail = async () => {
       try {
         // nextTick(() => {
