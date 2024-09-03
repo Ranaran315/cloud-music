@@ -1,5 +1,4 @@
 import { playlistApi } from '@/api'
-import usePlaylistStorage from '@/utils/storage/playlist'
 import { Song } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -31,45 +30,53 @@ interface Playlist {
   }
 }
 
-const playlistStorage = usePlaylistStorage()
-export const usePlaylistStore = defineStore('playlist', () => {
-  // 当前歌单 id
-  const currentPlaylistId = ref<number | null>(playlistStorage.getPlaylistId())
-  const currentPlaylist = ref<Playlist | any>({})
-  const currentSonglist = ref<Song[]>([])
+const key = 'PLAYLIST'
+export const usePlaylistStore = defineStore(
+  key,
+  () => {
+    // 当前歌单 id
+    const currentPlaylistId = ref<number | null>(-1)
+    const currentPlaylist = ref<Playlist | any>({})
+    const currentSonglist = ref<Song[]>([])
 
-  // 设置当前歌单 id
-  const setCurrentPlaylistId = (id: number) => {
-    // console.log('setCurrentPlaylistId', id)
-    currentPlaylistId.value = id
-    playlistStorage.setPlaylistId(id)
-  }
-
-  const getPlaylistDetail = async () => {
-    try {
-      // nextTick(() => {
-      //   console.log('nextTick', currentPlaylistId.value)
-      // })
-      // console.log('getPlaylistDetail', currentPlaylistId.value)
-      if (!currentPlaylistId.value) return
-      // 获取歌单详情
-      const { playlist } = await playlistApi.getPlaylistDetail(
-        currentPlaylistId.value
-      )
-      currentPlaylist.value = playlist
-      // 获取歌单的所有歌曲
-      const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
-      currentSonglist.value = songs
-    } catch (error) {
-      console.log(error)
+    // 设置当前歌单 id
+    const setCurrentPlaylistId = (id: number) => {
+      // console.log('setCurrentPlaylistId', id)
+      currentPlaylistId.value = id
     }
-  }
 
-  return {
-    currentPlaylistId,
-    setCurrentPlaylistId,
-    currentPlaylist,
-    getPlaylistDetail,
-    currentSonglist,
+    const getPlaylistDetail = async () => {
+      try {
+        // nextTick(() => {
+        //   console.log('nextTick', currentPlaylistId.value)
+        // })
+        // console.log('getPlaylistDetail', currentPlaylistId.value)
+        if (!currentPlaylistId.value) return
+        // 获取歌单详情
+        const { playlist } = await playlistApi.getPlaylistDetail(
+          currentPlaylistId.value
+        )
+        currentPlaylist.value = playlist
+        // 获取歌单的所有歌曲
+        const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
+        currentSonglist.value = songs
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    return {
+      currentPlaylistId,
+      setCurrentPlaylistId,
+      currentPlaylist,
+      getPlaylistDetail,
+      currentSonglist,
+    }
+  },
+  {
+    persist: {
+      key,
+      paths: ['currentPlaylistId'],
+    },
   }
-})
+)

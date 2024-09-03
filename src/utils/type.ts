@@ -50,6 +50,21 @@ export interface User {
   } // 用户信息
 }
 
+// 推荐歌单接口
+export interface RecommendPlaylist {
+  id: number
+  name: string
+  coverImgUrl: string
+  playCount?: number
+  detailPageTitle: string
+  createTime?: string
+  creator?: {
+    userId: number
+    nickname: string
+    avatarUrl: string
+  }
+}
+
 // 歌曲接口
 export interface Song {
   id: number

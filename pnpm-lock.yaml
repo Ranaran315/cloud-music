@@ -17,6 +17,9 @@ dependencies:
   pinia:
     specifier: ^2.2.2
     version: 2.2.2(typescript@5.5.4)(vue@3.4.38)
+  pinia-plugin-persistedstate:
+    specifier: ^3.2.3
+    version: 3.2.3(pinia@2.2.2)
   sass:
     specifier: ^1.77.8
     version: 1.77.8
@@ -2569,6 +2572,14 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
     dev: true
+
+  /pinia-plugin-persistedstate@3.2.3(pinia@2.2.2):
+    resolution: {integrity: sha512-Cm819WBj/s5K5DGw55EwbXDtx+EZzM0YR5AZbq9XE3u0xvXwvX2JnWoFpWIcdzISBHqy9H1UiSIUmXyXqWsQRQ==}
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: 2.2.2(typescript@5.5.4)(vue@3.4.38)
+    dev: false
 
   /pinia@2.2.2(typescript@5.5.4)(vue@3.4.38):
     resolution: {integrity: sha512-ja2XqFWZC36mupU4z1ZzxeTApV7DOw44cV4dhQ9sGwun+N89v/XP7+j7q6TanS1u1tdbK4r+1BUx7heMaIdagA==}

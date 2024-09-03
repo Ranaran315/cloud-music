@@ -61,7 +61,7 @@
 import { useClassName } from '@/hooks'
 import { usePlaylistStore } from '@/store'
 import { formatCount, formatTime } from '@/utils/format'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { Play, Collect, Download } from '@/icons'
 
 const ucn = useClassName('playlist', false)
@@ -109,9 +109,8 @@ const timeMeta = computed(() => [
     label: '歌曲更新于',
   },
 ])
-onMounted(() => {
-  playlistStore.getPlaylistDetail()
-})
+
+playlistStore.getPlaylistDetail()
 </script>
 
 <style scoped lang="scss">

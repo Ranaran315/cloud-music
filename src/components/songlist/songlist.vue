@@ -5,6 +5,7 @@
       :data="(data as any)"
       :columns="columns"
       :row-props="rowProps"
+      :bordered="false"
     >
     </n-data-table>
   </div>
@@ -109,8 +110,10 @@ const rowProps = (row: any) => {
 );
 
 ::v-deep {
-  .n-data-table .n-data-table-td {
+  .n-data-table-th,
+  .n-data-table-td {
     background-color: transparent;
+    color: inherit;
   }
   @include e('row') {
     background-color: getFillColor();
