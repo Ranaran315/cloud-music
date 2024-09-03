@@ -22,10 +22,10 @@ export const useRecommendStore = defineStore('recommend', () => {
   const recommendlist = ref<RecommendPlaylist[]>([])
   const getRecommendList = async () => {
     try {
-      // 缓存时间小于 5 分钟则不重新获取
+      // 缓存时间小于 10 分钟则不重新获取
       if (
         Date.now() - parseInt(recommendStorage.getRecommentCache()) <
-        1000 * 60 * 5
+        1000 * 60 * 10
       ) {
         recommendlist.value = recommendStorage.getRecommendList()
         return

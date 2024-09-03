@@ -53,8 +53,11 @@ const route = useRoute()
   display: flex;
   flex-direction: column;
   gap: 20px;
-  overflow-y: auto;
+  overflow-y: hidden;
   box-sizing: border-box;
+  &:hover {
+    overflow-y: auto;
+  }
   @include e('menu') {
     width: 100%;
     @include e('menu-title') {
