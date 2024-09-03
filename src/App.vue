@@ -29,8 +29,8 @@ body {
   overflow-x: hidden;
   --navbar-height: 60px;
   --sidebar-width: 220px;
-  --navbar-z-index: 3000;
-  --sidebar-z-index: 3000;
+  --navbar-z-index: 1000;
+  --sidebar-z-index: 1000;
 }
 
 .layout {

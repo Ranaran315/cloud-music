@@ -2,7 +2,7 @@
   <div :class="ucn.b()">
     <div :class="ucn.e('header')">
       <div :class="ucn.e('cover')">
-        <cloud-image :src="playlist.coverImgUrl" />
+        <cloud-image preview :src="playlist.coverImgUrl" />
       </div>
       <div :class="ucn.e('info')">
         <div :class="ucn.e('title')" style="margin-bottom: 0">

@@ -39,6 +39,7 @@ export const usePlaylistStore = defineStore('playlist', () => {
   const setCurrentPlaylistId = (id: number) => {
     // console.log('setCurrentPlaylistId', id)
     currentPlaylistId.value = id
+    playlistStorage.setPlaylistId(id)
   }
 
   const getPlaylistDetail = async () => {
