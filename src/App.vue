@@ -8,6 +8,9 @@
 
 <script setup lang="ts">
 import { Navbar, Sidebar } from '@/layout/index.ts'
+import { useLoginStore } from '@/store'
+
+useLoginStore().getLoginStatus()
 </script>
 
 <style lang="scss">

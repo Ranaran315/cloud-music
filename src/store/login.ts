@@ -113,11 +113,13 @@ export const useLoginStore = defineStore(
       isLogined,
       logout,
       getLoginStatus,
+      localCookie,
     }
   },
   {
     persist: {
       key,
+      paths: ['localCookie', 'userInfo'],
     },
   }
 )
