@@ -1,19 +1,8 @@
 <template>
-  <Navbar />
-  <Sidebar />
-  <div class="layout">
-    <div class="layout-main"><router-view /></div>
-  </div>
-  <Player />
+  <router-view />
 </template>
 
-<script setup lang="ts">
-import { Navbar, Sidebar, Player } from '@/layout/index.ts'
-import { useLoginStore, useSongStore } from '@/store'
-
-useLoginStore().getLoginStatus() // 获取登录状态
-useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss">
 body {
@@ -32,26 +21,6 @@ body {
   flex-direction: column;
   box-sizing: border-box;
   overflow-x: hidden;
-  --navbar-height: 60px;
-  --sidebar-width: 250px;
-  --player-height: 80px;
-  --layout-z-index: 1000;
-}
-
-.layout {
-  margin-top: var(--navbar-height);
-  margin-left: var(--sidebar-width);
-  margin-bottom: var(--player-height);
-  padding: 20px 50px;
-  padding-left: 30px;
-  box-sizing: border-box;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  &-main {
-    flex: 1;
-    max-width: 1280px;
-  }
 }
 
 // 滚动条整体

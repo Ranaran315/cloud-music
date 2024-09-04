@@ -11,6 +11,7 @@ import {
   Cloud,
   Dir,
   Recent,
+  Logo,
 } from '@/icons'
 
 export const sidebarRoutes: RouteRecordRaw[] = [
@@ -135,27 +136,40 @@ export const sidebarRoutes: RouteRecordRaw[] = [
           icon: Cloud,
         },
       },
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('@/views/profile/profile.vue'),
+        meta: {
+          title: '个人中心',
+          icon: Logo,
+        },
+      },
     ],
   },
 ]
 
 const routes: RouteRecordRaw[] = [
-  ...sidebarRoutes,
   {
-    path: '/playlist/:id',
-    name: 'Playlist',
-    component: () => import('@/views/playlist/playlist.vue'),
-    meta: {
-      title: '歌单',
-    },
+    path: '/',
+    name: 'Layout',
+    component: () => import('@/layout/layout.vue'),
+    children: [
+      ...sidebarRoutes,
+      {
+        path: '/playlist/:id',
+        name: 'Playlist',
+        component: () => import('@/views/playlist/playlist.vue'),
+        meta: {
+          title: '歌单',
+        },
+      },
+    ],
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('@/views/profile/profile.vue'),
-    meta: {
-      title: '个人中心',
-    },
+    path: '/player',
+    name: 'Player',
+    component: () => import('@/views/player/player.vue'),
   },
 ]
 

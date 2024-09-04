@@ -16,7 +16,7 @@ import ToPlaylist from './to-playlist.vue'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like, Comment } from '@/icons'
 
-const ucn = useClassName('player-menu', false)
+const ucn = useClassName('player-menu')
 defineOptions({
   name: 'PlayerMenu',
 })
@@ -25,7 +25,7 @@ defineOptions({
 <style scoped lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player-menu',
-  $use-namespace: false
+  $use-namespace: true
 );
 
 @include b() {

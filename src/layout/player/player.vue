@@ -28,7 +28,7 @@ import { computed, ref } from 'vue'
 import Controls from './controls.vue'
 import PlayerMenu from './player-menu.vue'
 
-const ucn = useClassName('player', false)
+const ucn = useClassName('player')
 defineOptions({
   name: 'Player',
 })
@@ -42,7 +42,7 @@ const song = computed(() => songStore.song)
 <style scoped lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player',
-  $use-namespace: false
+  $use-namespace: true
 );
 
 @include b() {

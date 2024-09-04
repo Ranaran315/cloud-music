@@ -56,7 +56,7 @@ import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { RaIcon } from '@capybara-plus/vue'
 import { useToPlaylistStore } from '@/store'
 
-const ucn = useClassName('controls', false)
+const ucn = useClassName('controls')
 defineOptions({
   name: 'Controls',
 })
@@ -181,7 +181,7 @@ const handleEnded = () => {
 </script>
 
 <style scoped lang="scss">
-@use '@/style/bem' as * with($block: 'controls', $use-namespace: false);
+@use '@/style/bem' as * with($block: 'controls', $use-namespace: true);
 
 @include b() {
   width: 40%;
