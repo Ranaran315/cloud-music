@@ -18,7 +18,18 @@
         </div>
         <div :class="ucn.e('album')">{{ song.al?.name }}</div>
       </div>
-      <div :class="ucn.e('lyric')"></div>
+      <div :class="ucn.e('lyric')">
+        <div
+          :class="[ucn.e('line'), ucn.is(isActive(line.time, index), 'active')]"
+          v-for="(line, index) of lyrics"
+          :key="index"
+        >
+          <div :class="ucn.e('content')">{{ line.content }}</div>
+          <div :class="ucn.e('time')" v-if="line.content">
+            {{ formatDuration(line.time) }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +39,9 @@ import { songApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { useSongStore } from '@/store'
 import { rgbToHex } from '@/utils/color'
+import { formatDuration } from '@/utils/format'
+import { parseLyric } from '@/utils/parse'
+import { Lyric } from '@/utils/type'
 import ColorThief from 'colorthief'
 import { computed, type CSSProperties, ref, watch } from 'vue'
 
@@ -37,7 +51,24 @@ defineOptions({
 })
 
 const songStore = useSongStore()
-const song = computed(() => songStore.song)
+const song = computed(() => songStore.song) // 当前播放歌曲
+const lyrics = ref<Lyric[]>([]) // 歌词
+const currentTime = ref(0)
+
+const isActive = computed(() => {
+  return (time: number, index: number) => {
+    if (!lyrics.value[index + 1]) {
+      return true
+    }
+    if (
+      time <= currentTime.value &&
+      lyrics.value[index + 1]!.time > currentTime.value
+    ) {
+      return true
+    }
+    return false
+  }
+})
 
 // 动态设置背景颜色
 const playerColor = ref<string>('#000')
@@ -57,7 +88,12 @@ watch(
   () => song.value.id,
   (id: number | undefined) => {
     if (!id) return
-    songApi.getSongLyric(id)
+    songApi.getSongLyric(id).then(({ lrc }) => {
+      lyrics.value = parseLyric(lrc.lyric)
+    })
+  },
+  {
+    immediate: true,
   }
 )
 </script>
@@ -70,6 +106,7 @@ watch(
 
 @include b() {
   width: 100vw;
+  max-height: 100vh;
   height: 100vh;
   box-sizing: border-box;
   overflow: hidden;
@@ -99,8 +136,12 @@ watch(
   @include e('right') {
     width: 60%;
     height: 100%;
+    max-height: 100vh;
     padding: 50px 20px;
     color: getFillColor();
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
     @include e('info') {
       display: flex;
       flex-direction: column;
@@ -111,6 +152,33 @@ watch(
       }
       @include e('artist') {
         font-size: 1.5rem;
+      }
+    }
+    @include e('lyric') {
+      margin-top: 20px;
+      overflow: auto;
+      flex-grow: 1;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      @include e('line') {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.5;
+        &.is-active {
+          opacity: 1;
+          transform: translateY(0) rotateX(0);
+          color: getColor('primary');
+        }
+        @include e('content') {
+          font-size: 1.5rem;
+          margin: 0 auto;
+        }
+        @include e('time') {
+          font-size: 1.2rem;
+        }
       }
     }
   }

@@ -114,3 +114,8 @@ export interface Song {
 export interface SongWithUrl extends Song {
   url: string
 }
+
+export interface Lyric {
+  time: number
+  content: string
+}
