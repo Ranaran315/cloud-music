@@ -1,5 +1,5 @@
 import { songApi } from '@/api'
-import type { Song, SongDetail } from '@/utils/type'
+import type { Song, SongWithUrl } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useLoginStore } from '@/store'
@@ -10,24 +10,34 @@ export const useSongStore = defineStore(
   () => {
     const loginStore = useLoginStore()
     // 当前播放的歌曲
-    const currentSong = ref<Partial<SongDetail>>({})
+    const song = ref<Partial<SongWithUrl>>({})
     // 用户喜欢的音乐 id 列表
     const likedSongs = ref<number[]>([])
     // 转化为 Set，提高查询效率
     const likedlist = computed(() => new Set(likedSongs.value))
-
-    // 设置当前播放的歌曲
-    const setCurrentSong = (newSong: Song) => {
-      currentSong.value = newSong
-      getSong(newSong.id.toString())
+    /**
+     * 设置当前播放的歌曲
+     * @param newSong 歌曲对象或歌曲 id
+     */
+    const setCurrentSong = async (newSong: Song | number) => {
+      try {
+        if (typeof newSong === 'number') {
+          const { songs } = await songApi.getSongDetail(newSong)
+          newSong = songs[0] as Song
+        }
+        song.value = newSong
+        getSong(newSong.id)
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     // 获取歌曲url
-    const getSong = async (id: string) => {
+    const getSong = async (id: number) => {
       try {
         const { data } = await songApi.getSongUrlV1(id)
         const { url } = data[0]
-        currentSong.value.url = url
+        song.value.url = url
       } catch (error) {
         console.error(error)
       }
@@ -45,7 +55,11 @@ export const useSongStore = defineStore(
       }
     }
 
-    // 喜欢音乐
+    /**
+     * @description 喜欢歌曲
+     * @deprecated 由于网易云盾验证，无法使用
+     * @param id 歌曲 id
+     */
     const like = async (id: number) => {
       try {
         const liked = likedlist.value.has(id)
@@ -57,7 +71,7 @@ export const useSongStore = defineStore(
     }
 
     return {
-      currentSong,
+      song,
       setCurrentSong,
       likedlist,
       getUserLikedSongs,
@@ -67,7 +81,7 @@ export const useSongStore = defineStore(
   {
     persist: {
       key,
-      paths: ['currentSong'],
+      paths: ['song'],
     },
   }
 )

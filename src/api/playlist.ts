@@ -42,6 +42,21 @@ export default {
    * 获取歌单所有歌曲
    * @param id 歌单 id
    * @returns
+   * - id: number
+   * - name: string
+   * - ar: {
+   *    id: number
+   *    name: string
+   *  }[]
+   * - al: {
+   *    id: number
+   *    name: string
+   *    picUrl: string
+   *  }
+   * - alia: string[]
+   * - publishTime: number
+   * - dt: number
+   * - isLiked: boolean
    */
   getPlaylistAllTracks(id: number | string) {
     return request({

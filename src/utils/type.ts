@@ -110,6 +110,7 @@ export interface Song {
   dt: number
   isLiked: boolean
 }
-export interface SongDetail extends Song {
+
+export interface SongWithUrl extends Song {
   url: string
 }

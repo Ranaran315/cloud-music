@@ -20,7 +20,7 @@ import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like, Liked } from '@/icons'
-import { useSongStore } from '@/store'
+import { useSongStore, useToPlaylistStore } from '@/store'
 
 const ucn = useClassName('songlist')
 defineOptions({
@@ -32,6 +32,7 @@ defineProps({
 })
 
 const songStore = useSongStore()
+const toPlaylistStore = useToPlaylistStore()
 const likedlist = computed(() => songStore.likedlist)
 
 // 列渲染
@@ -87,7 +88,11 @@ const columns: DataTableColumns<Song> = [
     render: (row: Song) => {
       return h(
         RaIcon,
-        { size: '1.2rem', onClick: () => songStore.like(row.id) },
+        {
+          class: ucn.e('like'),
+          size: '1.2rem',
+          onClick: () => songStore.like(row.id),
+        },
         { default: () => h(likedlist.value.has(row.id) ? Liked : Like) }
       )
     },
@@ -96,7 +101,7 @@ const columns: DataTableColumns<Song> = [
     title: '时长',
     key: 'dt',
     render: (row: Song) => {
-      return formatDuration(row.dt)
+      return h('div', { class: ucn.e('duration') }, formatDuration(row.dt))
     },
   },
 ]
@@ -107,6 +112,7 @@ const rowProps = (row: any) => {
     class: ucn.e('row'),
     onClick: () => {
       songStore.setCurrentSong(row)
+      toPlaylistStore.setToPlaylist(row.id)
     },
   }
 }
@@ -161,6 +167,21 @@ const rowProps = (row: any) => {
           font-size: 0.7rem;
         }
       }
+    }
+    @include e('artist') {
+      width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @include e('album') {
+      width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @include e('duration') {
+      white-space: nowrap;
     }
   }
 }

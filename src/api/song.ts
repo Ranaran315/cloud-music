@@ -14,32 +14,41 @@ type SongLevel =
 
 export default {
   /**
+   * 获取歌曲详情
+   * @param id 歌曲 id
+   * @returns
+   * songs: Song[]
+   */
+  getSongDetail(id: number | number[]) {
+    return request({
+      url: 'detail',
+      params: {
+        ids: idToids(id),
+      },
+    })
+  },
+  /**
    * 获取歌曲 url
+   * data: Array
    * - id: 歌曲 id
    * - url: 歌曲的 url
    * - time: 歌曲时长
    */
-  getSongUrl(id: string | string[], br: number = 999000) {
-    if (Array.isArray(id)) {
-      id = id.join(',')
-    }
+  getSongUrl(id: number | number[], br: number = 999000) {
     return request({
       url: 'url',
       params: {
-        id,
+        id: idToids(id),
         br,
       },
     })
   },
   // 获取歌曲url（新版）
-  getSongUrlV1(id: string | string[], level: SongLevel = 'sky') {
-    if (Array.isArray(id)) {
-      id = id.join(',')
-    }
+  getSongUrlV1(id: number | number[], level: SongLevel = 'sky') {
     return request({
       url: 'url/v1',
       params: {
-        id,
+        id: idToids(id),
         level,
       },
     })
@@ -74,4 +83,14 @@ export default {
       },
     })
   },
+}
+
+function idToids(id: number | number[]) {
+  let ids: string
+  if (Array.isArray(id)) {
+    ids = id.join(',')
+  } else {
+    ids = id.toString()
+  }
+  return ids
 }

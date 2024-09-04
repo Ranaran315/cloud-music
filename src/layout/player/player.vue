@@ -17,7 +17,7 @@
       :is-playing="isPlaying"
       @upadte:is-playing="(val) => (isPlaying = val)"
     />
-    <h2 style="width: 30%">占位符</h2>
+    <PlayerMenu />
   </div>
 </template>
 
@@ -26,6 +26,7 @@ import { useClassName } from '@/hooks'
 import { useSongStore } from '@/store'
 import { computed, ref } from 'vue'
 import Controls from './controls.vue'
+import PlayerMenu from './player-menu.vue'
 
 const ucn = useClassName('player', false)
 defineOptions({
@@ -35,7 +36,7 @@ defineOptions({
 const isPlaying = ref(false)
 
 const songStore = useSongStore()
-const song = computed(() => songStore.currentSong)
+const song = computed(() => songStore.song)
 </script>
 
 <style scoped lang="scss">
@@ -66,6 +67,18 @@ const song = computed(() => songStore.currentSong)
       flex-direction: column;
       align-items: flex-start;
       gap: 5px;
+      @include e('name') {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      @include e('artist') {
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     @include e('pic') {
       width: 40px;

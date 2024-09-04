@@ -11,6 +11,7 @@ export const usePlaylistStore = defineStore(
     const pid = ref<number | null>(-1)
     // 当前歌单
     const currentPlaylist = ref<Partial<Playlist>>({})
+    // 当前歌单中的所有歌曲
     const currentSonglist = ref<Song[]>([])
 
     // 设置当前歌单 id

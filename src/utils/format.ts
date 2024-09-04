@@ -66,3 +66,7 @@ export const formatDuration = (duration?: number) => {
 
   return `${minutes}:${second}`
 }
+
+export const formatName = (arr: any[], filed: string) => {
+  return arr.map((item) => item[filed]).join(' / ')
+}

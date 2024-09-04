@@ -8,13 +8,19 @@
       @ended="handleEnded"
     ></audio>
     <div :class="ucn.e('button-group')">
-      <ra-icon :class="ucn.e('prev-next-button')">
+      <ra-icon
+        :class="ucn.e('prev-next-button')"
+        @click="toPlaylistStore.prev()"
+      >
         <PrevSong />
       </ra-icon>
       <ra-icon :class="ucn.e('play-button')" @click="play">
         <component :is="isPlaying ? Stop : Play" />
       </ra-icon>
-      <ra-icon :class="ucn.e('prev-next-button')">
+      <ra-icon
+        :class="ucn.e('prev-next-button')"
+        @click="toPlaylistStore.next()"
+      >
         <NextSong />
       </ra-icon>
     </div>
@@ -48,6 +54,7 @@ import {
 } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { RaIcon } from '@capybara-plus/vue'
+import { useToPlaylistStore } from '@/store'
 
 const ucn = useClassName('controls', false)
 defineOptions({
@@ -166,9 +173,10 @@ onBeforeUnmount(() => {
 })
 
 // 播放结束
+const toPlaylistStore = useToPlaylistStore()
 const handleEnded = () => {
   console.log('播放完成')
-  emit('upadte:isPlaying', false)
+  toPlaylistStore.next()
 }
 </script>
 
