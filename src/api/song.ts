@@ -32,7 +32,7 @@ export default {
     })
   },
   // 获取歌曲url（新版）
-  getSongUrlV1(id: string | string[], level: SongLevel = 'standard') {
+  getSongUrlV1(id: string | string[], level: SongLevel = 'sky') {
     if (Array.isArray(id)) {
       id = id.join(',')
     }

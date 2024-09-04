@@ -25,7 +25,7 @@ export const useSongStore = defineStore(
     // 获取歌曲url
     const getSong = async (id: string) => {
       try {
-        const { data } = await songApi.getSongUrl(id)
+        const { data } = await songApi.getSongUrlV1(id)
         const { url } = data[0]
         currentSong.value.url = url
       } catch (error) {

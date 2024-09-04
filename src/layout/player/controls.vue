@@ -5,6 +5,7 @@
       :src="url"
       @canplaythrough="handleCanplaythrough"
       @timeupdate.stop="handleTimeUpdate"
+      @ended="handleEnded"
     ></audio>
     <div :class="ucn.e('button-group')">
       <ra-icon :class="ucn.e('prev-next-button')">
@@ -163,6 +164,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleSpace)
 })
+
+// 播放结束
+const handleEnded = () => {
+  console.log('播放完成')
+  emit('upadte:isPlaying', false)
+}
 </script>
 
 <style scoped lang="scss">

@@ -48,7 +48,7 @@
       <div :class="ucn.e('header-item')">
         <div :class="ucn.e('operator')">
           <cloud-button type="primary" :icon="Play"> 播放全部 </cloud-button>
-          <cloud-button :icon="Collect">收藏</cloud-button>
+          <cloud-button :icon="Collect">收藏 </cloud-button>
           <cloud-button :icon="Download">下载</cloud-button>
         </div>
       </div>

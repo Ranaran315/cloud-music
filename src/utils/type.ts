@@ -49,6 +49,34 @@ export interface User {
   } // 用户信息
 }
 
+// 歌单接口
+export interface Playlist {
+  id: number
+  name: string
+  coverImgUrl: string
+  createTime: number
+  updateTime: number
+  trackUpdateTime: number
+  playCount: number
+  subscribedCount: number
+  shareCount: number
+  commentCount: number
+  trackCount: number
+  description: string
+  tags: string[]
+  titleImageUrl: string
+  detailPageTitle: string
+  subscribers: {
+    userId: number
+    avatarUrl: string
+    nickname: string
+  }[]
+  creator: {
+    userId: number
+    avatarUrl: string
+    nickname: string
+  }
+}
 // 推荐歌单接口
 export interface RecommendPlaylist {
   id: number

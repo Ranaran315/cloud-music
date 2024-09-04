@@ -3,7 +3,8 @@
  * @param num
  * @returns
  */
-export const formatCount = (num: number) => {
+export const formatCount = (num?: number) => {
+  if (!num) return 0
   if (num > 100000000) {
     return `${(num / 100000000).toFixed(2)}亿`
   } else if (num > 10000) {
@@ -20,7 +21,8 @@ export const formatCount = (num: number) => {
  * @param time
  * @returns
  */
-export const formatTime = (time: number | string) => {
+export const formatTime = (time?: number | string) => {
+  if (!time) return '刚刚'
   const currentDate = new Date()
   const currentTime = currentDate.getTime()
 
