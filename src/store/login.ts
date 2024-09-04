@@ -18,7 +18,7 @@ export const useLoginStore = defineStore(
     const qrImg = ref('') // 二维码图片 base64 格式
     const qrStatus = ref<QRCodeStatus>(QRCodeStatus.OTHER) // 二维码是否过期
     const localCookie = ref('') // cookie
-    const userInfo = ref<LoginUser | {}>({}) // 用户信息
+    const userInfo = ref<Partial<LoginUser>>({}) // 用户信息
     const isLogined = ref(false)
     let timer: any = null // 轮询检查二维码状态的定时器
 

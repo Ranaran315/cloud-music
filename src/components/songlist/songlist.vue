@@ -14,12 +14,12 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { DataTableColumns, NDataTable } from 'naive-ui'
-import { h } from 'vue'
+import { computed, h } from 'vue'
 import { CloudImage } from '@/components'
 import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
-import { Like } from '@/icons'
+import { Like, Liked } from '@/icons'
 import { useSongStore } from '@/store'
 
 const ucn = useClassName('songlist')
@@ -32,6 +32,7 @@ defineProps({
 })
 
 const songStore = useSongStore()
+const likedlist = computed(() => songStore.likedlist)
 
 // 列渲染
 const columns: DataTableColumns<Song> = [
@@ -83,8 +84,12 @@ const columns: DataTableColumns<Song> = [
   {
     title: '喜欢',
     key: 'like',
-    render: () => {
-      return h(RaIcon, {}, { default: () => h(Like) })
+    render: (row: Song) => {
+      return h(
+        RaIcon,
+        { size: '1.2rem', onClick: () => songStore.like(row.id) },
+        { default: () => h(likedlist.value.has(row.id) ? Liked : Like) }
+      )
     },
   },
   {

@@ -28,16 +28,15 @@ export interface Profile {
 }
 // 账户信息
 export interface Account {
+  id: number
   status: number
 }
 // 登录后返回的用户登录信息
-export interface LoginUser {
-  account: Account
-  profile: Profile & {
+export type LoginUser = Account &
+  Profile & {
     lastLoginIP: string // 最后登录 IP
     lastLoginTime: number // 最后登录时间
   }
-}
 // 用户详情
 export interface User {
   level: number // 等级

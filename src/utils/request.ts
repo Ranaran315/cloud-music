@@ -42,7 +42,11 @@ const useRequest = (baseURL: string) => {
   }): Promise<AxiosResponse<any, any>['data']> => {
     url = resetUrl ? resetUrl : url ? baseURL + '/' + url : baseURL
     const request: any = { url, ...config }
-    if (timestamp) request.timestamp = Date.now()
+    if (timestamp)
+      request.params = {
+        ...request.params,
+        timestamp: new Date().getTime(),
+      }
     return server(request)
   }
 }

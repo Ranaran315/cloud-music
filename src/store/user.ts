@@ -1,10 +1,10 @@
 import { userApi } from '@/api'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { User } from '@/utils/type'
+import type { User } from '@/utils/type'
 
 export const useUserStore = defineStore('user', () => {
-  const userInfo = ref<User | any>({}) // 用户信息
+  const userInfo = ref<Partial<User>>({}) // 用户信息
   const profile = computed(() => userInfo.value?.profile)
 
   // 获取用户信息

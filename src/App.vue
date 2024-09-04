@@ -9,9 +9,10 @@
 
 <script setup lang="ts">
 import { Navbar, Sidebar, Player } from '@/layout/index.ts'
-import { useLoginStore } from '@/store'
+import { useLoginStore, useSongStore } from '@/store'
 
-useLoginStore().getLoginStatus()
+useLoginStore().getLoginStatus() // 获取登录状态
+useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
 </script>
 
 <style lang="scss">

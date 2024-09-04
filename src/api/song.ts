@@ -52,6 +52,7 @@ export default {
    */
   like(id: number, like: boolean) {
     return request({
+      method: 'post',
       resetUrl: 'like',
       params: {
         id,
@@ -59,7 +60,12 @@ export default {
       },
     })
   },
-  // 获取用户喜欢的音乐列表
+  /**
+   * 获取用户喜欢的音乐列表
+   * @param uid 用户 id
+   * @returns
+   * - ids: number[]
+   */
   getSongLikedList(uid: number) {
     return request({
       resetUrl: 'likelist',
