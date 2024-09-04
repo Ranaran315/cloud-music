@@ -14,3 +14,7 @@
 # 歌单详情
 
 ![歌单详情页](/docs/playlist.png)
+
+# 播放器
+
+![播放器](/docs/player.png)
