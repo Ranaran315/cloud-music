@@ -4,6 +4,7 @@
     :src="src"
     width="100%"
     :preview-disabled="!preview"
+    @load="handleLoad"
   ></n-image>
 </template>
 
@@ -26,6 +27,12 @@ defineProps({
     default: false,
   },
 })
+
+const emit = defineEmits(['load'])
+
+const handleLoad = (e: Event) => {
+  emit('load', e)
+}
 </script>
 
 <style scoped lang="scss">

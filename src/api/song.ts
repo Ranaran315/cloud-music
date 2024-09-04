@@ -83,6 +83,25 @@ export default {
       },
     })
   },
+  /**
+   * 获取歌曲歌词
+   * @param id 歌曲 id
+   * @returns
+   * - lrc：歌词
+   *  - version: 歌词版本
+   *  - lyric: 歌词
+   * - klyric
+   * - tlyric： 翻译歌词
+   * - romalyric： 罗马音歌词
+   */
+  getSongLyric(id: number) {
+    return request({
+      resetUrl: 'lyric',
+      params: {
+        id,
+      },
+    })
+  },
 }
 
 function idToids(id: number | number[]) {
