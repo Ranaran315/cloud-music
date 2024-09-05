@@ -1,5 +1,5 @@
 <template>
-  <div :class="ucn.b()">
+  <div :class="[ucn.b(), ucn.is(playerContext?.state.showViwes, 'views')]">
     <div :class="ucn.e('info')">
       <div
         :class="[
@@ -91,6 +91,12 @@ const song = computed(() => playerContext?.state.song)
       }
     }
   }
+}
+
+// 全屏样式
+@include is('views') {
+  background-color: transparent;
+  color: getFillColor();
 }
 
 @keyframes rotate {

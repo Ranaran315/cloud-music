@@ -123,9 +123,10 @@ const clickProgress = (e: MouseEvent) => {
   align-items: center;
   gap: 20px;
   user-select: none;
+  width: 100%;
   @include e('track') {
     position: relative;
-    width: 300px;
+    width: 100%;
     height: 5px;
     border-radius: 20px;
     background-color: getFillColor('third');
@@ -162,9 +163,10 @@ const clickProgress = (e: MouseEvent) => {
 }
 
 @include is('vertical') {
+  height: 100%;
   @include e('track') {
     width: 5px;
-    height: 200px;
+    height: 100%;
     transition: width 0.3s;
     @include e('dot') {
       top: 100%;

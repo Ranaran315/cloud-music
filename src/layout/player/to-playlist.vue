@@ -60,13 +60,20 @@ const toPlaylistStore = useToPlaylistStore()
 const songStore = useSongStore()
 const isCurrent = computed(() => (id: number) => songStore.song?.id === id)
 
-// 当 popover 显示时，获取播放列表的歌曲 url
+// 当 popover 显示时，获取播放列表的歌曲详情
 const handleUpdateShow = async (show: boolean) => {
   if (show) {
     const { songs: gotSongs } = await songApi.getSongDetail(
       Array.from(toPlaylistStore.list)
     )
     songs.value = gotSongs
+    /**
+     * @todo 有 bug ，body 会跟着一起滚动
+     */
+    // const element = document.querySelector('.to-playlist__item.is-active')
+    // element?.scrollIntoView({
+    //   block: 'center',
+    // })
   }
 }
 </script>

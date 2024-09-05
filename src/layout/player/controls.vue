@@ -1,5 +1,5 @@
 <template>
-  <div :class="ucn.b()">
+  <div :class="[ucn.b(), ucn.is(playerContext?.state.showViwes, 'views')]">
     <audio
       ref="audioRef"
       :src="playerContext?.state.song.url"
@@ -182,6 +182,7 @@ const handleEnded = () => {
     }
   }
   @include e('progress') {
+    width: 400px;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -190,6 +191,16 @@ const handleEnded = () => {
       font-size: 0.7rem;
       color: getTextColor('secondary');
     }
+  }
+}
+
+@include is('views') {
+  @include e('progress') {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
 }
 </style>

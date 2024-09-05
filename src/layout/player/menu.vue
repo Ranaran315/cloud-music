@@ -1,7 +1,7 @@
 <template>
   <div :class="ucn.b()">
     <ra-icon>
-      <Like />
+      <component :is="songStore.currentIsLiked ? Liked : Like" />
     </ra-icon>
     <ra-icon>
       <Comment />
@@ -19,15 +19,18 @@
 import { useClassName } from '@/hooks'
 import ToPlaylist from './to-playlist.vue'
 import { RaIcon } from '@capybara-plus/vue'
-import { Like, Comment, FullScreen } from '@/icons'
+import { Like, Comment, FullScreen, Liked } from '@/icons'
 import { inject } from 'vue'
 import { playerContextKey } from './context'
 import NoFullScreen from '@/icons/no-full-screen.vue'
+import { useSongStore } from '@/store'
 
 const ucn = useClassName('player-menu', false)
 defineOptions({
   name: 'PlayerMenu',
 })
+
+const songStore = useSongStore()
 
 const playerContext = inject(playerContextKey, undefined)
 

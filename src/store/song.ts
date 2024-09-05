@@ -15,6 +15,13 @@ export const useSongStore = defineStore(
     const likedSongs = ref<number[]>([])
     // 转化为 Set，提高查询效率
     const likedlist = computed(() => new Set(likedSongs.value))
+    const currentIsLiked = computed(() => {
+      if (!song.value?.id) {
+        return false
+      } else {
+        return likedlist.value.has(song.value.id)
+      }
+    })
     /**
      * 设置当前播放的歌曲
      * @param newSong 歌曲对象或歌曲 id
@@ -76,6 +83,7 @@ export const useSongStore = defineStore(
       likedlist,
       getUserLikedSongs,
       like,
+      currentIsLiked,
     }
   },
   {
