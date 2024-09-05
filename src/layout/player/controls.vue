@@ -27,8 +27,8 @@
     <div :class="ucn.e('progress')">
       <div :class="ucn.e('time')">{{ formatDuration(currentTime) }}</div>
       <cloud-progress
-        :width="progressBarWidth"
-        @update:width="(width: number) => (progressBarWidth = width)"
+        direction="x"
+        v-model="progressBarWidth"
         :before-traggle="handleBeforeTraggle"
         :on-traggle="handleOnTraggle"
         :after-traggle="handleAftreTraggle"
@@ -182,46 +182,6 @@ const handleEnded = () => {
     align-items: center;
     gap: 20px;
     user-select: none;
-    @include e('progress-track') {
-      position: relative;
-      width: 300px;
-      height: 5px;
-      border-radius: 20px;
-      background-color: getFillColor('third');
-      cursor: pointer;
-      transition: height 0.3s;
-      &:hover {
-        height: 8px;
-        @include e('progress-bar') {
-          @include e('progress-bar-dot') {
-            display: block;
-          }
-        }
-      }
-      @include e('progress-bar') {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 50%;
-        height: 100%;
-        border-radius: inherit;
-        background-color: getColor('primary');
-        @include e('progress-bar-dot') {
-          pointer-events: none;
-          content: '';
-          position: absolute;
-          top: 50%;
-          right: 0;
-          transform: translate(50%, -50%);
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background-color: getFillColor();
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-          display: none;
-        }
-      }
-    }
     @include e('time') {
       font-size: 0.7rem;
       color: getTextColor('secondary');

@@ -1,12 +1,16 @@
 <template>
-  <div :class="ucn.b()">
+  <div :class="[ucn.b(), ucn.is(direction == 'y', 'vertical')]">
     <div
-      :class="ucn.e('progress-track')"
+      :class="ucn.e('track')"
       ref="progressTrackRef"
       @mousedown.stop="clickProgress"
     >
-      <div :class="ucn.e('progress-bar')" :style="progressBarStyle">
-        <div :class="ucn.e('progress-bar-dot')" ref="progressBarDotRef"></div>
+      <div :class="ucn.e('bar')" :style="progressBarStyle">
+        <div
+          :class="ucn.e('dot')"
+          ref="progressBarDotRef"
+          :style="progressBarDotStyle"
+        ></div>
       </div>
     </div>
   </div>
@@ -14,6 +18,7 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
+import { definePropType } from '@/utils/props'
 import { computed, CSSProperties, ref } from 'vue'
 
 const ucn = useClassName('progress')
@@ -25,37 +30,76 @@ const props = defineProps({
   beforeTraggle: Function,
   onTraggle: Function,
   afterTraggle: Function,
-  width: {
+  modelValue: {
     type: Number,
     required: true,
   },
+  direction: {
+    type: definePropType<'x' | 'y'>(String),
+    default: 'x',
+  },
 })
 
-const emit = defineEmits(['update:width'])
+const emit = defineEmits(['update:modelValue'])
 
 const progressTrackRef = ref(null)
 const progressBarDotRef = ref(null)
 const progressBarStyle = computed<CSSProperties>(() => {
-  return {
-    width: `${props.width}%`,
+  if (props.direction === 'x') {
+    return {
+      width: `${props.modelValue}%`,
+      left: 0,
+    }
+  } else {
+    return {
+      height: `${props.modelValue}%`,
+      bottom: 0,
+    }
+  }
+})
+const progressBarDotStyle = computed<CSSProperties>(() => {
+  if (props.direction === 'x') {
+    return {
+      top: '50%',
+      right: 0,
+      transform: 'translate(50%, -50%)',
+    }
+  } else {
+    return {
+      top: 0,
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    }
   }
 })
 const clickProgress = (e: MouseEvent) => {
-  const targetElementX = e.clientX - e.offsetX
-  // 获取进度条轨道的宽度
-  const trackWidth = (progressTrackRef.value as unknown as HTMLElement)
-    .offsetWidth
-  let rateX = (e.offsetX / trackWidth) * 100
-  emit('update:width', rateX)
-  props.beforeTraggle?.(rateX)
+  let targetElementDistance: number // 元素距离屏幕左侧或上侧的距离
+  let trackSize: number // 轨道的宽度或高度
+  let rate: number // 进度条与轨道的比例
+  if (props.direction === 'x') {
+    targetElementDistance = e.clientX - e.offsetX
+    trackSize = (progressTrackRef.value as unknown as HTMLElement).offsetWidth
+    rate = (e.offsetX / trackSize) * 100
+  } else {
+    targetElementDistance = e.clientY - e.offsetY
+    trackSize = (progressTrackRef.value as unknown as HTMLElement).offsetHeight
+    rate = ((trackSize - e.offsetY) / trackSize) * 100
+  }
+  emit('update:modelValue', rate)
+  props.beforeTraggle?.(rate)
   // 拖动进度条
   const traggleProgress = (e: MouseEvent) => {
-    rateX = ((e.clientX - targetElementX) / trackWidth) * 100
+    if (props.direction == 'x') {
+      rate = ((e.clientX - targetElementDistance) / trackSize) * 100
+    } else {
+      rate =
+        ((trackSize - (e.clientY - targetElementDistance)) / trackSize) * 100
+    }
     // 边界判断
-    if (rateX > 100) rateX = 100
-    else if (rateX < 0) rateX = 0
-    emit('update:width', rateX)
-    props.onTraggle?.(rateX)
+    if (rate > 100) rate = 100
+    else if (rate < 0) rate = 0
+    emit('update:modelValue', rate)
+    props.onTraggle?.(rate)
   }
   window.addEventListener('mousemove', traggleProgress)
   // 拖动完成
@@ -79,7 +123,7 @@ const clickProgress = (e: MouseEvent) => {
   align-items: center;
   gap: 20px;
   user-select: none;
-  @include e('progress-track') {
+  @include e('track') {
     position: relative;
     width: 300px;
     height: 5px;
@@ -89,33 +133,48 @@ const clickProgress = (e: MouseEvent) => {
     transition: height 0.3s;
     &:hover {
       height: 8px;
-      @include e('progress-bar') {
-        @include e('progress-bar-dot') {
+      @include e('bar') {
+        @include e('dot') {
           display: block;
         }
       }
     }
-    @include e('progress-bar') {
+    @include e('bar') {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
+      width: 100%;
       height: 100%;
       border-radius: inherit;
       background-color: getColor('primary');
-      @include e('progress-bar-dot') {
+      pointer-events: none;
+      @include e('dot') {
         pointer-events: none;
         content: '';
         position: absolute;
-        top: 50%;
-        right: 0;
-        transform: translate(50%, -50%);
         width: 10px;
         height: 10px;
         border-radius: 50%;
         background-color: getFillColor();
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         display: none;
+      }
+    }
+  }
+}
+
+@include is('vertical') {
+  @include e('track') {
+    width: 5px;
+    height: 200px;
+    transition: width 0.3s;
+    @include e('dot') {
+      top: 100%;
+    }
+    &:hover {
+      width: 8px;
+      @include e('bar') {
+        @include e('dot') {
+          display: block;
+        }
       }
     }
   }
