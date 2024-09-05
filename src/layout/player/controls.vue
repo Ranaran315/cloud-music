@@ -26,15 +26,13 @@
     </div>
     <div :class="ucn.e('progress')">
       <div :class="ucn.e('time')">{{ formatDuration(currentTime) }}</div>
-      <div
-        :class="ucn.e('progress-track')"
-        ref="progressTrackRef"
-        @mousedown.stop="clickProgress"
-      >
-        <div :class="ucn.e('progress-bar')" :style="progressBarStyle">
-          <div :class="ucn.e('progress-bar-dot')" ref="progressBarDotRef"></div>
-        </div>
-      </div>
+      <cloud-progress
+        :width="progressBarWidth"
+        @update:width="(width: number) => (progressBarWidth = width)"
+        :before-traggle="handleBeforeTraggle"
+        :on-traggle="handleOnTraggle"
+        :after-traggle="handleAftreTraggle"
+      ></cloud-progress>
       <div :class="ucn.e('time')">{{ formatDuration(duration) }}</div>
     </div>
   </div>
@@ -44,7 +42,6 @@
 import { useClassName } from '@/hooks'
 import { formatDuration } from '@/utils/format'
 import {
-  type CSSProperties,
   computed,
   onBeforeUnmount,
   onMounted,
@@ -95,6 +92,7 @@ const handleCanplaythrough = () => {
   doPlay()
 }
 
+const progressBarWidth = ref(0) // 进度条宽度
 // 处理 audio 播放时间更新时
 const handleTimeUpdate = (e: Event) => {
   // 拖动进度条时不处理
@@ -105,50 +103,21 @@ const handleTimeUpdate = (e: Event) => {
 
 // 进度条
 const userIsController = ref(false) // 用户是否在拖动、点击进度条
-const progressTrackRef = ref(null)
-const progressBarDotRef = ref(null)
-const progressBarWidth = ref(0)
-const progressBarStyle = computed<CSSProperties>(() => {
-  return {
-    width: `${progressBarWidth.value}%`,
-  }
-})
-// 点击进度条
-const clickProgress = (e: MouseEvent) => {
-  // 更新进度条宽度与播放时间
-  function updateProgressBarWidth(rate: number) {
-    progressBarWidth.value = rate
-    currentTime.value = (rate / 100) * duration.value!
-  }
-  userIsController.value = true
-  // if (e.target == progressBarDotRef.value) return
-  const targetElementX = e.clientX - e.offsetX
-  // 获取进度条轨道的宽度
-  const trackWidth = (progressTrackRef.value as unknown as HTMLElement)
-    .offsetWidth
-  let rateX = (e.offsetX / trackWidth) * 100
-  updateProgressBarWidth(rateX) // 更新进度条宽度与播放时间
 
-  // 拖动进度条
-  const traggleProgress = (e: MouseEvent) => {
-    rateX = ((e.clientX - targetElementX) / trackWidth) * 100
-    // 边界判断
-    if (rateX > 100) rateX = 100
-    else if (rateX < 0) rateX = 0
-    updateProgressBarWidth(rateX) // 更新进度条宽度与播放时间
-  }
-  window.addEventListener('mousemove', traggleProgress)
-  // 拖动完成
-  const traggleCompleted = () => {
-    userIsController.value = false
-    // 更新 audio 的实际播放时间
-    // 因为 currentTime 是秒，然后这里的 currentTime 是毫秒
-    audioRef.value!.currentTime = currentTime.value / 1000
-    window.removeEventListener('mousemove', traggleProgress)
-    window.removeEventListener('mouseup', traggleCompleted)
-  }
-  // 鼠标松开时清除事件监听
-  window.addEventListener('mouseup', traggleCompleted)
+const handleBeforeTraggle = (rate: number) => {
+  userIsController.value = true
+  currentTime.value = (rate / 100) * duration.value!
+}
+
+const handleOnTraggle = (rate: number) => {
+  currentTime.value = (rate / 100) * duration.value!
+}
+
+const handleAftreTraggle = () => {
+  // 更新 audio 的实际播放时间
+  // 因为 currentTime 是秒，然后这里的 currentTime 是毫秒
+  audioRef.value!.currentTime = currentTime.value / 1000
+  userIsController.value = false
 }
 
 // 空格播放

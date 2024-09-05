@@ -25,14 +25,19 @@ const props = defineProps({
   beforeTraggle: Function,
   onTraggle: Function,
   afterTraggle: Function,
+  width: {
+    type: Number,
+    required: true,
+  },
 })
+
+const emit = defineEmits(['update:width'])
 
 const progressTrackRef = ref(null)
 const progressBarDotRef = ref(null)
-const progressBarWidth = ref(0)
 const progressBarStyle = computed<CSSProperties>(() => {
   return {
-    width: `${progressBarWidth.value}%`,
+    width: `${props.width}%`,
   }
 })
 const clickProgress = (e: MouseEvent) => {
@@ -41,7 +46,7 @@ const clickProgress = (e: MouseEvent) => {
   const trackWidth = (progressTrackRef.value as unknown as HTMLElement)
     .offsetWidth
   let rateX = (e.offsetX / trackWidth) * 100
-  progressBarWidth.value = rateX
+  emit('update:width', rateX)
   props.beforeTraggle?.(rateX)
   // 拖动进度条
   const traggleProgress = (e: MouseEvent) => {
@@ -49,7 +54,8 @@ const clickProgress = (e: MouseEvent) => {
     // 边界判断
     if (rateX > 100) rateX = 100
     else if (rateX < 0) rateX = 0
-    props.onTraggle?.(rateX) // 更新进度条宽度与播放时间
+    emit('update:width', rateX)
+    props.onTraggle?.(rateX)
   }
   window.addEventListener('mousemove', traggleProgress)
   // 拖动完成
