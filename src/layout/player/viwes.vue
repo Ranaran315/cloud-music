@@ -231,6 +231,9 @@ watch(
           @include e('play-button') {
             display: block;
           }
+          @include e('time') {
+            display: block;
+          }
         }
         @include e('play-button') {
           width: 30px;
@@ -248,6 +251,7 @@ watch(
           right: 0;
           position: absolute;
           font-size: 0.9rem;
+          display: none;
         }
       }
     }

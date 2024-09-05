@@ -44,7 +44,7 @@ export default {
     })
   },
   // 获取歌曲url（新版）
-  getSongUrlV1(id: number | number[], level: SongLevel = 'sky') {
+  getSongUrlV1(id: number | number[], level: SongLevel = 'jymaster') {
     return request({
       url: 'url/v1',
       params: {
