@@ -5,6 +5,7 @@ import { CloudImage } from './image'
 import { CloudTag } from './tag'
 import { CloudSonglist } from './songlist'
 import { CloudProgress } from './progress'
+import { CloudLoading } from './loading'
 
 const components = [
   CloudButton,
@@ -13,6 +14,7 @@ const components = [
   CloudTag,
   CloudSonglist,
   CloudProgress,
+  CloudLoading,
 ]
 
 export default {
@@ -29,4 +31,5 @@ export * from './image'
 export * from './tag'
 export * from './songlist'
 export * from './progress'
+export * from './loading'
 export { default as useLogin } from './login/function'

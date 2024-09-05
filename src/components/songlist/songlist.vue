@@ -1,35 +1,49 @@
 <template>
   <div :class="ucn.b()">
-    <n-data-table
-      remote
-      :data="(data as any)"
-      :columns="columns"
-      :row-props="rowProps"
-      :bordered="false"
-    >
-    </n-data-table>
+    <cloud-loading :show="show">
+      <n-data-table
+        remote
+        :data="(data as any)"
+        :columns="columns"
+        :row-props="rowProps"
+        :bordered="false"
+      >
+      </n-data-table>
+    </cloud-loading>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { DataTableColumns, NDataTable } from 'naive-ui'
-import { computed, h } from 'vue'
+import { computed, h, ref, watch } from 'vue'
 import { CloudImage } from '@/components'
 import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like, Liked } from '@/icons'
 import { useSongStore, useToPlaylistStore } from '@/store'
+import { definePropType } from '@/utils/props'
 
 const ucn = useClassName('songlist')
 defineOptions({
   name: 'CloudSonglist',
 })
 
-defineProps({
-  data: Object,
+const props = defineProps({
+  data: definePropType<Array<Song>>(Array),
 })
+
+const show = ref(true)
+
+watch(
+  () => props.data,
+  (val?: Array<any>) => {
+    if (val && val.length > 0) {
+      show.value = false
+    }
+  }
+)
 
 const songStore = useSongStore()
 const toPlaylistStore = useToPlaylistStore()

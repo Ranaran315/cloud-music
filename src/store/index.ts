@@ -7,7 +7,6 @@ store.use(piniaPluginPersistedstate)
 export default store
 export * from './login'
 export * from './user'
-export * from './recommend'
 export * from './playlist'
 export * from './song'
 export * from './to-playlist'

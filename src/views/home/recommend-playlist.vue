@@ -5,7 +5,7 @@
       <div
         @click="toPlaylistDetail(item.id, item.name)"
         :class="ucn.e('item')"
-        v-for="item of recommendStore.recommendlist"
+        v-for="item of playlistStore.recommendlist"
         :key="item.id"
       >
         <div :class="ucn.e('cover')">
@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { useRecommendStore, usePlaylistStore } from '@/store'
+import { usePlaylistStore } from '@/store'
 import { onMounted, nextTick } from 'vue'
 import { NImage } from 'naive-ui'
 import { formatCount, formatTime } from '@/utils/format'
@@ -60,10 +60,9 @@ defineOptions({
 
 const router = useRouter()
 
-const recommendStore = useRecommendStore()
 const playlistStore = usePlaylistStore()
 onMounted(() => {
-  recommendStore.getRecommendList()
+  playlistStore.getRecommendList()
 })
 
 // 跳转到歌单详情页
