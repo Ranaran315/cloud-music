@@ -20,27 +20,31 @@
             </div>
           </div>
         </div>
-        <div :class="ucn.e('list')">
-          <div
-            :class="[ucn.e('item'), ucn.is(isCurrent(song.id), 'active')]"
-            v-for="song of songs"
-            :key="song.id"
-            @click.stop="songStore.setCurrentSong(song)"
-          >
-            <cloud-image
-              :class="ucn.e('cover')"
-              :src="song.al?.picUrl"
-            ></cloud-image>
+        <cloud-loading :show="loading">
+          <div :class="ucn.e('list')">
+            <div
+              :class="[ucn.e('item'), ucn.is(isCurrent(song.id), 'active')]"
+              v-for="song of songs"
+              :key="song.id"
+              @click.stop="songStore.setCurrentSong(song)"
+            >
+              <cloud-image
+                :class="ucn.e('cover')"
+                :src="song.al?.picUrl"
+              ></cloud-image>
 
-            <div :class="ucn.e('info')">
-              <div :class="ucn.e('name')">{{ song.name }}</div>
-              <div :class="ucn.e('artist')">
-                {{ formatName(song.ar, 'name') }}
+              <div :class="ucn.e('info')">
+                <div :class="ucn.e('name')">{{ song.name }}</div>
+                <div :class="ucn.e('artist')">
+                  {{ formatName(song.ar, 'name') }}
+                </div>
+              </div>
+              <div :class="ucn.e('duration')">
+                {{ formatDuration(song.dt) }}
               </div>
             </div>
-            <div :class="ucn.e('duration')">{{ formatDuration(song.dt) }}</div>
           </div>
-        </div>
+        </cloud-loading>
       </div>
     </n-popover>
   </div>
@@ -66,14 +70,24 @@ const toPlaylistStore = useToPlaylistStore()
 const songStore = useSongStore()
 const isCurrent = computed(() => (id: number) => songStore.song?.id === id)
 
+const loading = ref(false)
+
 // 当 popover 显示时，获取播放列表的歌曲详情
 const handleUpdateShow = async (show: boolean) => {
   watchEffect(async () => {
     if (show) {
-      const { songs: gotSongs } = await songApi.getSongDetail(
-        Array.from(toPlaylistStore.list)
-      )
-      songs.value = gotSongs
+      try {
+        loading.value = true
+        const { songs: gotSongs } = await songApi.getSongDetail(
+          Array.from(toPlaylistStore.list)
+        )
+        songs.value = gotSongs
+      } catch (error) {
+        console.error(error)
+      } finally {
+        loading.value = false
+      }
+
       /**
        * @todo 有 bug ，body 会跟着一起滚动
        */

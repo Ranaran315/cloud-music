@@ -10,6 +10,10 @@ const server = axios.create({
 server.interceptors.request.use(
   (config) => {
     // 添加请求头
+    config.params = {
+      ...config.params,
+      realIP: '116.25.146.177',
+    }
     return config
   },
   (error) => {

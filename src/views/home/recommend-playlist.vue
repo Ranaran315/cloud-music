@@ -1,53 +1,55 @@
 <template>
   <div :class="ucn.b()">
     <div :class="ucn.e('title')">推荐歌单</div>
-    <div :class="ucn.e('list')">
-      <div
-        @click="toPlaylistDetail(item.id, item.name)"
-        :class="ucn.e('item')"
-        v-for="item of playlistStore.recommendlist"
-        :key="item.id"
-      >
-        <div :class="ucn.e('cover')">
-          <n-image
-            :class="ucn.e('cover-image')"
-            :src="item.coverImgUrl"
-            width="100%"
-            object-fit="contain"
-            preview-disabled
-            lazy
-          ></n-image>
-          <div :class="ucn.e('cover-title')" v-if="item.detailPageTitle">
-            {{ item.detailPageTitle }}
-          </div>
-        </div>
-        <div :class="ucn.e('content')">
-          <div :class="ucn.e('name')">{{ item.name }}</div>
-          <div :class="ucn.e('creator')" v-if="item.id != -1">
+    <cloud-loading :show="loading">
+      <div :class="ucn.e('list')">
+        <div
+          @click="toPlaylistDetail(item.id, item.name)"
+          :class="ucn.e('item')"
+          v-for="item of playlistStore.recommendlist"
+          :key="item.id"
+        >
+          <div :class="ucn.e('cover')">
             <n-image
-              :class="ucn.e('creator-avatar')"
-              :src="item.creator!.avatarUrl"
+              :class="ucn.e('cover-image')"
+              :src="item.coverImgUrl"
+              width="100%"
+              object-fit="contain"
               preview-disabled
               lazy
             ></n-image>
-            <div :class="ucn.e('creator-name')">
-              {{ item.creator!.nickname }}
+            <div :class="ucn.e('cover-title')" v-if="item.detailPageTitle">
+              {{ item.detailPageTitle }}
             </div>
           </div>
-          <div :class="ucn.e('meta')" v-if="item.id != -1">
-            <span>{{ formatCount(item.playCount!) }} 次播放</span>
-            <span>{{ formatTime(item.createTime!) }} </span>
+          <div :class="ucn.e('content')">
+            <div :class="ucn.e('name')">{{ item.name }}</div>
+            <div :class="ucn.e('creator')" v-if="item.id != -1">
+              <n-image
+                :class="ucn.e('creator-avatar')"
+                :src="item.creator!.avatarUrl"
+                preview-disabled
+                lazy
+              ></n-image>
+              <div :class="ucn.e('creator-name')">
+                {{ item.creator!.nickname }}
+              </div>
+            </div>
+            <div :class="ucn.e('meta')" v-if="item.id != -1">
+              <span>{{ formatCount(item.playCount!) }} 次播放</span>
+              <span>{{ formatTime(item.createTime!) }} </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </cloud-loading>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { usePlaylistStore } from '@/store'
-import { onMounted, nextTick } from 'vue'
+import { onMounted, nextTick, ref } from 'vue'
 import { NImage } from 'naive-ui'
 import { formatCount, formatTime } from '@/utils/format'
 import { useRouter } from 'vue-router'
@@ -61,9 +63,13 @@ defineOptions({
 const router = useRouter()
 
 const playlistStore = usePlaylistStore()
-onMounted(() => {
-  playlistStore.getRecommendList()
+onMounted(async () => {
+  loading.value = true
+  await playlistStore.getRecommendList() // 获取推荐歌单
+  loading.value = false
 })
+
+const loading = ref(false)
 
 // 跳转到歌单详情页
 const toPlaylistDetail = (id: number, name: string) => {
