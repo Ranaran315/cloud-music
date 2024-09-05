@@ -6,6 +6,11 @@
     <ra-icon>
       <Comment />
     </ra-icon>
+    <ra-icon @click.stop="changeFullScreen">
+      <component
+        :is="playerContext?.state.showViwes ? NoFullScreen : FullScreen"
+      />
+    </ra-icon>
     <ToPlaylist />
   </div>
 </template>
@@ -14,18 +19,28 @@
 import { useClassName } from '@/hooks'
 import ToPlaylist from './to-playlist.vue'
 import { RaIcon } from '@capybara-plus/vue'
-import { Like, Comment } from '@/icons'
+import { Like, Comment, FullScreen } from '@/icons'
+import { inject } from 'vue'
+import { playerContextKey } from './context'
+import NoFullScreen from '@/icons/no-full-screen.vue'
 
-const ucn = useClassName('player-menu')
+const ucn = useClassName('player-menu', false)
 defineOptions({
   name: 'PlayerMenu',
 })
+
+const playerContext = inject(playerContextKey, undefined)
+
+// 全屏或退出全屏
+const changeFullScreen = () => {
+  playerContext?.changeViwes()
+}
 </script>
 
 <style scoped lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player-menu',
-  $use-namespace: true
+  $use-namespace: false
 );
 
 @include b() {

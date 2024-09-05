@@ -1,37 +1,46 @@
 <template>
-  <div :class="ucn.b()" :style="playerStyle">
-    <div :class="ucn.e('left')">
-      <div :class="ucn.e('cover')">
-        <img
-          :class="ucn.e('cover-image')"
-          :src="song.al?.picUrl"
-          @load="handleImageLoad"
-          crossorigin="anonymous"
-        />
-      </div>
-    </div>
-    <div :class="ucn.e('right')">
-      <div :class="ucn.e('info')">
-        <div :class="ucn.e('name')">{{ song.name }}</div>
-        <div :class="ucn.e('artist')">
-          {{ song.ar?.map((item) => item.name).join('/') }}
+  <Transition name="views">
+    <div
+      :class="ucn.b()"
+      :style="playerStyle"
+      v-show="playerContext?.state.showViwes"
+    >
+      <div :class="ucn.e('left')">
+        <div :class="ucn.e('cover')">
+          <img
+            :class="ucn.e('cover-image')"
+            :src="song.al?.picUrl"
+            @load="handleImageLoad"
+            crossorigin="anonymous"
+          />
         </div>
-        <div :class="ucn.e('album')">{{ song.al?.name }}</div>
       </div>
-      <div :class="ucn.e('lyric')">
-        <div
-          :class="[ucn.e('line'), ucn.is(isActive(line.time, index), 'active')]"
-          v-for="(line, index) of lyrics"
-          :key="index"
-        >
-          <div :class="ucn.e('content')">{{ line.content }}</div>
-          <div :class="ucn.e('time')" v-if="line.content">
-            {{ formatDuration(line.time) }}
+      <div :class="ucn.e('right')">
+        <div :class="ucn.e('info')">
+          <div :class="ucn.e('name')">{{ song.name }}</div>
+          <div :class="ucn.e('artist')">
+            {{ song.ar?.map((item) => item.name).join('/') }}
+          </div>
+          <div :class="ucn.e('album')">{{ song.al?.name }}</div>
+        </div>
+        <div :class="ucn.e('lyric')">
+          <div
+            :class="[
+              ucn.e('line'),
+              ucn.is(isActive(line.time, index), 'active'),
+            ]"
+            v-for="(line, index) of lyrics"
+            :key="index"
+          >
+            <div :class="ucn.e('content')">{{ line.content }}</div>
+            <div :class="ucn.e('time')" v-if="line.content">
+              {{ formatDuration(line.time) }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -43,18 +52,22 @@ import { formatDuration } from '@/utils/format'
 import { parseLyric } from '@/utils/parse'
 import { Lyric } from '@/utils/type'
 import ColorThief from 'colorthief'
-import { computed, type CSSProperties, ref, watch } from 'vue'
+import { computed, type CSSProperties, inject, ref, watch } from 'vue'
+import { playerContextKey } from './context'
 
-const ucn = useClassName('player', false)
+const ucn = useClassName('player-viwes', false)
 defineOptions({
-  name: 'Player',
+  name: 'PlayerViews',
 })
 
 const songStore = useSongStore()
 const song = computed(() => songStore.song) // 当前播放歌曲
 const lyrics = ref<Lyric[]>([]) // 歌词
-const currentTime = ref(0)
+const currentTime = ref(0) // 当前播放时间
 
+const playerContext = inject(playerContextKey, undefined)
+
+// 当前播放歌词
 const isActive = computed(() => {
   return (time: number, index: number) => {
     if (!lyrics.value[index + 1]) {
@@ -100,7 +113,7 @@ watch(
 
 <style scoped lang="scss">
 @use '@/style/bem' as * with (
-  $block: 'player',
+  $block: 'player-viwes',
   $use-namespace: false
 );
 
@@ -111,6 +124,7 @@ watch(
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
+  padding-bottom: var(--player-controller-height);
   @include e('left') {
     width: 40%;
     height: 100%;
@@ -182,5 +196,16 @@ watch(
       }
     }
   }
+}
+
+.views-enter-active,
+.views-leave-active {
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.views-enter-from,
+.views-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
 }
 </style>

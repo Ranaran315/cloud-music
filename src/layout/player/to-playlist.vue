@@ -50,7 +50,7 @@ import { Song } from '@/utils/type'
 import { computed, ref } from 'vue'
 import { formatDuration, formatName } from '@/utils/format'
 
-const ucn = useClassName('to-playlist')
+const ucn = useClassName('to-playlist', false)
 defineOptions({
   name: 'ToPlaylist',
 })
@@ -74,7 +74,7 @@ const handleUpdateShow = async (show: boolean) => {
 <style scoped lang="scss">
 @use '@/style/bem' as * with (
   $block: 'to-playlist',
-  $use-namespace: true
+  $use-namespace: false
 );
 
 @include b() {

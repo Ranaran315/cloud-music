@@ -19,7 +19,7 @@ useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
 .layout {
   --navbar-height: 60px;
   --sidebar-width: 250px;
-  --player-height: 80px;
+  --player-controller-height: 80px;
   --layout-z-index: 1000;
   width: 100%;
   height: 100%;

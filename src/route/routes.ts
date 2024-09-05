@@ -166,11 +166,6 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: '/player',
-    name: 'Player',
-    component: () => import('@/views/player/player.vue'),
-  },
 ]
 
 export default routes
