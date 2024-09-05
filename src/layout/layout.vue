@@ -28,7 +28,7 @@ useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
   &-main {
     margin-top: var(--navbar-height);
     margin-left: var(--sidebar-width);
-    margin-bottom: var(--player-height);
+    margin-bottom: var(--player-controller-height);
     padding: 20px 50px;
     padding-left: 30px;
     box-sizing: border-box;

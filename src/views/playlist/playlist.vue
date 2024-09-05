@@ -9,13 +9,15 @@
           <div :class="ucn.e('title')" style="margin-bottom: 0">
             {{ playlist.name }}
           </div>
-          <div :class="ucn.e('description')">{{ playlist.description }}</div>
+          <div :class="ucn.e('description')" v-if="playlist.id !== -1">
+            {{ playlist.description }}
+          </div>
           <div :class="ucn.e('tags')">
             <cloud-tag v-for="tag in playlist.tags" :key="tag">
               {{ tag }}
             </cloud-tag>
           </div>
-          <div :class="ucn.e('count-meta')">
+          <div :class="ucn.e('count-meta')" v-if="playlist.id !== -1">
             <span
               v-for="(item, index) of countMeta"
               :key="index"
@@ -26,7 +28,7 @@
               {{ item.label }}
             </span>
           </div>
-          <div :class="ucn.e('creator')">
+          <div :class="ucn.e('creator')" v-if="playlist.id !== -1">
             <div :class="ucn.e('avatar')">
               <cloud-image :src="playlist.creator?.avatarUrl"></cloud-image>
             </div>

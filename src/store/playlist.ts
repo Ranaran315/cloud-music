@@ -1,4 +1,4 @@
-import { playlistApi } from '@/api'
+import { playlistApi, recommendApi } from '@/api'
 import { Playlist, Song } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -23,17 +23,27 @@ export const usePlaylistStore = defineStore(
     // 获取歌单详情
     const getPlaylistDetail = async () => {
       try {
-        // nextTick(() => {
-        //   console.log('nextTick', pid.value)
-        // })
-        // console.log('getPlaylistDetail', pid.value)
+        currentPlaylist.value = {}
         if (!pid.value) return
-        // 获取歌单详情
-        const { playlist } = await playlistApi.getPlaylistDetail(pid.value)
-        currentPlaylist.value = playlist
-        // 获取歌单的所有歌曲
-        const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
-        currentSonglist.value = songs
+        if (pid.value === -1) {
+          // 每日推荐
+          const {
+            data: { dailySongs },
+          } = await recommendApi.getRecommendSongs()
+          currentSonglist.value = dailySongs
+          currentPlaylist.value = {
+            id: -1,
+            name: '每日推荐',
+            coverImgUrl: (dailySongs[0] as Song).al.picUrl,
+          }
+        } else {
+          // 获取歌单详情
+          const { playlist } = await playlistApi.getPlaylistDetail(pid.value)
+          currentPlaylist.value = playlist
+          // 获取歌单的所有歌曲
+          const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
+          currentSonglist.value = songs
+        }
       } catch (error) {
         console.log(error)
       }
