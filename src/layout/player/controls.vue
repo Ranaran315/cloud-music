@@ -115,6 +115,11 @@ const progressBarStyle = computed<CSSProperties>(() => {
 })
 // 点击进度条
 const clickProgress = (e: MouseEvent) => {
+  // 更新进度条宽度与播放时间
+  function updateProgressBarWidth(rate: number) {
+    progressBarWidth.value = rate
+    currentTime.value = (rate / 100) * duration.value!
+  }
   userIsController.value = true
   // if (e.target == progressBarDotRef.value) return
   const targetElementX = e.clientX - e.offsetX
@@ -122,8 +127,7 @@ const clickProgress = (e: MouseEvent) => {
   const trackWidth = (progressTrackRef.value as unknown as HTMLElement)
     .offsetWidth
   let rateX = (e.offsetX / trackWidth) * 100
-  progressBarWidth.value = rateX // 更新进度条宽度
-  currentTime.value = (rateX / 100) * duration.value!
+  updateProgressBarWidth(rateX) // 更新进度条宽度与播放时间
 
   // 拖动进度条
   const traggleProgress = (e: MouseEvent) => {
@@ -131,16 +135,15 @@ const clickProgress = (e: MouseEvent) => {
     // 边界判断
     if (rateX > 100) rateX = 100
     else if (rateX < 0) rateX = 0
-    // 更新进度条宽度
-    progressBarWidth.value = rateX
-    // 更新当前播放时间
-    currentTime.value = (rateX / 100) * duration.value!
+    updateProgressBarWidth(rateX) // 更新进度条宽度与播放时间
   }
   window.addEventListener('mousemove', traggleProgress)
   // 拖动完成
   const traggleCompleted = () => {
     userIsController.value = false
-    audioRef.value!.currentTime = currentTime.value / 1000 // 因为 currentTime 是秒，然后这里的 currentTime 是毫秒
+    // 更新 audio 的实际播放时间
+    // 因为 currentTime 是秒，然后这里的 currentTime 是毫秒
+    audioRef.value!.currentTime = currentTime.value / 1000
     window.removeEventListener('mousemove', traggleProgress)
     window.removeEventListener('mouseup', traggleCompleted)
   }
@@ -202,6 +205,7 @@ const handleEnded = () => {
     @include e('prev-next-button') {
       width: 20px;
       height: 20px;
+      cursor: pointer;
     }
   }
   @include e('progress') {

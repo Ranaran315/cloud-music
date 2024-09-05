@@ -14,7 +14,7 @@
         >
           <img
             :class="ucn.e('cover-image')"
-            :src="song.al?.picUrl"
+            :src="song?.al?.picUrl"
             @load="handleImageLoad"
             crossorigin="anonymous"
           />
@@ -22,11 +22,11 @@
       </div>
       <div :class="ucn.e('right')">
         <div :class="ucn.e('info')">
-          <div :class="ucn.e('name')">{{ song.name }}</div>
+          <div :class="ucn.e('name')">{{ song?.name }}</div>
           <div :class="ucn.e('artist')">
-            {{ song.ar?.map((item) => item.name).join('/') }}
+            {{ song?.ar?.map((item) => item.name).join('/') }}
           </div>
-          <div :class="ucn.e('album')">{{ song.al?.name }}</div>
+          <div :class="ucn.e('album')">{{ song?.al?.name }}</div>
         </div>
         <div :class="ucn.e('lyric')">
           <div
@@ -51,7 +51,6 @@
 <script setup lang="ts">
 import { songApi } from '@/api'
 import { useClassName } from '@/hooks'
-import { useSongStore } from '@/store'
 import { rgbToHex } from '@/utils/color'
 import { formatDuration } from '@/utils/format'
 import { parseLyric } from '@/utils/parse'
@@ -65,12 +64,11 @@ defineOptions({
   name: 'PlayerViews',
 })
 
-const songStore = useSongStore()
-const song = computed(() => songStore.song) // 当前播放歌曲
+const playerContext = inject(playerContextKey, undefined)
+
+const song = computed(() => playerContext?.state.song) // 当前播放歌曲
 const lyrics = ref<Lyric[]>([]) // 歌词
 const currentTime = ref(0) // 当前播放时间
-
-const playerContext = inject(playerContextKey, undefined)
 
 // 当前播放歌词
 const isActive = computed(() => {
@@ -103,7 +101,7 @@ const handleImageLoad = (e: Event) => {
 
 // 获取歌词
 watch(
-  () => song.value.id,
+  () => song.value?.id,
   (id: number | undefined) => {
     if (!id) return
     songApi.getSongLyric(id).then(({ lrc }) => {
@@ -182,6 +180,7 @@ watch(
       margin-top: 20px;
       overflow: auto;
       flex-grow: 1;
+      user-select: none;
       &::-webkit-scrollbar {
         display: none;
       }

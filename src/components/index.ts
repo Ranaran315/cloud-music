@@ -4,6 +4,7 @@ import { CloudTooltip } from './tooltip'
 import { CloudImage } from './image'
 import { CloudTag } from './tag'
 import { CloudSonglist } from './songlist'
+import { CloudProgress } from './progress'
 
 const components = [
   CloudButton,
@@ -11,6 +12,7 @@ const components = [
   CloudImage,
   CloudTag,
   CloudSonglist,
+  CloudProgress,
 ]
 
 export default {
@@ -26,4 +28,5 @@ export * from './tooltip'
 export * from './image'
 export * from './tag'
 export * from './songlist'
+export * from './progress'
 export { default as useLogin } from './login/function'

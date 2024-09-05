@@ -23,12 +23,16 @@ export const userPlayerContext = () => {
   })
 
   watchEffect(() => {
-    console.log('watchEffect')
     state.song = songStore.song
   })
 
   const changeViwes = () => {
     state.showViwes = !state.showViwes
+    if (state.showViwes) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflowY = 'auto'
+    }
   }
 
   const changePlaying = () => {
