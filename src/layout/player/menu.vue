@@ -1,16 +1,11 @@
 <template>
   <div :class="ucn.b()">
-    <ra-icon>
-      <component :is="songStore.currentIsLiked ? Liked : Like" />
-    </ra-icon>
-    <ra-icon>
-      <Comment />
-    </ra-icon>
-    <ra-icon @click.stop="changeFullScreen">
-      <component
-        :is="playerContext?.state.showViwes ? NoFullScreen : FullScreen"
-      />
-    </ra-icon>
+    <cloud-icon :icon="songStore.currentIsLiked ? Liked : Like" />
+    <cloud-icon :icon="Comment" />
+    <cloud-icon
+      @click.stop="changeFullScreen"
+      :icon="playerContext?.state.showViwes ? NoFullScreen : FullScreen"
+    />
     <ToPlaylist />
   </div>
 </template>
@@ -18,7 +13,6 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import ToPlaylist from './to-playlist.vue'
-import { RaIcon } from '@capybara-plus/vue'
 import { Like, Comment, FullScreen, Liked } from '@/icons'
 import { inject } from 'vue'
 import { playerContextKey } from './context'

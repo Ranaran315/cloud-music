@@ -6,12 +6,19 @@
       :show-arrow="false"
       @update-show="handleUpdateShow"
     >
-      <template #trigger
-        ><ra-icon><Menu /></ra-icon>
-      </template>
+      <template #trigger><cloud-icon :icon="Menu" /> </template>
       <div :class="ucn.e('popover')">
         <div :class="ucn.e('header')">
           <div :class="ucn.e('title')">播放列表</div>
+          <div :class="ucn.e('operator')">
+            <div
+              :class="ucn.e('operator-item')"
+              @click.stop="toPlaylistStore.clear"
+            >
+              <cloud-icon :icon="Delete"></cloud-icon>
+              清除
+            </div>
+          </div>
         </div>
         <div :class="ucn.e('list')">
           <div
@@ -41,13 +48,12 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { RaIcon } from '@capybara-plus/vue'
-import { Menu } from '@/icons'
+import { Delete, Menu } from '@/icons'
 import { NPopover } from 'naive-ui'
 import { songApi } from '@/api'
 import { useSongStore, useToPlaylistStore } from '@/store'
 import { Song } from '@/utils/type'
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { formatDuration, formatName } from '@/utils/format'
 
 const ucn = useClassName('to-playlist', false)
@@ -62,19 +68,21 @@ const isCurrent = computed(() => (id: number) => songStore.song?.id === id)
 
 // 当 popover 显示时，获取播放列表的歌曲详情
 const handleUpdateShow = async (show: boolean) => {
-  if (show) {
-    const { songs: gotSongs } = await songApi.getSongDetail(
-      Array.from(toPlaylistStore.list)
-    )
-    songs.value = gotSongs
-    /**
-     * @todo 有 bug ，body 会跟着一起滚动
-     */
-    // const element = document.querySelector('.to-playlist__item.is-active')
-    // element?.scrollIntoView({
-    //   block: 'center',
-    // })
-  }
+  watchEffect(async () => {
+    if (show) {
+      const { songs: gotSongs } = await songApi.getSongDetail(
+        Array.from(toPlaylistStore.list)
+      )
+      songs.value = gotSongs
+      /**
+       * @todo 有 bug ，body 会跟着一起滚动
+       */
+      // const element = document.querySelector('.to-playlist__item.is-active')
+      // element?.scrollIntoView({
+      //   block: 'center',
+      // })
+    }
+  })
 }
 </script>
 
@@ -99,9 +107,25 @@ const handleUpdateShow = async (show: boolean) => {
     height: $header-height;
     margin-bottom: 20px;
     padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     @include e('title') {
       font-size: 1.2rem;
       font-weight: 700;
+    }
+    @include e('operator') {
+      display: flex;
+      gap: 10px;
+      @include e('operator-item') {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: getTextColor('secondary');
+        &:hover {
+          color: getColor('primary');
+        }
+      }
     }
   }
   @include e('list') {

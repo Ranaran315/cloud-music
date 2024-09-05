@@ -9,7 +9,7 @@
           <div :class="ucn.e('title')" style="margin-bottom: 0">
             {{ playlist.name }}
           </div>
-          <div :class="ucn.e('description')" v-if="playlist.id !== -1">
+          <div :class="ucn.e('description')" v-if="isDailyRecommend">
             {{ playlist.description }}
           </div>
           <div :class="ucn.e('tags')">
@@ -17,7 +17,7 @@
               {{ tag }}
             </cloud-tag>
           </div>
-          <div :class="ucn.e('count-meta')" v-if="playlist.id !== -1">
+          <div :class="ucn.e('count-meta')" v-if="isDailyRecommend">
             <span
               v-for="(item, index) of countMeta"
               :key="index"
@@ -28,7 +28,7 @@
               {{ item.label }}
             </span>
           </div>
-          <div :class="ucn.e('creator')" v-if="playlist.id !== -1">
+          <div :class="ucn.e('creator')" v-if="isDailyRecommend">
             <div :class="ucn.e('avatar')">
               <cloud-image :src="playlist.creator?.avatarUrl"></cloud-image>
             </div>
@@ -73,6 +73,8 @@ defineOptions({
 
 const playlistStore = usePlaylistStore()
 const playlist = computed(() => playlistStore.currentPlaylist)
+// 是否是每日推荐歌单
+const isDailyRecommend = computed(() => playlist.value.id === -1)
 const countMeta = computed(() => {
   return [
     {

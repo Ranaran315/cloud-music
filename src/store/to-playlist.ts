@@ -22,6 +22,7 @@ export const useToPlaylistStore = defineStore(
     // 下一首
     const next = () => {
       const ids = Array.from(list.value)
+      if (ids.length <= 1) return
       let index: number = 0
       if (songStore.song.id) {
         index = ids.indexOf(songStore.song.id)
@@ -35,6 +36,7 @@ export const useToPlaylistStore = defineStore(
     // 下一首
     const prev = () => {
       const ids = Array.from(list.value)
+      if (ids.length <= 1) return
       let index: number = ids.length - 1
       if (songStore.song.id) {
         index = ids.indexOf(songStore.song.id)
@@ -45,11 +47,17 @@ export const useToPlaylistStore = defineStore(
       songStore.setCurrentSong(ids[--index])
     }
 
+    // 清空播放列表
+    const clear = () => {
+      list.value.clear()
+    }
+
     return {
       list,
       setToPlaylist,
       next,
       prev,
+      clear,
     }
   },
   {
