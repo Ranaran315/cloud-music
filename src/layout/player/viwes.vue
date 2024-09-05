@@ -30,6 +30,7 @@
         </div>
         <div :class="ucn.e('lyric')">
           <div
+            @click.stop="playerContext?.changeCurrentTime(line.time / 1000)"
             :class="[
               ucn.e('line'),
               ucn.is(isActive(line.time, index), 'active'),
@@ -37,6 +38,9 @@
             v-for="(line, index) of lyrics"
             :key="index"
           >
+            <ra-icon :class="ucn.e('play-button')" v-if="line.content"
+              ><Play
+            /></ra-icon>
             <div :class="ucn.e('content')">{{ line.content }}</div>
             <div :class="ucn.e('time')" v-if="line.content">
               {{ formatDuration(line.time) }}
@@ -58,6 +62,8 @@ import { Lyric } from '@/utils/type'
 import ColorThief from 'colorthief'
 import { computed, type CSSProperties, inject, ref, watch } from 'vue'
 import { playerContextKey } from './context'
+import { RaIcon } from '@capybara-plus/vue'
+import { Play } from '@/icons'
 
 const ucn = useClassName('player-viwes', false)
 defineOptions({
@@ -68,23 +74,44 @@ const playerContext = inject(playerContextKey, undefined)
 
 const song = computed(() => playerContext?.state.song) // 当前播放歌曲
 const lyrics = ref<Lyric[]>([]) // 歌词
-const currentTime = ref(0) // 当前播放时间
+const currentTime = computed(() => playerContext?.state.currentTime) // 当前播放时间
+const currentIndex = ref(0) // 当前高亮的歌词
 
 // 当前播放歌词
 const isActive = computed(() => {
   return (time: number, index: number) => {
-    if (!lyrics.value[index + 1]) {
-      return true
-    }
-    if (
-      time <= currentTime.value &&
-      lyrics.value[index + 1]!.time > currentTime.value
-    ) {
-      return true
+    if (!lyrics.value[index].content || !time) return false
+    // 当歌词时间 <= 当前的播放时间
+    if (time <= currentTime.value!) {
+      // 递归判断下一行不为空的歌词的时间是否 > 当前播放时间
+      function findNextNoEmpty(index: number) {
+        const nextLine = lyrics.value[index]
+        if (!nextLine) return true
+        if (!nextLine.content) return findNextNoEmpty(index + 1)
+        return nextLine.time > currentTime.value!
+      }
+      if (findNextNoEmpty(index + 1)) {
+        currentIndex.value = index
+        return true
+      }
     }
     return false
   }
 })
+
+watch(
+  () => currentIndex.value,
+  () => {
+    const element = document.querySelector('.is-active')
+    element?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 
 // 动态设置背景颜色
 const playerColor = ref<string>('#000')
@@ -185,21 +212,39 @@ watch(
         display: none;
       }
       @include e('line') {
+        position: relative;
         height: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-        opacity: 0.5;
+        opacity: 0.3;
+        cursor: pointer;
         &.is-active {
           opacity: 1;
-          transform: translateY(0) rotateX(0);
           color: getColor('primary');
+          background-color: rgba($color: getFillColor(), $alpha: 0.1);
+        }
+        &:hover {
+          @include e('play-button') {
+            display: block;
+          }
+        }
+        @include e('play-button') {
+          width: 30px;
+          position: absolute;
+          left: 0;
+          display: none;
         }
         @include e('content') {
           font-size: 1.5rem;
           margin: 0 auto;
+          padding-left: 30px;
+          padding-right: 40px;
         }
         @include e('time') {
+          width: 60px;
+          right: 0;
+          position: absolute;
           font-size: 1.2rem;
         }
       }

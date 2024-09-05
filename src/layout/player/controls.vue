@@ -72,6 +72,7 @@ const play = () => {
     doPlay()
   })
 }
+
 // 根据 isPlaying 控制音乐播放
 const doPlay = async () => {
   try {
@@ -95,6 +96,7 @@ const handleCanplaythrough = () => {
 const progressBarWidth = ref(0) // 进度条宽度
 // 处理 audio 播放时间更新时
 const handleTimeUpdate = (e: Event) => {
+  playerContext?.recordCurrentTime((e.target as HTMLAudioElement).currentTime)
   // 拖动进度条时不处理
   if (userIsController.value) return
   currentTime.value = (e.target as HTMLAudioElement).currentTime * 1000
@@ -129,6 +131,7 @@ const handleSpace = (e: KeyboardEvent) => {
 }
 onMounted(() => {
   window.addEventListener('keydown', handleSpace)
+  playerContext?.setAudio(audioRef.value!)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleSpace)

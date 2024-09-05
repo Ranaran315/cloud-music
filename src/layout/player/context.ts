@@ -7,9 +7,14 @@ interface PlayerContext {
     isPlaying: boolean
     showViwes: boolean
     song: Partial<SongWithUrl>
+    currentTime: number
+    audio: HTMLAudioElement | null
   }
   changeViwes: () => void
   changePlaying: () => void
+  recordCurrentTime: (time: number) => void
+  setAudio: (audio: HTMLAudioElement) => void
+  changeCurrentTime: (time: number) => void
 }
 
 export const playerContextKey: InjectionKey<PlayerContext> =
@@ -20,12 +25,15 @@ export const userPlayerContext = () => {
     isPlaying: false,
     showViwes: false,
     song: songStore.song,
+    currentTime: 0,
+    audio: null as HTMLAudioElement | null,
   })
 
   watchEffect(() => {
     state.song = songStore.song
   })
 
+  // 是否显示播放器全屏
   const changeViwes = () => {
     state.showViwes = !state.showViwes
     if (state.showViwes) {
@@ -35,9 +43,32 @@ export const userPlayerContext = () => {
     }
   }
 
+  // 播放与暂停
   const changePlaying = () => {
     state.isPlaying = !state.isPlaying
   }
 
-  return { state, changeViwes, changePlaying }
+  // 记录当前播放时间
+  const recordCurrentTime = (time: number) => {
+    state.currentTime = time * 1000 // 转换为毫秒
+  }
+
+  // 设置 audio
+  const setAudio = (audio: HTMLAudioElement) => {
+    state.audio = audio
+  }
+
+  // 更改 audio 当前播放时间
+  const changeCurrentTime = (time: number) => {
+    state.audio!.currentTime = time
+  }
+
+  return {
+    state,
+    changeViwes,
+    changePlaying,
+    recordCurrentTime,
+    setAudio,
+    changeCurrentTime,
+  }
 }
