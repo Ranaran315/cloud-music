@@ -99,6 +99,7 @@ const isActive = computed(() => {
   }
 })
 
+// 让高亮歌词居中
 watch(
   () => currentIndex.value,
   () => {
@@ -213,18 +214,20 @@ watch(
       }
       @include e('line') {
         position: relative;
-        height: 40px;
+        height: fit-content;
         display: flex;
         justify-content: center;
         align-items: center;
         opacity: 0.3;
         cursor: pointer;
+        padding: 5px 0;
         &.is-active {
           opacity: 1;
           color: getColor('primary');
           background-color: rgba($color: getFillColor(), $alpha: 0.1);
         }
         &:hover {
+          opacity: 1;
           @include e('play-button') {
             display: block;
           }
@@ -236,16 +239,15 @@ watch(
           display: none;
         }
         @include e('content') {
-          font-size: 1.5rem;
+          font-size: 1.2rem;
           margin: 0 auto;
-          padding-left: 30px;
-          padding-right: 40px;
+          padding: 0 100px;
         }
         @include e('time') {
           width: 60px;
           right: 0;
           position: absolute;
-          font-size: 1.2rem;
+          font-size: 0.9rem;
         }
       }
     }

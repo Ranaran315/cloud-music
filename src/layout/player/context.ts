@@ -11,7 +11,7 @@ interface PlayerContext {
     audio: HTMLAudioElement | null
   }
   changeViwes: () => void
-  changePlaying: () => void
+  changePlaying: (play?: boolean) => void
   recordCurrentTime: (time: number) => void
   setAudio: (audio: HTMLAudioElement) => void
   changeCurrentTime: (time: number) => void
@@ -43,9 +43,13 @@ export const userPlayerContext = () => {
     }
   }
 
-  // 播放与暂停
-  const changePlaying = () => {
-    state.isPlaying = !state.isPlaying
+  // 改变播放状态
+  const changePlaying = (play?: boolean) => {
+    if (play == undefined) {
+      state.isPlaying = !state.isPlaying
+    } else {
+      state.isPlaying = play
+    }
   }
 
   // 记录当前播放时间

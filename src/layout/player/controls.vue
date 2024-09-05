@@ -3,7 +3,7 @@
     <audio
       ref="audioRef"
       :src="playerContext?.state.song.url"
-      @canplaythrough="handleCanplaythrough"
+      @loadedmetadata="handleLoadedmetadata"
       @timeupdate.stop="handleTimeUpdate"
       @ended="handleEnded"
     ></audio>
@@ -46,8 +46,8 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  nextTick,
   inject,
+  nextTick,
 } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { RaIcon } from '@capybara-plus/vue'
@@ -73,14 +73,15 @@ const play = () => {
   })
 }
 
-// 根据 isPlaying 控制音乐播放
+// 执行播放，根据 isPlaying 控制音乐播放
 const doPlay = async () => {
   try {
-    if (!audioRef.value) return
+    const audio = audioRef.value
+    if (!audio) return
     if (playerContext?.state.isPlaying) {
-      await audioRef.value.play()
+      await audio.play()
     } else {
-      audioRef.value.pause()
+      audio.pause()
     }
   } catch (error) {
     console.log(error)
@@ -88,7 +89,7 @@ const doPlay = async () => {
 }
 
 // 当音乐加载完成时
-const handleCanplaythrough = () => {
+const handleLoadedmetadata = () => {
   console.log('加载音乐完成')
   doPlay()
 }
