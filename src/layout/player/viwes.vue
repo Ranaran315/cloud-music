@@ -6,7 +6,12 @@
       v-show="playerContext?.state.showViwes"
     >
       <div :class="ucn.e('left')">
-        <div :class="ucn.e('cover')">
+        <div
+          :class="[
+            ucn.e('cover'),
+            ucn.is(playerContext?.state.isPlaying, 'playing'),
+          ]"
+        >
           <img
             :class="ucn.e('cover-image')"
             :src="song.al?.picUrl"
@@ -139,6 +144,11 @@ watch(
       padding: 60px;
       box-sizing: border-box;
       background-color: #000;
+      animation: rotate 10s linear infinite;
+      animation-play-state: paused;
+      &.is-playing {
+        animation-play-state: running;
+      }
       @include e('cover-image') {
         width: 100%;
         height: 100%;
@@ -195,6 +205,15 @@ watch(
         }
       }
     }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 

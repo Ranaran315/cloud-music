@@ -2,7 +2,7 @@
   <div :class="ucn.b()">
     <audio
       ref="audioRef"
-      :src="url"
+      :src="playerContext?.state.song.url"
       @canplaythrough="handleCanplaythrough"
       @timeupdate.stop="handleTimeUpdate"
       @ended="handleEnded"
@@ -15,7 +15,7 @@
         <PrevSong />
       </ra-icon>
       <ra-icon :class="ucn.e('play-button')" @click="play">
-        <component :is="isPlaying ? Stop : Play" />
+        <component :is="playerContext?.state.isPlaying ? Stop : Play" />
       </ra-icon>
       <ra-icon
         :class="ucn.e('prev-next-button')"
@@ -35,7 +35,7 @@
           <div :class="ucn.e('progress-bar-dot')" ref="progressBarDotRef"></div>
         </div>
       </div>
-      <div :class="ucn.e('time')">{{ duration }}</div>
+      <div :class="ucn.e('time')">{{ formatDuration(duration) }}</div>
     </div>
   </div>
 </template>
@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { formatDuration } from '@/utils/format'
-import { isBoolean } from '@/utils/type'
 import {
   type CSSProperties,
   computed,
@@ -51,36 +50,27 @@ import {
   onMounted,
   ref,
   nextTick,
+  inject,
 } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { RaIcon } from '@capybara-plus/vue'
 import { useToPlaylistStore } from '@/store'
+import { playerContextKey } from './context'
 
 const ucn = useClassName('controls', false)
 defineOptions({
   name: 'Controls',
 })
 
-const props = defineProps({
-  url: String,
-  duration: {
-    type: Number,
-    default: 1,
-  },
-  isPlaying: Boolean, // 是否正在播放
-})
-
-const emit = defineEmits({
-  'upadte:isPlaying': (value: boolean) => isBoolean(value),
-})
+const playerContext = inject(playerContextKey, undefined)
 
 // 播放控制
 const audioRef = ref<HTMLAudioElement | null>(null)
-const duration = computed(() => formatDuration(props.duration)) // 歌曲总时长
+const duration = computed(() => playerContext?.state.song.dt) // 歌曲总时长
 const currentTime = ref(0) // 当前播放时间
 // 点击播放按钮
 const play = () => {
-  emit('upadte:isPlaying', !props.isPlaying)
+  playerContext?.changePlaying()
   nextTick(() => {
     doPlay()
   })
@@ -89,7 +79,7 @@ const play = () => {
 const doPlay = async () => {
   try {
     if (!audioRef.value) return
-    if (props.isPlaying) {
+    if (playerContext?.state.isPlaying) {
       await audioRef.value.play()
     } else {
       audioRef.value.pause()
@@ -110,7 +100,7 @@ const handleTimeUpdate = (e: Event) => {
   // 拖动进度条时不处理
   if (userIsController.value) return
   currentTime.value = (e.target as HTMLAudioElement).currentTime * 1000
-  progressBarWidth.value = (currentTime.value / props.duration) * 100
+  progressBarWidth.value = (currentTime.value / duration.value!) * 100
 }
 
 // 进度条
@@ -133,7 +123,7 @@ const clickProgress = (e: MouseEvent) => {
     .offsetWidth
   let rateX = (e.offsetX / trackWidth) * 100
   progressBarWidth.value = rateX // 更新进度条宽度
-  currentTime.value = (rateX / 100) * props.duration
+  currentTime.value = (rateX / 100) * duration.value!
 
   // 拖动进度条
   const traggleProgress = (e: MouseEvent) => {
@@ -144,7 +134,7 @@ const clickProgress = (e: MouseEvent) => {
     // 更新进度条宽度
     progressBarWidth.value = rateX
     // 更新当前播放时间
-    currentTime.value = (rateX / 100) * props.duration
+    currentTime.value = (rateX / 100) * duration.value!
   }
   window.addEventListener('mousemove', traggleProgress)
   // 拖动完成

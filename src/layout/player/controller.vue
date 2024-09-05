@@ -1,42 +1,40 @@
 <template>
   <div :class="ucn.b()">
     <div :class="ucn.e('info')">
-      <div :class="[ucn.e('pic'), ucn.is(isPlaying, 'playing')]">
-        <cloud-image :src="song.al?.picUrl"></cloud-image>
+      <div
+        :class="[
+          ucn.e('pic'),
+          ucn.is(playerContext?.state.isPlaying, 'playing'),
+        ]"
+      >
+        <cloud-image :src="song?.al?.picUrl"></cloud-image>
       </div>
       <div :class="ucn.e('content')">
-        <div :class="ucn.e('name')">{{ song.name }}</div>
+        <div :class="ucn.e('name')">{{ song?.name }}</div>
         <div :class="ucn.e('artist')">
-          {{ song.ar?.map((item) => item.name).join('/') }}
+          {{ song?.ar?.map((item) => item.name).join('/') }}
         </div>
       </div>
     </div>
-    <Controls
-      :url="song.url"
-      :duration="song.dt"
-      :is-playing="isPlaying"
-      @upadte:is-playing="(val) => (isPlaying = val)"
-    />
+    <Controls />
     <PlayerMenu />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { useSongStore } from '@/store'
-import { computed, ref } from 'vue'
+import { computed, inject } from 'vue'
 import Controls from './controls.vue'
 import PlayerMenu from './menu.vue'
+import { playerContextKey } from './context'
 
 const ucn = useClassName('controller', false)
 defineOptions({
   name: 'Controller',
 })
 
-const isPlaying = ref(false)
-
-const songStore = useSongStore()
-const song = computed(() => songStore.song)
+const playerContext = inject(playerContextKey, undefined)
+const song = computed(() => playerContext?.state.song)
 </script>
 
 <style scoped lang="scss">
