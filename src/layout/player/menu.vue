@@ -1,6 +1,9 @@
 <template>
   <div :class="ucn.b()">
-    <cloud-icon :icon="songStore.currentIsLiked ? Liked : Like" />
+    <cloud-icon
+      :icon="songStore.currentIsLiked ? Liked : Like"
+      @click.stop="like"
+    />
     <cloud-icon :icon="Comment" />
     <cloud-icon
       @click.stop="changeFullScreen"
@@ -31,6 +34,12 @@ const playerContext = inject(playerContextKey, undefined)
 // 全屏或退出全屏
 const changeFullScreen = () => {
   playerContext?.changeViwes()
+}
+
+// 喜欢音乐
+const like = () => {
+  if (!playerContext?.state.song?.id) return
+  songStore.like(playerContext.state.song.id)
 }
 </script>
 

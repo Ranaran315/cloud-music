@@ -52,6 +52,7 @@ watch(
   }
 )
 
+// 修改静音状态
 const changeMuted = () => {
   isMuted.value = !isMuted.value
   if (!playerContext?.state.audio) return
