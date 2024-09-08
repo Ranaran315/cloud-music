@@ -68,13 +68,14 @@ export const useSongStore = defineStore(
      * @param id 歌曲 id
      */
     const like = async (id: number) => {
-      try {
-        const liked = likedlist.value.has(id)
-        await songApi.like(id, !liked)
-        getUserLikedSongs()
-      } catch (error) {
-        console.error(error)
-      }
+      window.open(`https://music.163.com/#/song?id=${id}`) // 打开网易云音乐添加喜欢😊
+      // try {
+      //   const liked = likedlist.value.has(id)
+      //   await songApi.like(id, !liked)
+      //   getUserLikedSongs()
+      // } catch (error) {
+      //   console.error(error)
+      // }
     }
 
     return {
