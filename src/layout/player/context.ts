@@ -15,6 +15,7 @@ interface PlayerContext {
   recordCurrentTime: (time: number) => void
   setAudio: (audio: HTMLAudioElement) => void
   changeCurrentTime: (time: number) => void
+  setVolume: (volume: number) => void
 }
 
 export const playerContextKey: InjectionKey<PlayerContext> =
@@ -67,6 +68,12 @@ export const userPlayerContext = () => {
     state.audio!.currentTime = time
   }
 
+  // 设置音量
+  const setVolume = (volume: number) => {
+    if (!state.audio) return
+    state.audio.volume = volume
+  }
+
   return {
     state,
     changeViwes,
@@ -74,5 +81,6 @@ export const userPlayerContext = () => {
     recordCurrentTime,
     setAudio,
     changeCurrentTime,
+    setVolume,
   }
 }

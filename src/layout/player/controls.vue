@@ -8,21 +8,22 @@
       @ended="handleEnded"
     ></audio>
     <div :class="ucn.e('button-group')">
-      <ra-icon
+      <cloud-icon
+        :icon="PrevSong"
         :class="ucn.e('prev-next-button')"
         @click="toPlaylistStore.prev()"
-      >
-        <PrevSong />
-      </ra-icon>
-      <ra-icon :class="ucn.e('play-button')" @click="play">
-        <component :is="playerContext?.state.isPlaying ? Stop : Play" />
-      </ra-icon>
-      <ra-icon
+      />
+      <cloud-icon
+        :icon="playerContext?.state.isPlaying ? Stop : Play"
+        :class="ucn.e('play-button')"
+        @click="play"
+      />
+      <cloud-icon
+        :icon="NextSong"
         :class="ucn.e('prev-next-button')"
         @click="toPlaylistStore.next()"
-      >
-        <NextSong />
-      </ra-icon>
+      />
+      <PlayerVolume />
     </div>
     <div :class="ucn.e('progress')">
       <div :class="ucn.e('time')">{{ formatDuration(currentTime) }}</div>
@@ -50,9 +51,9 @@ import {
   nextTick,
 } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
-import { RaIcon } from '@capybara-plus/vue'
 import { useToPlaylistStore } from '@/store'
 import { playerContextKey } from './context'
+import PlayerVolume from './volume.vue'
 
 const ucn = useClassName('controls', false)
 defineOptions({
@@ -173,6 +174,9 @@ const handleEnded = () => {
       transition: opacity 0.3s;
       &:hover {
         opacity: 0.8;
+        :deep(.icon) {
+          color: getFillColor() !important;
+        }
       }
     }
     @include e('prev-next-button') {
