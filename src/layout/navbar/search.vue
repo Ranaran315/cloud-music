@@ -79,7 +79,7 @@ import { Album, Artist, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { searchApi } from '@/api'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const ucn = useClassName('navbar-search', false)
 
@@ -210,6 +210,7 @@ watch(
 )
 
 const router = useRouter()
+const route = useRoute()
 
 // 点击搜索列表项时搜索
 const doSearch = async (keywords: string) => {
@@ -217,7 +218,7 @@ const doSearch = async (keywords: string) => {
     path: '/search',
     query: {
       keywords,
-      type: 1018,
+      type: route.query.type ?? 1018,
     },
   })
 }

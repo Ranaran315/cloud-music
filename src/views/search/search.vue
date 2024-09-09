@@ -1,24 +1,40 @@
 <template>
   <div :class="ucn.b()">
-    <n-tabs type="line" animated>
+    <n-tabs type="line" animated @update-value="handleUpdateTab">
       <n-tab-pane
         v-for="item of tabs"
         :key="item.name"
         :name="item.name"
         :tab="item.tab"
-      ></n-tab-pane>
+      >
+        <template #default>
+          <cloud-loading :show="loading">
+            <div :class="ucn.e('result')">
+              <component :is="item.component" />
+            </div>
+          </cloud-loading>
+        </template>
+      </n-tab-pane>
     </n-tabs>
   </div>
 </template>
 
 <script setup lang="ts">
+import { searchApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { NTabs, NTabPane } from 'naive-ui'
+import { provide, ref, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Songs from './songs.vue'
+import { SearchContextKey, useSearchContext } from './context'
 
 const ucn = useClassName('search', false)
 defineOptions({
   name: 'Search',
 })
+
+const searchContext = useSearchContext()
+provide(SearchContextKey, searchContext)
 
 const tabs = [
   {
@@ -28,6 +44,7 @@ const tabs = [
   {
     name: '1',
     tab: '单曲',
+    component: Songs,
   },
   {
     name: '1000',
@@ -62,6 +79,41 @@ const tabs = [
     tab: '用户',
   },
 ]
+
+const route = useRoute()
+const router = useRouter()
+const loading = ref(false) // 加载状态
+
+// 当 tab 更新时
+const handleUpdateTab = (value: string) => {
+  router.replace({
+    query: {
+      ...route.query,
+      type: value,
+    },
+  })
+}
+
+// 搜索
+const search = async () => {
+  try {
+    loading.value = true
+    const { keywords, type } = route.query
+    const { result } = await searchApi.search({
+      keywords: keywords as string,
+      type: type as unknown as number,
+    })
+    searchContext.setResult(result)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
+}
+
+watchEffect(async () => {
+  await search()
+})
 </script>
 
 <style scoped lang="scss">
@@ -80,5 +132,9 @@ const tabs = [
 }
 :deep(.n-tabs-bar) {
   background-color: getColor('primary');
+}
+@include e('result') {
+  min-height: 200px;
+  padding: 20px 0;
 }
 </style>
