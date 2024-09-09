@@ -13,6 +13,8 @@ export const usePlaylistStore = defineStore(
     const currentPlaylist = ref<Partial<Playlist>>({})
     // 当前歌单中的所有歌曲
     const songs = ref<Song[]>([])
+    // 获取歌曲列表时的 loading
+    const songsLoading = ref(false)
     // 缓存时间
     const cache = ref(0)
     // 推荐歌单
@@ -78,19 +80,23 @@ export const usePlaylistStore = defineStore(
 
     // 获取歌单详情
     const getPlaylistDetail = async () => {
+      console.log('getPlaylistDetail', pid.value)
       try {
         currentPlaylist.value = {} // 清空当前歌单
         songs.value = [] // 清空当前歌单中的所有歌曲
         if (!pid.value) return
+        // 每日推荐
         if (pid.value === -1) {
-          // 每日推荐
+          songsLoading.value = true
           const {
             data: { dailySongs },
           } = await recommendApi.getRecommendSongs()
           songs.value = dailySongs
+          const firstSong: Song = dailySongs[0]
           currentPlaylist.value = {
             id: -1,
             name: '每日推荐',
+            description: `今天从《${firstSong.name}》开始。聆听每日推荐，发现更多好音乐`,
             coverImgUrl: (dailySongs[0] as Song).al.picUrl,
           }
         } else {
@@ -98,11 +104,15 @@ export const usePlaylistStore = defineStore(
           const { playlist } = await playlistApi.getPlaylistDetail(pid.value)
           currentPlaylist.value = playlist
           // 获取歌单的所有歌曲
-          const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
-          songs.value = songs
+          songsLoading.value = true
+          const { songs: playlistSongs } =
+            await playlistApi.getPlaylistAllTracks(playlist.id)
+          songs.value = playlistSongs
         }
       } catch (error) {
         console.log(error)
+      } finally {
+        songsLoading.value = false
       }
     }
 
@@ -115,6 +125,7 @@ export const usePlaylistStore = defineStore(
       cache,
       recommendlist,
       getRecommendList,
+      songsLoading,
     }
   },
   {

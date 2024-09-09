@@ -9,7 +9,7 @@
           <div :class="ucn.e('title')" style="margin-bottom: 0">
             {{ playlist.name }}
           </div>
-          <div :class="ucn.e('description')" v-if="!isDailyRecommend">
+          <div :class="ucn.e('description')">
             {{ playlist.description }}
           </div>
           <div :class="ucn.e('tags')">
@@ -57,7 +57,10 @@
         </div>
       </div>
     </div>
-    <cloud-songlist :data="playlistStore.songs"></cloud-songlist>
+    <cloud-songlist
+      :data="playlistStore.songs"
+      :loading="playlistStore.songsLoading"
+    ></cloud-songlist>
   </div>
 </template>
 
@@ -118,6 +121,7 @@ const timeMeta = computed(() => [
   },
 ])
 
+// 获取歌单详情
 playlistStore.getPlaylistDetail()
 
 // 播放全部

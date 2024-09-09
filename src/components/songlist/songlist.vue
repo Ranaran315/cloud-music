@@ -1,6 +1,6 @@
 <template>
   <div :class="ucn.b()">
-    <cloud-loading :show="show">
+    <cloud-loading :show="loading">
       <n-data-table
         remote
         :data="(data as any)"
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { DataTableColumns, NDataTable } from 'naive-ui'
-import { computed, h, ref, watch } from 'vue'
+import { computed, h } from 'vue'
 import { CloudImage } from '@/components'
 import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
@@ -30,20 +30,10 @@ defineOptions({
   name: 'CloudSonglist',
 })
 
-const props = defineProps({
+defineProps({
   data: definePropType<Array<Song>>(Array),
+  loading: Boolean,
 })
-
-const show = ref(true)
-
-watch(
-  () => props.data,
-  (val?: Array<any>) => {
-    if (val && val.length > 0) {
-      show.value = false
-    }
-  }
-)
 
 const songStore = useSongStore()
 const toPlaylistStore = useToPlaylistStore()
