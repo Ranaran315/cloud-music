@@ -12,7 +12,7 @@ export const usePlaylistStore = defineStore(
     // 当前歌单
     const currentPlaylist = ref<Partial<Playlist>>({})
     // 当前歌单中的所有歌曲
-    const currentSonglist = ref<Song[]>([])
+    const songs = ref<Song[]>([])
     // 缓存时间
     const cache = ref(0)
     // 推荐歌单
@@ -80,14 +80,14 @@ export const usePlaylistStore = defineStore(
     const getPlaylistDetail = async () => {
       try {
         currentPlaylist.value = {} // 清空当前歌单
-        currentSonglist.value = [] // 清空当前歌单中的所有歌曲
+        songs.value = [] // 清空当前歌单中的所有歌曲
         if (!pid.value) return
         if (pid.value === -1) {
           // 每日推荐
           const {
             data: { dailySongs },
           } = await recommendApi.getRecommendSongs()
-          currentSonglist.value = dailySongs
+          songs.value = dailySongs
           currentPlaylist.value = {
             id: -1,
             name: '每日推荐',
@@ -99,7 +99,7 @@ export const usePlaylistStore = defineStore(
           currentPlaylist.value = playlist
           // 获取歌单的所有歌曲
           const { songs } = await playlistApi.getPlaylistAllTracks(playlist.id)
-          currentSonglist.value = songs
+          songs.value = songs
         }
       } catch (error) {
         console.log(error)
@@ -111,7 +111,7 @@ export const usePlaylistStore = defineStore(
       setCurrentPlaylistId,
       currentPlaylist,
       getPlaylistDetail,
-      currentSonglist,
+      songs,
       cache,
       recommendlist,
       getRecommendList,

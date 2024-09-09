@@ -49,22 +49,25 @@
       </div>
       <div :class="ucn.e('header-item')">
         <div :class="ucn.e('operator')">
-          <cloud-button type="primary" :icon="Play"> 播放全部 </cloud-button>
+          <cloud-button type="primary" :icon="Play" @click="playAll">
+            播放全部
+          </cloud-button>
           <cloud-button :icon="Collect">收藏 </cloud-button>
           <cloud-button :icon="Download">下载</cloud-button>
         </div>
       </div>
     </div>
-    <cloud-songlist :data="playlistStore.currentSonglist"></cloud-songlist>
+    <cloud-songlist :data="playlistStore.songs"></cloud-songlist>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { usePlaylistStore } from '@/store'
+import { usePlaylistStore, useToPlaylistStore } from '@/store'
 import { formatCount, formatTime } from '@/utils/format'
 import { computed } from 'vue'
 import { Play, Collect, Download } from '@/icons'
+import { Song } from '@/utils/type'
 
 const ucn = useClassName('playlist', false)
 defineOptions({
@@ -72,6 +75,7 @@ defineOptions({
 })
 
 const playlistStore = usePlaylistStore()
+const toPlaylistStore = useToPlaylistStore()
 const playlist = computed(() => playlistStore.currentPlaylist)
 // 是否是每日推荐歌单
 const isDailyRecommend = computed(() => playlist.value.id === -1)
@@ -115,6 +119,12 @@ const timeMeta = computed(() => [
 ])
 
 playlistStore.getPlaylistDetail()
+
+// 播放全部
+const playAll = () => {
+  const ids = playlistStore.songs.map((item: Song) => item.id)
+  toPlaylistStore.addToPlaylist(ids)
+}
 </script>
 
 <style scoped lang="scss">

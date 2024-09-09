@@ -11,7 +11,7 @@ export const useToPlaylistStore = defineStore(
     const songStore = useSongStore()
 
     // 添加歌曲到播放列表
-    const setToPlaylist = (id: number | number[]) => {
+    const addToPlaylist = (id: number | number[]) => {
       if (Array.isArray(id)) {
         id.forEach((item) => list.value.add(item))
       } else {
@@ -47,6 +47,15 @@ export const useToPlaylistStore = defineStore(
       songStore.setCurrentSong(ids[--index])
     }
 
+    // 从播放列表中移除歌曲
+    const removeItem = (id: number) => {
+      list.value.delete(id)
+      // 如果移除的是当前播放的歌曲，自动播放下一首
+      if (id === songStore.song.id) {
+        next()
+      }
+    }
+
     // 清空播放列表
     const clear = () => {
       list.value.clear()
@@ -54,10 +63,11 @@ export const useToPlaylistStore = defineStore(
 
     return {
       list,
-      setToPlaylist,
+      addToPlaylist,
       next,
       prev,
       clear,
+      removeItem,
     }
   },
   {

@@ -126,7 +126,7 @@ const rowProps = (row: any) => {
     class: ucn.e('row'),
     onClick: () => {
       songStore.setCurrentSong(row)
-      toPlaylistStore.setToPlaylist(row.id)
+      toPlaylistStore.addToPlaylist(row.id)
     },
   }
 }
