@@ -23,7 +23,7 @@
 import { searchApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { NTabs, NTabPane } from 'naive-ui'
-import { provide, ref, watchEffect } from 'vue'
+import { computed, provide, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Songs from './songs.vue'
 import { SearchContextKey, useSearchContext } from './context'
@@ -82,7 +82,7 @@ const tabs = [
 
 const route = useRoute()
 const router = useRouter()
-const loading = ref(false) // 加载状态
+const loading = computed(() => searchContext.state.loading) // 加载状态
 
 // 当 tab 更新时
 const handleUpdateTab = (value: string) => {
@@ -97,7 +97,7 @@ const handleUpdateTab = (value: string) => {
 // 搜索
 const search = async () => {
   try {
-    loading.value = true
+    searchContext.setLoading(true)
     const { keywords, type } = route.query
     const { result } = await searchApi.search({
       keywords: keywords as string,
@@ -107,7 +107,7 @@ const search = async () => {
   } catch (error) {
     console.log(error)
   } finally {
-    loading.value = false
+    searchContext.setLoading(false)
   }
 }
 
@@ -119,6 +119,12 @@ watchEffect(async () => {
 <style scoped lang="scss">
 @use '@/style/bem' as * with($block: 'search', $use-namespace: false);
 
+:deep(.n-tabs-nav) {
+  position: fixed;
+  top: var(--navbar-height);
+  z-index: 1;
+  background-color: getFillColor();
+}
 :deep(.n-tabs-tab) {
   .n-tabs-tab__label {
     font-weight: 700;
@@ -133,8 +139,11 @@ watchEffect(async () => {
 :deep(.n-tabs-bar) {
   background-color: getColor('primary');
 }
-@include e('result') {
-  min-height: 200px;
-  padding: 20px 0;
+@include b() {
+  position: relative;
+  @include e('result') {
+    min-height: 200px;
+    padding: 20px 0;
+  }
 }
 </style>

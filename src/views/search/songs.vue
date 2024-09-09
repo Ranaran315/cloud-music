@@ -10,12 +10,16 @@ import { songApi } from '@/api'
 const searchContext = inject(SearchContextKey, undefined)
 const songs = ref<any[]>([])
 watchEffect(async () => {
-  songs.value = []
   const songIds: number[] = searchContext?.state.result?.songs?.map?.(
     (item: any) => item.id
   )
   if (songIds) {
     songs.value = (await songApi.getSongDetail(songIds)).songs
+  }
+})
+watchEffect(() => {
+  if (searchContext?.state.loading) {
+    songs.value = []
   }
 })
 </script>
