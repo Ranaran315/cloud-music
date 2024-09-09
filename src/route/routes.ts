@@ -164,6 +164,11 @@ const routes: RouteRecordRaw[] = [
           title: '歌单',
         },
       },
+      {
+        path: '/search',
+        name: 'Search',
+        component: () => import('@/views/search/search.vue'),
+      },
     ],
   },
 ]

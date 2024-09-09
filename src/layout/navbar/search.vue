@@ -32,38 +32,41 @@
         </div>
       </template>
       <div :class="ucn.e('popover')">
-        <div :class="ucn.e('search-list')">
-          <template v-if="showHotlist">
-            <div :class="ucn.e('title')">推荐热搜</div>
-            <li
-              :class="ucn.e('search-item')"
-              v-for="(item, index) of hotlist"
-              :key="index"
-            >
-              <span class="index">{{ index + 1 }}</span>
-              <span class="word">{{ item.searchWord }}</span>
-            </li>
-          </template>
-          <template v-else>
-            <div :class="ucn.e('title')">猜你想搜</div>
-            <div v-for="(order, index) of searchlistOrder" :key="index">
-              <div :class="ucn.e('subtitle')">
-                <ra-icon size="1.5em">
-                  <component :is="searchlistMap[order].component"></component>
-                </ra-icon>
-                {{ searchlistMap[order].name }}
-              </div>
+        <cloud-loading :show="loading">
+          <div :class="ucn.e('search-list')">
+            <template v-if="showHotlist">
+              <div :class="ucn.e('title')">推荐热搜</div>
               <div
                 :class="ucn.e('search-item')"
-                v-for="(item, index) of searchlist[order]"
+                v-for="(item, index) of hotlist"
                 :key="index"
-                @click="doSearch(item.id)"
+                @click="doSearch(item.searchWord)"
               >
-                <div class="word">{{ item.name }}</div>
+                <span class="index">{{ index + 1 }}</span>
+                <span class="word">{{ item.searchWord }}</span>
               </div>
-            </div>
-          </template>
-        </div>
+            </template>
+            <template v-else>
+              <div :class="ucn.e('title')">猜你想搜</div>
+              <div v-for="(order, index) of searchlistOrder" :key="index">
+                <div :class="ucn.e('subtitle')">
+                  <ra-icon size="1.5em">
+                    <component :is="searchlistMap[order].component"></component>
+                  </ra-icon>
+                  {{ searchlistMap[order].name }}
+                </div>
+                <div
+                  :class="ucn.e('search-item')"
+                  v-for="(item, index) of searchlist[order]"
+                  :key="index"
+                  @click="doSearch(item.name)"
+                >
+                  <div class="word">{{ item.name }}</div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </cloud-loading>
       </div>
     </n-popover>
   </div>
@@ -75,7 +78,8 @@ import { NPopover } from 'naive-ui'
 import { Album, Artist, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
-import { searchApi, songApi } from '@/api'
+import { searchApi } from '@/api'
+import { useRouter } from 'vue-router'
 
 const ucn = useClassName('navbar-search', false)
 
@@ -118,14 +122,17 @@ const handleKeydownTab = (e: KeyboardEvent) => {
   if (modelValue.value) return
   modelValue.value = defaultKeyword.keyword
   nextTick(() => {
-    search()
+    getSearchSuggest()
   })
 }
+
+const loading = ref(false) // 加载效果
 
 // 获取热搜列表
 const hotlist = ref<any[]>([])
 let throllte = 0 // 节流
 const handleFocus = async () => {
+  loading.value = true
   showPopover.value = true
   if (!showHotlist.value) return
   try {
@@ -135,6 +142,8 @@ const handleFocus = async () => {
     throllte = parseInt(Date.now().toString())
   } catch (error) {
     console.error(error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -164,27 +173,27 @@ const searchlistMap: Record<string, any> = {
     component: Song,
   },
 }
-
 // 当值发生改变时搜索
 const handleChange = async () => {
-  search()
+  getSearchSuggest()
 }
-
 // 根据关键字搜索
 let searchShake: any = null // 防抖
-const search = async () => {
+const getSearchSuggest = async () => {
   if (searchShake) clearTimeout(searchShake)
   searchShake = setTimeout(async () => {
     try {
+      loading.value = true
       const res = (await searchApi.suggest(modelValue.value)) as any
       const { result } = res
       searchlistOrder.value = result?.order
       searchlistOrder.value?.forEach?.((item: string) => {
         searchlist.value[item] = result[item]
       })
-      console.log(searchlist)
     } catch (error) {
       console.error(error)
+    } finally {
+      loading.value = false
     }
   }, 300)
 }
@@ -200,10 +209,17 @@ watch(
   }
 )
 
+const router = useRouter()
+
 // 点击搜索列表项时搜索
-const doSearch = async (id: number) => {
-  const res = await songApi.getSongUrl(id.toString())
-  console.log('getSongUrl', res)
+const doSearch = async (keywords: string) => {
+  router.push({
+    path: '/search',
+    query: {
+      keywords,
+      type: 1018,
+    },
+  })
 }
 </script>
 
@@ -259,6 +275,7 @@ $size: 40px;
   border-radius: 3px;
   @include e('search-list') {
     width: 100%;
+    min-height: 300px;
     max-height: 300px;
     padding: 10px 0;
     margin: 0;
@@ -279,6 +296,8 @@ $size: 40px;
       font-weight: 700;
       color: getTextColor('third');
       background-color: getFillColor('third');
+    }
+    @include e('search-wrapper') {
     }
     @include e('search-item') {
       width: 100%;
