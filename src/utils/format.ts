@@ -70,3 +70,5 @@ export const formatDuration = (duration?: number) => {
 export const formatName = (arr: any[], filed: string) => {
   return arr.map((item) => item[filed]).join(' / ')
 }
+
+export const formatAlias = (alias: string[]) => alias.join(' / ')

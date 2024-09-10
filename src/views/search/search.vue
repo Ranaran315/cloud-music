@@ -2,7 +2,7 @@
   <div :class="ucn.b()">
     <n-tabs type="line" animated @update-value="handleUpdateTab">
       <n-tab-pane
-        v-for="item of tabs"
+        v-for="item of searchContext.tabs"
         :key="item.name"
         :name="item.name"
         :tab="item.tab"
@@ -25,7 +25,6 @@ import { useClassName } from '@/hooks'
 import { NTabs, NTabPane } from 'naive-ui'
 import { computed, provide, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Songs from './songs.vue'
 import { SearchContextKey, useSearchContext } from './context'
 
 const ucn = useClassName('search', false)
@@ -35,50 +34,6 @@ defineOptions({
 
 const searchContext = useSearchContext()
 provide(SearchContextKey, searchContext)
-
-const tabs = [
-  {
-    name: '1018',
-    tab: '综合',
-  },
-  {
-    name: '1',
-    tab: '单曲',
-    component: Songs,
-  },
-  {
-    name: '1000',
-    tab: '歌单',
-  },
-  {
-    name: '100',
-    tab: '歌手',
-  },
-  {
-    name: '2000',
-    tab: '声音',
-  },
-  {
-    name: '1009',
-    tab: '博客',
-  },
-  {
-    name: '1006',
-    tab: '歌词',
-  },
-  {
-    name: '10',
-    tab: '专辑',
-  },
-  {
-    name: '1014',
-    tab: 'MV',
-  },
-  {
-    name: '1002',
-    tab: '用户',
-  },
-]
 
 const route = useRoute()
 const router = useRouter()

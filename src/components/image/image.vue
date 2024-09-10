@@ -43,5 +43,7 @@ const handleLoad = (e: Event) => {
 @include b() {
   border-radius: inherit;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 </style>
