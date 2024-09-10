@@ -126,6 +126,9 @@ const handleAftreTraggle = () => {
 
 // 空格播放
 const handleSpace = (e: KeyboardEvent) => {
+  // 如果在输入框中按下空格键，则不触发
+  if ((e.target as any)?.closest('input, textarea, [contenteditable="true"]'))
+    return
   if (e.code === 'Space') {
     e.preventDefault()
     play()

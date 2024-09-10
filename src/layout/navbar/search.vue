@@ -132,10 +132,10 @@ const loading = ref(false) // 加载效果
 const hotlist = ref<any[]>([])
 let throllte = 0 // 节流
 const handleFocus = async () => {
-  loading.value = true
   showPopover.value = true
   if (!showHotlist.value) return
   try {
+    loading.value = true
     if (parseInt(Date.now().toString()) - throllte < 1000 * 60 * 2) return
     const res = await searchApi.hotDetail()
     hotlist.value = res.data
