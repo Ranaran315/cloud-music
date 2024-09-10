@@ -55,8 +55,9 @@ const artists = computed(() => searchContext?.state.result?.artists)
 );
 
 @include b() {
+  $size: 200px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(#{$size * 2}, 1fr));
   gap: 20px;
   @include e('artist') {
     display: flex;
@@ -71,8 +72,8 @@ const artists = computed(() => searchContext?.state.result?.artists)
       background-color: getFillColor('secondary');
     }
     @include e('cover') {
-      width: 200px;
-      height: 200px;
+      width: $size;
+      height: $size;
       border-radius: 50%;
       box-shadow: getBoxShadow();
     }
@@ -81,20 +82,22 @@ const artists = computed(() => searchContext?.state.result?.artists)
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
-      max-width: 200px;
+      max-width: $size;
       @include e('name') {
+        $identity-size: 20px;
         font-size: 1.1rem;
         font-weight: 700;
         display: flex;
         align-items: center;
         position: relative;
+        padding-right: #{$identity-size + 10px};
+        @include ellipsis;
         @include e('identity') {
-          width: 20px;
-          height: 20px;
+          width: $identity-size;
+          height: $identity-size;
           position: absolute;
           top: 0;
           right: 0;
-          transform: translateX(calc(100% + 5px));
         }
       }
       @include e('alias') {
