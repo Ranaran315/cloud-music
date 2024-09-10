@@ -3,44 +3,11 @@
     <div :class="ucn.e('title')">推荐歌单</div>
     <cloud-loading :show="loading">
       <div :class="ucn.e('list')">
-        <div
-          @click="toPlaylistDetail(item.id, item.name)"
-          :class="ucn.e('item')"
+        <cloud-playlist-card
           v-for="item of playlistStore.recommendlist"
           :key="item.id"
-        >
-          <div :class="ucn.e('cover')">
-            <n-image
-              :class="ucn.e('cover-image')"
-              :src="item.coverImgUrl"
-              width="100%"
-              object-fit="contain"
-              preview-disabled
-              lazy
-            ></n-image>
-            <div :class="ucn.e('cover-title')" v-if="item.detailPageTitle">
-              {{ item.detailPageTitle }}
-            </div>
-          </div>
-          <div :class="ucn.e('content')">
-            <div :class="ucn.e('name')">{{ item.name }}</div>
-            <div :class="ucn.e('creator')" v-if="item.id != -1">
-              <n-image
-                :class="ucn.e('creator-avatar')"
-                :src="item.creator!.avatarUrl"
-                preview-disabled
-                lazy
-              ></n-image>
-              <div :class="ucn.e('creator-name')">
-                {{ item.creator!.nickname }}
-              </div>
-            </div>
-            <div :class="ucn.e('meta')" v-if="item.id != -1">
-              <span>{{ formatCount(item.playCount!) }} 次播放</span>
-              <span>{{ formatTime(item.createTime!) }} </span>
-            </div>
-          </div>
-        </div>
+          :data="item"
+        ></cloud-playlist-card>
       </div>
     </cloud-loading>
   </div>
@@ -49,18 +16,13 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { usePlaylistStore } from '@/store'
-import { onMounted, nextTick, ref } from 'vue'
-import { NImage } from 'naive-ui'
-import { formatCount, formatTime } from '@/utils/format'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
 
 const ucn = useClassName('recommend-playlist', false)
 
 defineOptions({
   name: 'RecommendPlaylist',
 })
-
-const router = useRouter()
 
 const playlistStore = usePlaylistStore()
 onMounted(async () => {
@@ -70,16 +32,6 @@ onMounted(async () => {
 })
 
 const loading = ref(false)
-
-// 跳转到歌单详情页
-const toPlaylistDetail = (id: number, name: string) => {
-  playlistStore.setCurrentPlaylistId(id)
-  nextTick(() => {
-    router.push({
-      path: `/playlist/${name}`,
-    })
-  })
-}
 </script>
 
 <style scoped lang="scss">
@@ -102,91 +54,6 @@ const toPlaylistDetail = (id: number, name: string) => {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     row-gap: 40px;
-  }
-  @include e('item') {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    @include e('cover') {
-      width: 200px;
-      height: 200px;
-      border-radius: 10px;
-      box-shadow: getBoxShadow();
-      position: relative;
-      transition: box-shadow 0.3s, transform 0.3s;
-      &:hover {
-        box-shadow: 0 0 10px 5px rgba($color: getColor('primary'), $alpha: 0.7);
-        transform: translateY(-5px);
-      }
-      @include e('cover-image') {
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-      }
-      @include e('cover-title') {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 5px;
-        background-color: rgba(0, 0, 0, 0.3);
-        color: getFillColor();
-        font-size: 0.85rem;
-        border-radius: inherit;
-        border-top-left-radius: none;
-        border-top-right-radius: none;
-        text-align: center;
-        box-sizing: border-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-    @include e('content') {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
-      padding: 10px;
-      box-sizing: border-box;
-      @include e('name') {
-        flex-grow: 1;
-        text-align: left;
-        word-break: break-all;
-        width: 100%;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3; // 显示的行数
-        overflow: hidden;
-      }
-      @include e('creator') {
-        display: flex;
-        align-items: center;
-        &:hover {
-          color: getColor('primary');
-        }
-        @include e('creator-avatar') {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-        }
-        @include e('creator-name') {
-          margin-left: 10px;
-        }
-      }
-      @include e('meta') {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        font-size: 0.85rem;
-        color: getTextColor('secondary');
-      }
-    }
   }
 }
 </style>

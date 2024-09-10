@@ -1,27 +1,29 @@
 <template>
-  <div :class="ucn.b()">
-    <div :class="ucn.e('artist')" v-for="item of artists" :key="item.id">
-      <div :class="ucn.e('cover')">
-        <cloud-image :src="item.picUrl" width="100%"></cloud-image>
-      </div>
-      <div :class="ucn.e('info')">
-        <div :class="ucn.e('name')">
-          {{ item.name
-          }}<cloud-image
-            :src="item.identityIconUrl"
-            :class="ucn.e('identity')"
-          ></cloud-image>
+  <cloud-loading :show="searchContext?.state.loading">
+    <div :class="ucn.b()">
+      <div :class="ucn.e('artist')" v-for="item of artists" :key="item.id">
+        <div :class="ucn.e('cover')">
+          <cloud-image :src="item.picUrl" width="100%"></cloud-image>
         </div>
-        <div :class="ucn.e('alias')" v-if="item.alias?.length">
-          {{ formatAlias(item.alias) }}
-        </div>
-        <div :class="ucn.e('count')">
-          <span>{{ item.albumSize }}专辑</span>
-          <span>{{ item.mvSize }}MV</span>
+        <div :class="ucn.e('info')">
+          <div :class="ucn.e('name')">
+            {{ item.name
+            }}<cloud-image
+              :src="item.identityIconUrl"
+              :class="ucn.e('identity')"
+            ></cloud-image>
+          </div>
+          <div :class="ucn.e('alias')" v-if="item.alias?.length">
+            {{ formatAlias(item.alias) }}
+          </div>
+          <div :class="ucn.e('count')">
+            <span>{{ item.albumSize }}专辑</span>
+            <span>{{ item.mvSize }}MV</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </cloud-loading>
 </template>
 
 <script setup lang="ts">
@@ -59,6 +61,7 @@ const artists = computed(() => searchContext?.state.result?.artists)
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(#{$size * 2}, 1fr));
   gap: 20px;
+  min-height: 200px;
   @include e('artist') {
     display: flex;
     align-items: center;

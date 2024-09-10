@@ -1,6 +1,7 @@
 import { Component, InjectionKey, reactive } from 'vue'
 import Songs from './songs.vue'
 import Artists from './artists.vue'
+import Playlist from './playlist.vue'
 
 interface SearchContext {
   state: {
@@ -36,6 +37,7 @@ export function useSearchContext() {
     {
       name: '1000',
       tab: '歌单',
+      component: Playlist,
     },
     {
       name: '100',

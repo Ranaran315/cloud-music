@@ -5,6 +5,7 @@ const request = useRequest('playlist')
 export default {
   /**
    * 根据 id 获取歌单详情
+   * playlist:
    *  - id: 歌单id
    *  - name: 歌单名
    *  - coverImgUrl: 歌单封面

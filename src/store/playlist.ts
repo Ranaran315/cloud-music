@@ -1,5 +1,5 @@
 import { playlistApi, recommendApi } from '@/api'
-import type { Playlist, Song, RecommendPlaylist } from '@/utils/type'
+import type { PlaylistDetail, Song, Playlist } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -10,7 +10,7 @@ export const usePlaylistStore = defineStore(
     // 当前歌单 id
     const pid = ref<number | null>(-1)
     // 当前歌单
-    const currentPlaylist = ref<Partial<Playlist>>({})
+    const currentPlaylist = ref<Partial<PlaylistDetail>>({})
     // 当前歌单中的所有歌曲
     const songs = ref<Song[]>([])
     // 获取歌曲列表时的 loading
@@ -18,7 +18,7 @@ export const usePlaylistStore = defineStore(
     // 缓存时间
     const cache = ref(0)
     // 推荐歌单
-    const recommendlist = ref<RecommendPlaylist[]>([])
+    const recommendlist = ref<Playlist[]>([])
 
     // 获取推荐歌单
     const getRecommendList = async () => {

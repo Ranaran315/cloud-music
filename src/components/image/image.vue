@@ -5,11 +5,13 @@
     width="100%"
     :preview-disabled="!preview"
     @load="handleLoad"
+    :object-fit="objectFit"
   ></n-image>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
+import { definePropType } from '@/utils/props'
 import { NImage } from 'naive-ui'
 
 const ucn = useClassName('image')
@@ -25,6 +27,12 @@ defineProps({
   preview: {
     type: Boolean,
     default: false,
+  },
+  objectFit: {
+    type: definePropType<'fill' | 'cover' | 'contain' | 'none' | 'scale-down'>(
+      String
+    ),
+    default: 'cover',
   },
 })
 

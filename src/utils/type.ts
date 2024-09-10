@@ -54,6 +54,20 @@ export interface Playlist {
   id: number
   name: string
   coverImgUrl: string
+  playCount?: number
+  detailPageTitle: string
+  createTime?: string
+  creator?: {
+    userId: number
+    nickname: string
+    avatarUrl: string
+  }
+}
+// 歌单详情接口
+export interface PlaylistDetail {
+  id: number
+  name: string
+  coverImgUrl: string
   createTime: number
   updateTime: number
   trackUpdateTime: number
@@ -75,20 +89,6 @@ export interface Playlist {
     userId: number
     avatarUrl: string
     nickname: string
-  }
-}
-// 推荐歌单接口
-export interface RecommendPlaylist {
-  id: number
-  name: string
-  coverImgUrl: string
-  playCount?: number
-  detailPageTitle: string
-  createTime?: string
-  creator?: {
-    userId: number
-    nickname: string
-    avatarUrl: string
   }
 }
 

@@ -1,5 +1,8 @@
 <template>
-  <cloud-songlist :data="songs"></cloud-songlist>
+  <cloud-songlist
+    :data="songs"
+    :loading="searchContext?.state.loading"
+  ></cloud-songlist>
 </template>
 
 <script setup lang="ts">

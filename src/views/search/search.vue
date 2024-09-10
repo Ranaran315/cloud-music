@@ -8,11 +8,9 @@
         :tab="item.tab"
       >
         <template #default>
-          <cloud-loading :show="loading">
-            <div :class="ucn.e('result')">
-              <component :is="item.component" />
-            </div>
-          </cloud-loading>
+          <div :class="ucn.e('result')">
+            <component :is="item.component" />
+          </div>
         </template>
       </n-tab-pane>
     </n-tabs>
@@ -37,7 +35,6 @@ provide(SearchContextKey, searchContext)
 
 const route = useRoute()
 const router = useRouter()
-const loading = computed(() => searchContext.state.loading) // 加载状态
 const value = computed(() => route.query.type as string) // 当前 tab
 
 // 当 tab 更新时
@@ -76,6 +73,7 @@ watchEffect(async () => {
 @use '@/style/bem' as * with($block: 'search', $use-namespace: false);
 
 :deep(.n-tabs-nav) {
+  width: 100%;
   position: fixed;
   top: var(--navbar-height);
   z-index: 1;
@@ -96,6 +94,7 @@ watchEffect(async () => {
   background-color: getColor('primary');
 }
 @include b() {
+  width: 100%;
   position: relative;
   @include e('result') {
     min-height: 200px;
