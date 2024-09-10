@@ -1,6 +1,6 @@
 <template>
   <div :class="ucn.b()">
-    <n-tabs type="line" animated @update-value="handleUpdateTab">
+    <n-tabs type="line" animated @update-value="handleUpdateTab" :value="value">
       <n-tab-pane
         v-for="item of searchContext.tabs"
         :key="item.name"
@@ -38,6 +38,7 @@ provide(SearchContextKey, searchContext)
 const route = useRoute()
 const router = useRouter()
 const loading = computed(() => searchContext.state.loading) // 加载状态
+const value = computed(() => route.query.type as string) // 当前 tab
 
 // 当 tab 更新时
 const handleUpdateTab = (value: string) => {
