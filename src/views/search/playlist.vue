@@ -1,5 +1,5 @@
 <template>
-  <cloud-loading :show="loading">
+  <cloud-loading :show="searchContext?.state.loading">
     <div :class="ucn.b()">
       <cloud-playlist-card
         v-for="item of playlists"
@@ -23,11 +23,10 @@ defineOptions({
 })
 
 const playlists = ref<Playlist[]>([])
-const loading = ref(false)
 const searchContext = inject(SearchContextKey, undefined)
 watchEffect(async () => {
   try {
-    loading.value = true
+    searchContext?.setLoading(true)
     playlists.value = []
     const ids = searchContext?.state.result?.playlists?.map?.(
       (item: any) => item.id
@@ -43,7 +42,7 @@ watchEffect(async () => {
   } catch (error) {
     console.log(error)
   } finally {
-    loading.value = false
+    searchContext?.setLoading(false)
   }
 })
 </script>

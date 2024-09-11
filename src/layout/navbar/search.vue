@@ -214,6 +214,7 @@ const route = useRoute()
 
 // 点击搜索列表项时搜索
 const doSearch = async (keywords: string) => {
+  modelValue.value = keywords
   router.push({
     path: '/search',
     query: {

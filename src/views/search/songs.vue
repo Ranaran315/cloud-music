@@ -13,11 +13,18 @@ import { songApi } from '@/api'
 const searchContext = inject(SearchContextKey, undefined)
 const songs = ref<any[]>([])
 watchEffect(async () => {
-  const songIds: number[] = searchContext?.state.result?.songs?.map?.(
-    (item: any) => item.id
-  )
-  if (songIds) {
-    songs.value = (await songApi.getSongDetail(songIds)).songs
+  try {
+    searchContext?.setLoading(true)
+    const songIds: number[] = searchContext?.state.result?.songs?.map?.(
+      (item: any) => item.id
+    )
+    if (songIds) {
+      songs.value = (await songApi.getSongDetail(songIds)).songs
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    searchContext?.setLoading(false)
   }
 })
 watchEffect(() => {
