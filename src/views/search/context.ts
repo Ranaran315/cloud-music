@@ -3,6 +3,7 @@ import Songs from './songs.vue'
 import Artists from './artists.vue'
 import Playlist from './playlist.vue'
 import Albums from './albums.vue'
+import Synthesis from './synthesis.vue'
 
 interface SearchContext {
   state: {
@@ -29,6 +30,7 @@ export function useSearchContext() {
     {
       name: '1018',
       tab: '综合',
+      component: Synthesis,
     },
     {
       name: '1',
