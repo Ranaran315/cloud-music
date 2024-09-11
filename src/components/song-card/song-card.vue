@@ -1,5 +1,5 @@
 <template>
-  <div :class="ucn.b()">
+  <div :class="ucn.b()" @click.stop="handleClick">
     <div :class="ucn.e('cover')">
       <cloud-image :src="data.al?.picUrl" />
     </div>
@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
+import { useSongStore } from '@/store'
 import { formatAlias, formatDuration } from '@/utils/format'
 import { definePropType } from '@/utils/props'
 import { Song } from '@/utils/type'
@@ -27,12 +28,17 @@ defineOptions({
   name: 'CloudSongCard',
 })
 
-defineProps({
+const props = defineProps({
   data: {
     type: definePropType<Song>(Object),
     required: true,
   },
 })
+
+const songStore = useSongStore()
+const handleClick = () => {
+  songStore.setCurrentSong(props.data)
+}
 </script>
 
 <style scoped lang="scss">

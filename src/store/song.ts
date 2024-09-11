@@ -2,13 +2,14 @@ import { songApi } from '@/api'
 import type { Song, SongWithUrl } from '@/utils/type'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { useLoginStore } from '@/store'
+import { useLoginStore, useToPlaylistStore } from '@/store'
 
 const key = 'SONG'
 export const useSongStore = defineStore(
   key,
   () => {
     const loginStore = useLoginStore()
+    const toPlaylistStore = useToPlaylistStore()
     // 当前播放的歌曲
     const song = ref<Partial<SongWithUrl>>({})
     // 用户喜欢的音乐 id 列表
@@ -33,6 +34,7 @@ export const useSongStore = defineStore(
           newSong = songs[0] as Song
         }
         song.value = newSong
+        toPlaylistStore.addToPlaylist(song.value.id!)
         getSong(newSong.id)
       } catch (error) {
         console.log(error)

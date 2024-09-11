@@ -22,7 +22,7 @@ import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like, Liked } from '@/icons'
-import { useSongStore, useToPlaylistStore } from '@/store'
+import { useSongStore } from '@/store'
 import { definePropType } from '@/utils/props'
 
 const ucn = useClassName('songlist')
@@ -36,7 +36,6 @@ defineProps({
 })
 
 const songStore = useSongStore()
-const toPlaylistStore = useToPlaylistStore()
 const likedlist = computed(() => songStore.likedlist)
 
 // 列渲染
@@ -116,7 +115,6 @@ const rowProps = (row: any) => {
     class: ucn.e('row'),
     onClick: () => {
       songStore.setCurrentSong(row)
-      toPlaylistStore.addToPlaylist(row.id)
     },
   }
 }
