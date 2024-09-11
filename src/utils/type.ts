@@ -110,12 +110,37 @@ export interface Song {
   dt: number
   isLiked: boolean
 }
-
+// 歌曲详情接口（带有url）
 export interface SongWithUrl extends Song {
   url: string
 }
-
+// 歌词接口
 export interface Lyric {
   time: number
   content: string
+}
+
+// 艺人接口
+export interface Artist {
+  id: number
+  name: string
+  alias: string[]
+  picUrl?: string
+  albumSize?: number
+  mvSize?: number
+  musicSize?: number
+  followed?: boolean
+  identityIconUrl?: string
+}
+
+// 专辑接口
+export interface Album {
+  id: number
+  name: string
+  picUrl: string
+  publishTime: number
+  description: string
+  tags: string[]
+  company: string
+  artists: Artist[]
 }

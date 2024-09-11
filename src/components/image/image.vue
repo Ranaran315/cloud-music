@@ -6,6 +6,7 @@
     :preview-disabled="!preview"
     @load="handleLoad"
     :object-fit="objectFit"
+    :lazy="lazy"
   ></n-image>
 </template>
 
@@ -33,6 +34,10 @@ defineProps({
       String
     ),
     default: 'cover',
+  },
+  lazy: {
+    type: Boolean,
+    default: true,
   },
 })
 

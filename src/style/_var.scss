@@ -18,6 +18,13 @@ $color: (
   'box-shadow': (
     'primary': 0 5px 10px 3px rgba(0, 0, 0, 0.3),
   ),
+  'border-radius': (
+    'mini': 5px,
+    'small': 10px,
+    'normal': 20px,
+    'round': 50px,
+    'circle': 50%,
+  ),
 );
 
 @function getColor($type: 'default') {
@@ -34,4 +41,8 @@ $color: (
 
 @function getBoxShadow($type: 'primary') {
   @return map.get($color, 'box-shadow', $type);
+}
+
+@function getBorderRadius($type: 'normal') {
+  @return map.get($color, 'border-radius', $type);
 }

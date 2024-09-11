@@ -76,7 +76,7 @@ watchEffect(async () => {
   width: 100%;
   position: fixed;
   top: var(--navbar-height);
-  z-index: 1;
+  z-index: var(--tab-nav-z-index);
   background-color: getFillColor();
 }
 :deep(.n-tabs-tab) {

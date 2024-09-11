@@ -8,6 +8,7 @@ import { CloudProgress } from './progress'
 import { CloudLoading } from './loading'
 import { CloudIcon } from './icon'
 import { CloudPlaylistCard } from './playlist-card'
+import { CloudAlbumCard } from './album-card'
 
 const components = [
   CloudButton,
@@ -19,6 +20,7 @@ const components = [
   CloudLoading,
   CloudIcon,
   CloudPlaylistCard,
+  CloudAlbumCard,
 ]
 
 export default {
@@ -39,3 +41,4 @@ export * from './loading'
 export * from './icon'
 export { default as useLogin } from './login/function'
 export * from './playlist-card'
+export * from './album-card'
