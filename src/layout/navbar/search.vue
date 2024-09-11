@@ -19,6 +19,7 @@
             @focus="handleFocus"
             @blur="handleBlur"
             @keydown.tab="handleKeydownTab"
+            @keydown.enter="doSearch(modelValue)"
             @input="handleChange"
           >
             <template #prefix>

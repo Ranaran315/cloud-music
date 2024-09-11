@@ -51,7 +51,7 @@ export function useSearchContext() {
     },
     {
       name: '1009',
-      tab: '博客',
+      tab: '播客',
     },
     {
       name: '1006',
