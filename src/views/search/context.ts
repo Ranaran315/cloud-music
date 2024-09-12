@@ -4,6 +4,8 @@ import Artists from './artists.vue'
 import Playlist from './playlist.vue'
 import Albums from './albums.vue'
 import Synthesis from './synthesis.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { SearchType } from '@/utils/type'
 
 interface SearchContext {
   state: {
@@ -17,11 +19,14 @@ interface SearchContext {
   }>
   setResult: (result: any) => void
   setLoading: (loading: boolean) => void
+  changeTab: (type: SearchType) => void
 }
 
 export const SearchContextKey: InjectionKey<SearchContext> = Symbol('search')
 
 export function useSearchContext() {
+  const route = useRoute()
+  const router = useRouter()
   const state = reactive({
     result: {},
     loading: false,
@@ -82,10 +87,20 @@ export function useSearchContext() {
     state.loading = loading
   }
 
+  const changeTab = (type: SearchType) => {
+    router.replace({
+      query: {
+        ...route.query,
+        type,
+      },
+    })
+  }
+
   return {
     state,
     setResult,
     setLoading,
     tabs,
+    changeTab,
   }
 }

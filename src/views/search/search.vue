@@ -22,7 +22,7 @@ import { searchApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { NTabs, NTabPane } from 'naive-ui'
 import { computed, provide, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { SearchContextKey, useSearchContext } from './context'
 
 const ucn = useClassName('search', false)
@@ -34,17 +34,11 @@ const searchContext = useSearchContext()
 provide(SearchContextKey, searchContext)
 
 const route = useRoute()
-const router = useRouter()
 const value = computed(() => route.query.type as string) // 当前 tab
 
 // 当 tab 更新时
-const handleUpdateTab = (value: string) => {
-  router.replace({
-    query: {
-      ...route.query,
-      type: value,
-    },
-  })
+const handleUpdateTab = (value: number) => {
+  searchContext.changeTab(value as unknown as number)
 }
 
 // 搜索

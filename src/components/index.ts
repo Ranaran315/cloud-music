@@ -10,6 +10,7 @@ import { CloudIcon } from './icon'
 import { CloudPlaylistCard } from './playlist-card'
 import { CloudAlbumCard } from './album-card'
 import { CloudSongCard } from './song-card'
+import { CloudArtistCard } from './artist-card'
 
 const components = [
   CloudButton,
@@ -23,6 +24,7 @@ const components = [
   CloudPlaylistCard,
   CloudAlbumCard,
   CloudSongCard,
+  CloudArtistCard,
 ]
 
 export default {
@@ -45,3 +47,4 @@ export { default as useLogin } from './login/function'
 export * from './playlist-card'
 export * from './album-card'
 export * from './song-card'
+export * from './artist-card'

@@ -144,3 +144,17 @@ export interface Album {
   company: string
   artists: Artist[]
 }
+
+// 查询类型接口
+export enum SearchType {
+  Synthesis = 1018,
+  Songs = 1,
+  Playlist = 1000,
+  Artists = 100,
+  Sound = 2000,
+  Podcast = 1009,
+  Lyrics = 1006,
+  Album = 10,
+  MV = 1014,
+  User = 1002,
+}
