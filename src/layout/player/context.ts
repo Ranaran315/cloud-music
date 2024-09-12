@@ -20,6 +20,7 @@ interface PlayerContext {
 
 export const playerContextKey: InjectionKey<PlayerContext> =
   Symbol('playerContext')
+
 export const userPlayerContext = () => {
   const songStore = useSongStore()
   const state = reactive({
@@ -31,6 +32,7 @@ export const userPlayerContext = () => {
   })
 
   watchEffect(() => {
+    console.log('watchEffect')
     state.song = songStore.song
   })
 

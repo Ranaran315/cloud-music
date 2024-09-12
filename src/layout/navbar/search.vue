@@ -1,5 +1,5 @@
 <template>
-  <div :class="ucn.b()">
+  <div :class="ucn.b()" ref="searchRef">
     <n-popover
       trigger="manual"
       :show="showPopover"
@@ -17,7 +17,6 @@
             ref="RaInputRef"
             clearable
             @focus="handleFocus"
-            @blur="handleBlur"
             @keydown.tab="handleKeydownTab"
             @keydown.enter="doSearch(modelValue)"
             @input="handleChange"
@@ -81,6 +80,7 @@ import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { searchApi } from '@/api'
 import { useRoute, useRouter } from 'vue-router'
+import { onClickOutside } from '@vueuse/core'
 
 const ucn = useClassName('navbar-search', false)
 
@@ -95,10 +95,10 @@ const RaInputRef = ref<typeof RaInput | null>(null)
 // 是否展示 popover
 const showPopover = ref(false)
 
-// 失去焦点时关闭 popover
-const handleBlur = () => {
+const searchRef = ref(null)
+onClickOutside(searchRef, () => {
   showPopover.value = false
-}
+})
 
 // 获取默认搜索
 const defaultKeyword = reactive({
@@ -215,6 +215,7 @@ const route = useRoute()
 
 // 点击搜索列表项时搜索
 const doSearch = async (keywords: string) => {
+  showPopover.value = false
   modelValue.value = keywords
   router.push({
     path: '/search',

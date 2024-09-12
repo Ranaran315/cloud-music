@@ -1,34 +1,40 @@
 <template>
-  <div :class="ucn.b()">
-    <SearchSynthesisItem title="歌曲" @more="handleMore(SearchType.Songs)">
-      <div :class="ucn.e('song-wrapper')">
-        <cloud-song-card v-for="item of songs" :key="item.id" :data="item" />
-      </div>
-    </SearchSynthesisItem>
-    <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
-      <div :class="ucn.e('artist-wrapper')">
-        <cloud-artist-card
-          v-for="item of artists"
-          :key="item.id"
-          :data="item"
-        />
-      </div>
-    </SearchSynthesisItem>
-    <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
-      <div :class="ucn.e('playlist-wrapper')">
-        <cloud-playlist-card
-          v-for="item of playlists"
-          :key="item.id"
-          :data="item"
-        />
-      </div>
-    </SearchSynthesisItem>
-    <SearchSynthesisItem title="专辑" @more="handleMore(SearchType.Album)">
-      <div :class="ucn.e('album-wrapper')">
-        <cloud-album-card v-for="item of albums" :key="item.id" :data="item" />
-      </div>
-    </SearchSynthesisItem>
-  </div>
+  <cloud-loading :show="searchContext?.state.loading">
+    <div :class="ucn.b()">
+      <SearchSynthesisItem title="歌曲" @more="handleMore(SearchType.Songs)">
+        <div :class="ucn.e('song-wrapper')">
+          <cloud-song-card v-for="item of songs" :key="item.id" :data="item" />
+        </div>
+      </SearchSynthesisItem>
+      <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
+        <div :class="ucn.e('artist-wrapper')">
+          <cloud-artist-card
+            v-for="item of artists"
+            :key="item.id"
+            :data="item"
+          />
+        </div>
+      </SearchSynthesisItem>
+      <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
+        <div :class="ucn.e('playlist-wrapper')">
+          <cloud-playlist-card
+            v-for="item of playlists"
+            :key="item.id"
+            :data="item"
+          />
+        </div>
+      </SearchSynthesisItem>
+      <SearchSynthesisItem title="专辑" @more="handleMore(SearchType.Album)">
+        <div :class="ucn.e('album-wrapper')">
+          <cloud-album-card
+            v-for="item of albums"
+            :key="item.id"
+            :data="item"
+          />
+        </div>
+      </SearchSynthesisItem>
+    </div>
+  </cloud-loading>
 </template>
 
 <script setup lang="ts">

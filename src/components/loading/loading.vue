@@ -26,4 +26,8 @@ defineProps({
 :deep(.n-spin) {
   color: getTextColor();
 }
+
+:deep(.n-spin-body) {
+  top: min(50%, 200px);
+}
 </style>

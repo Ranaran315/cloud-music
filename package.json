@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@capybara-plus/vue": "^0.0.2",
+    "@vueuse/core": "^11.0.3",
     "axios": "^1.7.5",
     "colorthief": "^2.4.0",
     "pinia": "^2.2.2",
