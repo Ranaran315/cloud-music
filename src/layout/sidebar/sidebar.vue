@@ -50,6 +50,7 @@ const route = useRoute()
   height: calc(100vh - var(--navbar-height));
   background-color: getFillColor();
   padding: 10px;
+  padding-bottom: var(--player-controller-height);
   display: flex;
   flex-direction: column;
   gap: 20px;

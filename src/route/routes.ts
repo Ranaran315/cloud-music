@@ -11,7 +11,7 @@ import {
   Cloud,
   Dir,
   Recent,
-  Logo,
+  User,
 } from '@/icons'
 
 export const sidebarRoutes: RouteRecordRaw[] = [
@@ -141,8 +141,8 @@ export const sidebarRoutes: RouteRecordRaw[] = [
         name: 'Profile',
         component: () => import('@/views/profile/profile.vue'),
         meta: {
-          title: '个人中心',
-          icon: Logo,
+          name: '个人中心',
+          icon: User,
         },
       },
     ],
