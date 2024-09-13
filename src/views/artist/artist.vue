@@ -42,6 +42,11 @@
         </div>
       </div>
     </div>
+    <cloud-tab
+      :tabs="tabs"
+      @update-value="handleUpdateValue"
+      :value="tabValue"
+    ></cloud-tab>
   </div>
 </template>
 
@@ -51,16 +56,18 @@ import { useClassName } from '@/hooks'
 import { Play, SubScribe, SubScribed } from '@/icons'
 import { formatAlias, formatCount } from '@/utils/format'
 import { Artist } from '@/utils/type'
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const ucn = useClassName('artist', false)
 defineOptions({
   name: 'Artist',
 })
 
+const router = useRouter()
 const route = useRoute()
 const artist = ref<Artist | null>(null)
+// 获取歌手信息
 const getData = async () => {
   try {
     const id = route.params.id as unknown as number
@@ -81,6 +88,38 @@ const getData = async () => {
   }
 }
 getData()
+
+// 导航栏
+const tabs = [
+  {
+    name: 'desc',
+    tab: '简介',
+  },
+  {
+    name: 'music',
+    tab: '音乐',
+  },
+  {
+    name: 'album',
+    tab: '专辑',
+  },
+  {
+    name: 'mv',
+    tab: 'MV',
+  },
+  {
+    name: 'simi',
+    tab: '相似歌手',
+  },
+]
+const tabValue = computed(() => route.query.tab as string)
+watchEffect(() => {
+  if (!route.query || !route.query.tab)
+    router.replace({ query: { tab: 'desc' } })
+})
+const handleUpdateValue = (val: any) => {
+  router.replace({ query: { tab: val } })
+}
 </script>
 
 <style scoped lang="scss">

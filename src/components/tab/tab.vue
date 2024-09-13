@@ -37,11 +37,12 @@ interface Tab {
 }
 
 defineProps({
+  // 选项卡列表
   tabs: {
     type: definePropType<Tab[]>(Array),
     required: true,
   },
-  value: [String, Number],
+  value: String, // 当前激活 tab 的 name
 })
 
 defineEmits({

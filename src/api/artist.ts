@@ -42,4 +42,44 @@ export default {
       },
     })
   },
+  // 获取相似歌手
+  getSimi(id: number) {
+    return request({
+      resetUrl: 'simi/artist',
+      params: {
+        id,
+      },
+    })
+  },
+  // 获取歌手专辑
+  getAlbums(id: number, limit = 30, offset = 0) {
+    return request({
+      url: 'album',
+      params: {
+        id,
+        limit,
+        offset,
+      },
+    })
+  },
+  // 获取歌手mv
+  getMV(id: number) {
+    return request({
+      url: 'mv',
+      params: {
+        id,
+      },
+    })
+  },
+  // 获取歌手歌曲
+  getSongs(id: number, limit = 30, offset = 0) {
+    return request({
+      url: 'songs',
+      params: {
+        id,
+        limit,
+        offset,
+      },
+    })
+  },
 }
