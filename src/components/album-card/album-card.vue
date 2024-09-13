@@ -2,6 +2,9 @@
   <div :class="ucn.b()">
     <div :class="ucn.e('cover')">
       <cloud-image :class="ucn.e('cover-image')" :src="data.picUrl" />
+      <div :class="ucn.e('disc')">
+        <cloud-image :class="ucn.e('disc-image')" :src="data.picUrl" />
+      </div>
     </div>
     <div :class="ucn.e('info')">
       <div :class="ucn.e('name')">{{ data.name }}</div>
@@ -69,8 +72,7 @@ const artistName = computed(() =>
     height: $size;
     padding-right: 30px;
     border-radius: getBorderRadius('small');
-    &::after {
-      content: '';
+    @include e('disc') {
       position: absolute;
       top: 0;
       right: 0;
@@ -78,11 +80,13 @@ const artistName = computed(() =>
       height: $size;
       border-radius: 50%;
       background-color: #000;
+      box-shadow: getBoxShadow();
     }
     @include e('cover-image') {
+      filter: blur(5px);
       position: relative;
-      z-index: 1;
       box-shadow: getBoxShadow();
+      transition: z-index 0.3s, filter 0.3s;
     }
   }
   @include e('info') {
