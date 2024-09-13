@@ -71,4 +71,7 @@ export const formatName = (arr: any[], filed: string) => {
   return arr.map((item) => item[filed]).join(' / ')
 }
 
-export const formatAlias = (alias: string[]) => alias.join(' / ')
+export const formatAlias = (alias?: string[]) => {
+  if (!alias) return
+  return alias.join(' / ')
+}

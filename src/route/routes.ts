@@ -169,6 +169,11 @@ const routes: RouteRecordRaw[] = [
         name: 'Search',
         component: () => import('@/views/search/search.vue'),
       },
+      {
+        path: '/artist/:id',
+        name: 'Artist',
+        component: () => import('@/views/artist/artist.vue'),
+      }
     ],
   },
 ]

@@ -125,12 +125,17 @@ export interface Artist {
   id: number
   name: string
   alias: string[]
-  picUrl?: string
+  picUrl: string
+  img1v1Url?: string
   albumSize?: number
   mvSize?: number
   musicSize?: number
   followed?: boolean
   identityIconUrl?: string
+  briefDesc?: string
+  publishTime?: number
+  fansCnt?: number
+  followCnt?: number
 }
 
 // 专辑接口

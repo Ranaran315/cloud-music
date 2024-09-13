@@ -25,6 +25,14 @@ $color: (
     'round': 50px,
     'circle': 50%,
   ),
+  'font-size': (
+    'normal': 1rem,
+    'medium': 1.1rem,
+    'large': 1.2rem,
+    'larger': 1.5rem,
+    'small': 0.85rem,
+    'mini': 0.8rem,
+  ),
 );
 
 @function getColor($type: 'default') {
@@ -45,4 +53,8 @@ $color: (
 
 @function getBorderRadius($type: 'normal') {
   @return map.get($color, 'border-radius', $type);
+}
+
+@function getFontSize($type: 'normal') {
+  @return map.get($color, 'font-size', $type);
 }

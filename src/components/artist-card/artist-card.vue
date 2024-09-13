@@ -1,5 +1,5 @@
 <template>
-  <div :class="ucn.b()">
+  <router-link :to="`artist/${data.id}`" :class="ucn.b()" @click.stop="">
     <div :class="ucn.e('cover')">
       <cloud-image :src="data.picUrl" width="100%"></cloud-image>
     </div>
@@ -19,7 +19,7 @@
         <span>{{ data.mvSize }}MV</span>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">

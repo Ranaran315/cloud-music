@@ -3,9 +3,6 @@
     <div :class="ucn.b()">
       <cloud-album-card v-for="item in albums" :key="item.id" :data="item" />
     </div>
-    <div :class="ucn.b()">
-      <cloud-album-card v-for="item in albums" :key="item.id" :data="item" />
-    </div>
   </cloud-loading>
 </template>
 
@@ -33,5 +30,6 @@ const albums = computed(() => searchContext?.state.result.albums)
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
+  min-height: 200px;
 }
 </style>

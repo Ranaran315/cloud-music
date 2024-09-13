@@ -32,7 +32,6 @@ export const userPlayerContext = () => {
   })
 
   watchEffect(() => {
-    console.log('watchEffect')
     state.song = songStore.song
   })
 
