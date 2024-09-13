@@ -11,6 +11,7 @@ import { CloudPlaylistCard } from './playlist-card'
 import { CloudAlbumCard } from './album-card'
 import { CloudSongCard } from './song-card'
 import { CloudArtistCard } from './artist-card'
+import { CloudTab } from './tab'
 
 const components = [
   CloudButton,
@@ -25,6 +26,7 @@ const components = [
   CloudAlbumCard,
   CloudSongCard,
   CloudArtistCard,
+  CloudTab,
 ]
 
 export default {
@@ -48,3 +50,4 @@ export * from './playlist-card'
 export * from './album-card'
 export * from './song-card'
 export * from './artist-card'
+export * from './tab'

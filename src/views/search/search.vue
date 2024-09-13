@@ -1,26 +1,22 @@
 <template>
   <div :class="ucn.b()">
-    <n-tabs type="line" animated @update-value="handleUpdateTab" :value="value">
-      <n-tab-pane
-        v-for="item of searchContext.tabs"
-        :key="item.name"
-        :name="item.name"
-        :tab="item.tab"
-      >
-        <template #default>
-          <div :class="ucn.e('result')">
-            <component :is="item.component" />
-          </div>
-        </template>
-      </n-tab-pane>
-    </n-tabs>
+    <cloud-tab
+      :tabs="searchContext.tabs"
+      @update-value="handleUpdateTab"
+      :value="value"
+    >
+      <template #default="{ tab }">
+        <div :class="ucn.e('result')">
+          <component :is="tab.component" />
+        </div>
+      </template>
+    </cloud-tab>
   </div>
 </template>
 
 <script setup lang="ts">
 import { searchApi } from '@/api'
 import { useClassName } from '@/hooks'
-import { NTabs, NTabPane } from 'naive-ui'
 import { computed, provide, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { SearchContextKey, useSearchContext } from './context'
