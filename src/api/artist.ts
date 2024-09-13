@@ -34,7 +34,8 @@ export default {
       },
     })
   },
-  getDesc(id: number) {
+  // 获取歌手简要百科
+  getProducation(id: number) {
     return request({
       resetUrl: '/ugc/artist/get',
       params: {

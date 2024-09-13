@@ -42,11 +42,11 @@
         </div>
       </div>
     </div>
-    <cloud-tab
-      :tabs="tabs"
-      @update-value="handleUpdateValue"
-      :value="tabValue"
-    ></cloud-tab>
+    <cloud-tab :tabs="tabs" @update-value="handleUpdateValue" :value="tabValue">
+      <template #default="{ tab }">
+        <component :is="tab.component"></component>
+      </template>
+    </cloud-tab>
   </div>
 </template>
 
@@ -58,6 +58,8 @@ import { formatAlias, formatCount } from '@/utils/format'
 import { Artist } from '@/utils/type'
 import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import ArtistProducation from './producation.vue'
+import ArtistSongs from './songs.vue'
 
 const ucn = useClassName('artist', false)
 defineOptions({
@@ -80,9 +82,6 @@ const getData = async () => {
     } = await artistApi.getFans(id)
     artist.value!.fansCnt = fansCnt
     artist.value!.followCnt = followCnt
-
-    const res = await artistApi.getDesc(id)
-    console.log(res)
   } catch (error) {
     console.log(error)
   }
@@ -94,10 +93,12 @@ const tabs = [
   {
     name: 'desc',
     tab: '简介',
+    component: ArtistProducation,
   },
   {
     name: 'music',
     tab: '音乐',
+    component: ArtistSongs,
   },
   {
     name: 'album',
