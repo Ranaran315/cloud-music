@@ -55,5 +55,6 @@ h6 {
 @include b() {
   color: getTextColor('secondary');
   text-align: left;
+  min-height: 200px;
 }
 </style>

@@ -5,7 +5,9 @@
         <LogoWithName />
       </ra-icon>
     </router-link>
-    <cloud-search />
+    <div :class="ucn.e('center')">
+      <NavbarSearch />
+    </div>
     <div :class="ucn.e('menu')">
       <div
         v-for="(item, index) of menuItem"
@@ -22,11 +24,12 @@
 import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
 import { LogoWithName } from '@/icons'
-import CloudSearch from './search.vue'
-import CloudMessage from './message.vue'
-import CloudSkin from './skin.vue'
-import CloudSetting from './setting.vue'
-import CloudUser from './user.vue'
+import NavbarSearch from './search.vue'
+import NavbarMessage from './message.vue'
+import NavbarSkin from './skin.vue'
+import NavbarSetting from './setting.vue'
+import NavbarUser from './user.vue'
+import NavbarBack from './back.vue'
 
 const ucn = useClassName('navbar', false)
 defineOptions({
@@ -35,21 +38,25 @@ defineOptions({
 
 const menuItem = [
   {
+    name: '返回',
+    component: NavbarBack,
+  },
+  {
     name: '用户',
-    component: CloudUser,
+    component: NavbarUser,
   },
   {
     name: '通知',
-    component: CloudMessage,
+    component: NavbarMessage,
   },
 
   {
     name: '皮肤',
-    component: CloudSkin,
+    component: NavbarSkin,
   },
   {
     name: '设置',
-    component: CloudSetting,
+    component: NavbarSetting,
   },
 ]
 </script>
@@ -81,6 +88,11 @@ const menuItem = [
     align-items: center;
     font-size: 12rem;
     margin-right: 30px;
+  }
+  @include e('center') {
+    display: flex;
+    align-items: center;
+    margin: auto;
   }
   @include e('menu') {
     display: flex;
