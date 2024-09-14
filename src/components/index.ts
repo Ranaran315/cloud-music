@@ -8,7 +8,7 @@ import { CloudProgress } from './progress'
 import { CloudLoading } from './loading'
 import { CloudIcon } from './icon'
 import { CloudPlaylistCard } from './playlist-card'
-import { CloudAlbumCard } from './album-card'
+import { CloudAlbumCards } from './album-cards'
 import { CloudSongCard } from './song-card'
 import { CloudArtistCard } from './artist-card'
 import { CloudTab } from './tab'
@@ -23,7 +23,7 @@ const components = [
   CloudLoading,
   CloudIcon,
   CloudPlaylistCard,
-  CloudAlbumCard,
+  CloudAlbumCards,
   CloudSongCard,
   CloudArtistCard,
   CloudTab,
@@ -47,7 +47,7 @@ export * from './loading'
 export * from './icon'
 export { default as useLogin } from './login/function'
 export * from './playlist-card'
-export * from './album-card'
+export * from './album-cards'
 export * from './song-card'
 export * from './artist-card'
 export * from './tab'

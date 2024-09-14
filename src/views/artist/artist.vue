@@ -60,6 +60,7 @@ import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ArtistProducation from './producation.vue'
 import ArtistSongs from './songs.vue'
+import ArtistAlbums from './albums.vue'
 
 const ucn = useClassName('artist', false)
 defineOptions({
@@ -103,6 +104,7 @@ const tabs = [
   {
     name: 'album',
     tab: '专辑',
+    component: ArtistAlbums,
   },
   {
     name: 'mv',
