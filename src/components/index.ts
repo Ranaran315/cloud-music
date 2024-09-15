@@ -10,7 +10,7 @@ import { CloudIcon } from './icon'
 import { CloudPlaylistCard } from './playlist-card'
 import { CloudAlbumCards } from './album-cards'
 import { CloudSongCard } from './song-card'
-import { CloudArtistCard } from './artist-card'
+import { CloudArtistCards } from './artist-cards'
 import { CloudTab } from './tab'
 
 const components = [
@@ -25,7 +25,7 @@ const components = [
   CloudPlaylistCard,
   CloudAlbumCards,
   CloudSongCard,
-  CloudArtistCard,
+  CloudArtistCards,
   CloudTab,
 ]
 
@@ -49,5 +49,5 @@ export { default as useLogin } from './login/function'
 export * from './playlist-card'
 export * from './album-cards'
 export * from './song-card'
-export * from './artist-card'
+export * from './artist-cards'
 export * from './tab'

@@ -1,47 +1,49 @@
 <template>
   <div :class="ucn.b()">
-    <div :class="ucn.e('header')">
-      <div :class="ucn.e('cover')">
-        <cloud-image :src="artist?.img1v1Url"></cloud-image>
-      </div>
-      <div :class="ucn.e('info')">
-        <div :class="ucn.e('name')">
-          {{ artist?.name }}
-          <div :class="ucn.e('alias')">{{ formatAlias(artist?.alias!) }}</div>
+    <cloud-loading :show="loading">
+      <div :class="ucn.e('header')">
+        <div :class="ucn.e('cover')">
+          <cloud-image :src="artist?.img1v1Url"></cloud-image>
         </div>
-        <div :class="ucn.e('desc')">{{ artist?.briefDesc }}</div>
-        <div :class="ucn.e('meta-info')">
-          <div :class="ucn.e('meta-item')">
-            <div :class="ucn.e('title')">关注</div>
-            <div :class="ucn.e('count')">{{ artist?.followCnt }}</div>
+        <div :class="ucn.e('info')">
+          <div :class="ucn.e('name')">
+            {{ artist?.name }}
+            <div :class="ucn.e('alias')">{{ formatAlias(artist?.alias!) }}</div>
           </div>
-          <div :class="ucn.e('meta-item')">
-            <div :class="ucn.e('title')">粉丝</div>
-            <div :class="ucn.e('count')">
-              {{ formatCount(artist?.fansCnt) }}
+          <div :class="ucn.e('desc')">{{ artist?.briefDesc }}</div>
+          <div :class="ucn.e('meta-info')">
+            <div :class="ucn.e('meta-item')">
+              <div :class="ucn.e('title')">关注</div>
+              <div :class="ucn.e('count')">{{ artist?.followCnt }}</div>
+            </div>
+            <div :class="ucn.e('meta-item')">
+              <div :class="ucn.e('title')">粉丝</div>
+              <div :class="ucn.e('count')">
+                {{ formatCount(artist?.fansCnt) }}
+              </div>
+            </div>
+            <div :class="ucn.e('meta-item')">
+              <div :class="ucn.e('title')">音乐</div>
+              <div :class="ucn.e('count')">{{ artist?.musicSize }}</div>
+            </div>
+            <div :class="ucn.e('meta-item')">
+              <div :class="ucn.e('title')">专辑</div>
+              <div :class="ucn.e('count')">{{ artist?.albumSize }}</div>
+            </div>
+            <div :class="ucn.e('meta-item')">
+              <div :class="ucn.e('title')">MV</div>
+              <div :class="ucn.e('count')">{{ artist?.mvSize }}</div>
             </div>
           </div>
-          <div :class="ucn.e('meta-item')">
-            <div :class="ucn.e('title')">音乐</div>
-            <div :class="ucn.e('count')">{{ artist?.musicSize }}</div>
+          <div :class="ucn.e('operator')">
+            <cloud-button type="primary" :icon="Play">播放全部</cloud-button>
+            <cloud-button :icon="artist?.followed ? SubScribed : SubScribe">{{
+              artist?.followed ? '已关注' : '关注'
+            }}</cloud-button>
           </div>
-          <div :class="ucn.e('meta-item')">
-            <div :class="ucn.e('title')">专辑</div>
-            <div :class="ucn.e('count')">{{ artist?.albumSize }}</div>
-          </div>
-          <div :class="ucn.e('meta-item')">
-            <div :class="ucn.e('title')">MV</div>
-            <div :class="ucn.e('count')">{{ artist?.mvSize }}</div>
-          </div>
-        </div>
-        <div :class="ucn.e('operator')">
-          <cloud-button type="primary" :icon="Play">播放全部</cloud-button>
-          <cloud-button :icon="artist?.followed ? SubScribed : SubScribe">{{
-            artist?.followed ? '已关注' : '关注'
-          }}</cloud-button>
         </div>
       </div>
-    </div>
+    </cloud-loading>
     <cloud-tab :tabs="tabs" @update-value="handleUpdateValue" :value="tabValue">
       <template #default="{ tab }">
         <component :is="tab.component"></component>
@@ -56,11 +58,12 @@ import { useClassName } from '@/hooks'
 import { Play, SubScribe, SubScribed } from '@/icons'
 import { formatAlias, formatCount } from '@/utils/format'
 import { Artist } from '@/utils/type'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ArtistProducation from './producation.vue'
 import ArtistSongs from './songs.vue'
 import ArtistAlbums from './albums.vue'
+import SimiArtist from './simi-artists.vue'
 
 const ucn = useClassName('artist', false)
 defineOptions({
@@ -70,9 +73,11 @@ defineOptions({
 const router = useRouter()
 const route = useRoute()
 const artist = ref<Artist | null>(null)
+const loading = ref(false)
 // 获取歌手信息
 const getData = async () => {
   try {
+    loading.value = true
     const id = route.params.id as unknown as number
     // 获取基本信息
     const { artist: foundArtist } = await artistApi.getBaseInfo(id)
@@ -85,9 +90,20 @@ const getData = async () => {
     artist.value!.followCnt = followCnt
   } catch (error) {
     console.log(error)
+  } finally {
+    loading.value = false
   }
 }
-getData()
+watch(
+  () => route.params.id,
+  () => {
+    console.log('id change')
+    getData()
+  },
+  {
+    immediate: true,
+  }
+)
 
 // 导航栏
 const tabs = [
@@ -113,6 +129,7 @@ const tabs = [
   {
     name: 'simi',
     tab: '相似歌手',
+    component: SimiArtist,
   },
 ]
 const tabValue = computed(() => route.query.tab as string)
