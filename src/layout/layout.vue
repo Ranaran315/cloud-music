@@ -1,22 +1,35 @@
 <template>
-  <div class="layout">
+  <div :class="ucn.b()">
     <Navbar />
     <Sidebar />
-    <div class="layout-main"><router-view /></div>
+    <div :class="ucn.e('main')">
+      <router-view />
+    </div>
     <Player />
   </div>
 </template>
 
 <script setup lang="ts">
+import { useClassName } from '@/hooks'
 import { Navbar, Sidebar, Player } from '@/layout/index.ts'
 import { useLoginStore, useSongStore } from '@/store'
 
 useLoginStore().getLoginStatus() // 获取登录状态
 useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
+
+const ucn = useClassName('layout', false)
+defineOptions({
+  name: 'Layout',
+})
 </script>
 
 <style lang="scss">
-.layout {
+@use '@/style/bem' as * with (
+  $block: 'layout',
+  $use-namespace: false
+);
+
+@include b() {
   --navbar-height: 60px;
   --sidebar-width: 250px;
   --player-controller-height: 80px;
@@ -26,7 +39,7 @@ useSongStore().getUserLikedSongs() // 获取用户喜欢的歌曲列表
   height: 100%;
   display: flex;
   justify-content: center;
-  &-main {
+  @include e('main') {
     margin-top: var(--navbar-height);
     margin-left: var(--sidebar-width);
     margin-bottom: var(--player-controller-height);

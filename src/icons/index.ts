@@ -1,6 +1,7 @@
 export { default as LogoWithName } from './logo-with-name.vue'
 export { default as Logo } from './logo.vue'
 export { default as Back } from './back.vue'
+export { default as Forward } from './forward.vue'
 export { default as Like } from './like.vue'
 export { default as Liked } from './liked.vue'
 export { default as Search } from './search.vue'

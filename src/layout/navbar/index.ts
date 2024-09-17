@@ -1,4 +1,7 @@
-import { withInstall } from '@/utils/install'
-import Navbar from './navbar.vue'
-
-export const CloudNavbar = withInstall(Navbar)
+export { default as NavbarSearch } from './search.vue'
+export { default as NavbarMessage } from './message.vue'
+export { default as NavbarSkin } from './skin.vue'
+export { default as NavbarSetting } from './setting.vue'
+export { default as NavbarUser } from './user.vue'
+export { default as NavbarBack } from './back.vue'
+export { default as NavbarForward } from './forward.vue'

@@ -24,12 +24,15 @@
 import { useClassName } from '@/hooks'
 import { RaIcon } from '@capybara-plus/vue'
 import { LogoWithName } from '@/icons'
-import NavbarSearch from './search.vue'
-import NavbarMessage from './message.vue'
-import NavbarSkin from './skin.vue'
-import NavbarSetting from './setting.vue'
-import NavbarUser from './user.vue'
-import NavbarBack from './back.vue'
+import {
+  NavbarSearch,
+  NavbarBack,
+  NavbarForward,
+  NavbarUser,
+  NavbarMessage,
+  NavbarSkin,
+  NavbarSetting,
+} from './index.ts'
 
 const ucn = useClassName('navbar', false)
 defineOptions({
@@ -40,6 +43,10 @@ const menuItem = [
   {
     name: '返回',
     component: NavbarBack,
+  },
+  {
+    name: '前进',
+    component: NavbarForward,
   },
   {
     name: '用户',

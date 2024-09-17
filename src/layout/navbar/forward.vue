@@ -3,12 +3,12 @@
     type="primary"
     shape="circle"
     size="medium"
-    :icon="Back"
-    @click="$router.back()"
+    :icon="Forward"
+    @click="$router.forward()"
   >
   </cloud-button>
 </template>
 
 <script setup lang="ts">
-import { Back } from '@/icons'
+import { Forward } from '@/icons'
 </script>
