@@ -1,9 +1,5 @@
 <template>
-  <div
-    @click="toPlaylistDetail(data.id, data.name)"
-    :class="ucn.b()"
-    :key="data.id"
-  >
+  <div @click="toPlaylistDetail(data.id)" :class="ucn.b()" :key="data.id">
     <div :class="ucn.e('cover')">
       <cloud-image
         :class="ucn.e('cover-image')"
@@ -38,7 +34,6 @@ import { definePropType } from '@/utils/props'
 import { Playlist } from '@/utils/type'
 import { formatCount, formatTime } from '@/utils/format'
 import { nextTick } from 'vue'
-import { usePlaylistStore } from '@/store'
 import { useRouter } from 'vue-router'
 
 const ucn = useClassName('playlist-card', true)
@@ -53,13 +48,11 @@ defineProps({
   },
 })
 
-const playlistStore = usePlaylistStore()
 const router = useRouter()
-const toPlaylistDetail = (id: number, name: string) => {
-  playlistStore.setCurrentPlaylistId(id)
+const toPlaylistDetail = (id: number) => {
   nextTick(() => {
     router.push({
-      path: `/playlist/${name}`,
+      path: `/playlist/${id}`,
     })
   })
 }

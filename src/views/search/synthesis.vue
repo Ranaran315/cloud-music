@@ -8,11 +8,7 @@
       </SearchSynthesisItem>
       <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
         <div :class="ucn.e('artist-wrapper')">
-          <cloud-artist-card
-            v-for="item of artists"
-            :key="item.id"
-            :data="item"
-          />
+          <cloud-artist-cards :data="artists" />
         </div>
       </SearchSynthesisItem>
       <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
@@ -80,11 +76,6 @@ const handleMore = (type: SearchType) => {
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       column-gap: 20px;
       row-gap: 30px;
-    }
-  }
-  @include e('artist-wrapper') {
-    @include grid() {
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     }
   }
   @include e('playlist-wrapper') {
