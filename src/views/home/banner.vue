@@ -24,7 +24,7 @@
       </template>
       <div
         class="banner__item"
-        v-for="(item, index) of bannerList"
+        v-for="(item, index) of bannerList.filter((item) => item.adid == null)"
         :key="item.targetId"
       >
         <router-link to="#">
