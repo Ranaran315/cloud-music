@@ -10,10 +10,16 @@
         </ra-icon>
       </div>
       <div :class="ucn.e('center')">
-        <QRLogin />
+        <KeepAlive>
+          <component :is="isQRLogin ? QRLogin : CaptchaLogin"></component>
+        </KeepAlive>
       </div>
-      <CloudTooltip content="二维码登录">
-        <div :class="ucn.e('bottom')"></div>
+      <CloudTooltip :content="isQRLogin ? '验证码登录' : '二维码登录'">
+        <div :class="ucn.e('bottom')" @click.stop="isQRLogin = !isQRLogin">
+          <ra-icon>
+            <component :is="isQRLogin ? Phone : QR"></component>
+          </ra-icon>
+        </div>
       </CloudTooltip>
     </div>
   </n-modal>
@@ -25,10 +31,10 @@ import { definePropType } from '@/utils/props'
 import { NModal } from 'naive-ui'
 import { ref } from 'vue'
 import { RaIcon } from '@capybara-plus/vue'
-import { LogoWithName, Close } from '@/icons'
+import { LogoWithName, Close, QR, Phone } from '@/icons'
 import { CloudTooltip } from '../tooltip'
-
 import QRLogin from './qr.vue'
+import CaptchaLogin from './captcha.vue'
 
 const ucn = useClassName('login', false)
 defineOptions({
@@ -42,6 +48,7 @@ defineProps({
   },
 })
 
+// 控制展示登录模态框
 const show = ref(false)
 ;(function open() {
   show.value = true
@@ -49,6 +56,8 @@ const show = ref(false)
 function close() {
   show.value = false
 }
+
+const isQRLogin = ref(true)
 </script>
 
 <style lang="scss">
@@ -58,6 +67,7 @@ function close() {
 );
 
 @include b() {
+  user-select: none;
   @include flex(column, space-between, $gap: 20px) {
     flex-wrap: nowrap;
   }
@@ -92,9 +102,15 @@ function close() {
     border-bottom-left-radius: 0;
     border-top-right-radius: 0;
     cursor: pointer;
+    font-size: 2.5rem;
+    text-align: left;
+    line-height: 50px;
+    color: getFillColor();
     &::after {
       content: '';
       position: absolute;
+      left: 0;
+      top: 0;
       border: 25px solid transparent;
       border-top-color: getFillColor();
       border-left-color: getFillColor();
