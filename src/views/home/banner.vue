@@ -51,9 +51,10 @@ import { bannerApi } from '@/api'
 import { NCarousel } from 'naive-ui'
 import { RaIcon } from '@capybara-plus/vue'
 import { Prev, Next } from '@/icons'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import ColorThief from 'colorthief'
 import { rgbToHex } from '@/utils/color'
+import { useTryCatch } from '@/utils/error'
 
 defineOptions({
   name: 'Banner',
@@ -63,13 +64,12 @@ const bannerList = ref<any[]>([])
 
 // 获取banner列表
 async function getBannerList() {
-  try {
+  useTryCatch(async () => {
     const res = (await bannerApi.getBannerList()) as any
     bannerList.value = res.banners
-  } catch (error) {
-    console.log(error)
-  }
+  })
 }
+getBannerList()
 
 // 获取图片主色调
 const colorthief = new ColorThief()
@@ -78,10 +78,6 @@ async function getImageColor(index: number, e: Event) {
   const resultHex = rgbToHex(result)
   bannerList.value[index].imageColor = resultHex
 }
-
-onMounted(() => {
-  getBannerList()
-})
 </script>
 
 <style scoped lang="scss">
