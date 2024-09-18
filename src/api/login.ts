@@ -44,4 +44,14 @@ export default {
       resetUrl: 'logout',
     })
   },
+  // 手机验证码登录
+  cellPhoneLogin(phone: string, captcha: string) {
+    return request({
+      url: 'cellphone',
+      params: {
+        phone,
+        captcha,
+      },
+    })
+  },
 }
