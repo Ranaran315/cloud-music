@@ -2,14 +2,10 @@
   <cloud-loading :show="searchContext?.state.loading">
     <div :class="ucn.b()">
       <SearchSynthesisItem title="歌曲" @more="handleMore(SearchType.Songs)">
-        <div :class="ucn.e('song-wrapper')">
-          <cloud-song-card v-for="item of songs" :key="item.id" :data="item" />
-        </div>
+        <cloud-song-cards :data="songs" />
       </SearchSynthesisItem>
       <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
-        <div :class="ucn.e('artist-wrapper')">
-          <cloud-artist-cards :data="artists" />
-        </div>
+        <cloud-artist-cards :data="artists" />
       </SearchSynthesisItem>
       <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
         <cloud-playlist-cards :data="playlists" />
@@ -49,15 +45,6 @@ const handleMore = (type: SearchType) => {
 <style scoped lang="scss">
 @use '@/style/bem' as * with($block: 'synthesis', $use-namespace: false);
 
-@mixin grid() {
-  width: 100%;
-  display: grid;
-  gap: 20px;
-  padding: 10px;
-  box-sizing: border-box;
-  @content;
-}
-
 @include b() {
   width: 100%;
   padding: 10px;
@@ -65,12 +52,5 @@ const handleMore = (type: SearchType) => {
   flex-direction: column;
   gap: 30px;
   box-sizing: border-box;
-  @include e('song-wrapper') {
-    @include grid() {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      column-gap: 20px;
-      row-gap: 30px;
-    }
-  }
 }
 </style>

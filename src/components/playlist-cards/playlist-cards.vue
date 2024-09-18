@@ -49,10 +49,7 @@ defineOptions({
 })
 
 defineProps({
-  data: {
-    type: definePropType<Playlist[]>(Array),
-    required: true,
-  },
+  data: definePropType<Playlist[]>(Array),
   loading: Boolean,
 })
 </script>
