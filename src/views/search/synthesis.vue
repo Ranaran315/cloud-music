@@ -12,13 +12,7 @@
         </div>
       </SearchSynthesisItem>
       <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
-        <div :class="ucn.e('playlist-wrapper')">
-          <cloud-playlist-card
-            v-for="item of playlists"
-            :key="item.id"
-            :data="item"
-          />
-        </div>
+        <cloud-playlist-cards :data="playlists" />
       </SearchSynthesisItem>
       <SearchSynthesisItem title="专辑" @more="handleMore(SearchType.Album)">
         <cloud-album-cards :data="albums" />
@@ -76,11 +70,6 @@ const handleMore = (type: SearchType) => {
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       column-gap: 20px;
       row-gap: 30px;
-    }
-  }
-  @include e('playlist-wrapper') {
-    @include grid() {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
   }
 }

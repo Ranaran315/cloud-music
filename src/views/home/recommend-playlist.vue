@@ -1,15 +1,10 @@
 <template>
   <div :class="ucn.b()">
     <div :class="ucn.e('title')">推荐歌单</div>
-    <cloud-loading :show="loading">
-      <div :class="ucn.e('list')">
-        <cloud-playlist-card
-          v-for="item of recommendlist"
-          :key="item.id"
-          :data="item"
-        ></cloud-playlist-card>
-      </div>
-    </cloud-loading>
+    <cloud-playlist-cards
+      :data="recommendlist"
+      :loading="loading"
+    ></cloud-playlist-cards>
   </div>
 </template>
 
@@ -90,12 +85,6 @@ onMounted(async () => {
     font-weight: 700;
     margin-bottom: 20px;
     text-align: left;
-  }
-  @include e('list') {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    row-gap: 40px;
   }
 }
 </style>
