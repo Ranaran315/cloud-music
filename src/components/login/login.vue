@@ -11,21 +11,21 @@
       </div>
       <div :class="ucn.e('center')">
         <div :class="ucn.e('left')">
-          <n-image
+          <cloud-image
             :class="ucn.e('example')"
             src="/qrlogin-example.png"
-            object-fit="cover"
-          ></n-image>
+            object-fit="contain"
+          ></cloud-image>
         </div>
         <div :class="ucn.e('right')">
           <div :class="ucn.e('qr-code')">
-            <n-image :src="qrImg" :class="ucn.is(isExpired, 'expired')">
-            </n-image>
+            <cloud-image
+              :src="qrImg"
+              :class="[ucn.e('qr-code-image'), ucn.is(isExpired, 'expired')]"
+            >
+            </cloud-image>
             <div v-show="isExpired" :class="ucn.e('refresh')">
-              <cloud-button @click="refresh" :loading="loading">
-                <ra-icon>
-                  <Refresh />
-                </ra-icon>
+              <cloud-button @click="refresh" :loading="loading" :icon="Refresh">
                 点击刷新
               </cloud-button>
             </div>
@@ -40,12 +40,13 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
-import { NModal, NImage } from 'naive-ui'
+import { NModal } from 'naive-ui'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RaIcon } from '@capybara-plus/vue'
 import { LogoWithName, Close, Refresh } from '@/icons'
 import { QRCodeStatus, useLoginStore } from '@/store'
 import { CloudButton } from '../button'
+import { CloudImage } from '@/components'
 
 const ucn = useClassName('login')
 defineOptions({
@@ -111,10 +112,94 @@ const isExpired = computed(() => loginStore.qrStatus === QRCodeStatus.EXPIRED)
 // 重新获取二维码
 const loading = ref(false)
 const refresh = async () => {
-  loading.value = true
-  await getQRCode()
-  loading.value = false
+  try {
+    loading.value = true
+    await getQRCode()
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
-<style scoped src="@/style/components/login.scss"></style>
+<style lang="scss">
+@use '@/style/bem' as * with (
+  $block: 'login'
+);
+
+@include b() {
+  width: 600px;
+  height: 400px;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  background-color: getFillColor();
+  border-radius: 10px;
+  background: linear-gradient(145deg, getFillColor(), getColor('primary'));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  @include e('header') {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include e('close') {
+      cursor: pointer;
+      transition: transform 0.3s;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  @include e('center') {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+    @include e('left') {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      @include e('example') {
+        height: 300px;
+      }
+    }
+    @include e('right') {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      @include e('qr-code') {
+        position: relative;
+        border-radius: 20px;
+        @include e('qr-code-image') {
+          border-radius: getBorderRadius('normal');
+          &#{is('expired')} {
+            filter: blur(5px);
+          }
+        }
+        @include e('refresh') {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: getColor('primary');
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: transform 0.3s;
+        }
+      }
+      @include e('qr-status') {
+        font-size: 1.2rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+</style>

@@ -17,7 +17,7 @@ export const useLoginStore = defineStore(
   () => {
     const qrImg = ref('') // 二维码图片 base64 格式
     const qrStatus = ref<QRCodeStatus>(QRCodeStatus.OTHER) // 二维码是否过期
-    const localCookie = ref('') // cookie
+    const cookie = ref('') // cookie
     const userInfo = ref<Partial<LoginUser>>({}) // 用户信息
     const isLogined = ref(false)
     let timer: any = null // 轮询检查二维码状态的定时器
@@ -48,9 +48,9 @@ export const useLoginStore = defineStore(
             console.log('授权成功')
             qrStatus.value = QRCodeStatus.AUTH_SUCCESS
             clearInterval(timer!)
-            const { cookie } = statusRes // 拿到 cookie
-            await getLoginStatus(cookie) // 获取登录状态
-            localCookie.value = cookie // 持久化存储 cookie
+            const { cookie: result } = statusRes // 拿到 cookie
+            await getLoginStatus(result) // 获取登录状态
+            cookie.value = result // 持久化存储 cookie
           } else if (code === 800) {
             console.log('二维码已过期')
             qrStatus.value = QRCodeStatus.EXPIRED
@@ -65,12 +65,12 @@ export const useLoginStore = defineStore(
     }
 
     // 获取登录状态
-    async function getLoginStatus(cookie?: string) {
+    async function getLoginStatus(c?: string) {
       try {
-        cookie = cookie || localCookie.value
+        c = c || cookie.value
         const {
           data: { account, profile },
-        } = await loginApi.getLoginStatus(cookie)
+        } = await loginApi.getLoginStatus(c)
         userInfo.value = { ...account, ...profile }
         if (account || profile) {
           isLogined.value = true
@@ -95,7 +95,7 @@ export const useLoginStore = defineStore(
     const logout = async () => {
       try {
         await loginApi.logout()
-        localCookie.value = ''
+        cookie.value = ''
         userInfo.value = {}
       } catch (error) {
         console.log(error)
@@ -113,13 +113,13 @@ export const useLoginStore = defineStore(
       isLogined,
       logout,
       getLoginStatus,
-      localCookie,
+      cookie,
     }
   },
   {
     persist: {
       key,
-      paths: ['localCookie', 'userInfo'],
+      paths: ['cookie', 'userInfo'],
     },
   }
 )
