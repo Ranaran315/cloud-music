@@ -45,11 +45,9 @@ const handleClick = () => {
 @use '@/style/bem' as * with($block: 'song-card');
 
 @include b() {
+  @include flex($align: center);
   min-width: 300px;
   height: 80px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   cursor: pointer;
   border-radius: getBorderRadius('small');
   outline: 1px solid transparent;
@@ -65,14 +63,9 @@ const handleClick = () => {
     border-radius: inherit;
   }
   @include e('info') {
+    @include flex(column, center, $gap: 5px);
     padding: 10px 0;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 5px;
-    box-sizing: border-box;
     font-size: 0.8rem;
     color: getTextColor('secondary');
     @include e('name') {

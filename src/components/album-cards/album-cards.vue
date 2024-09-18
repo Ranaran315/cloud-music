@@ -49,12 +49,8 @@ defineProps({
 }
 
 @include b() {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+  @include grid($gap: 10px);
   min-height: 200px;
-  padding: 10px;
-  box-sizing: border-box;
   @include e('card') {
     $size: 200px;
     width: $size;
@@ -62,12 +58,8 @@ defineProps({
     border-radius: getBorderRadius();
     background-color: getFillColor();
     transition: background-color 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    @include flex(row, center, center);
     cursor: pointer;
-    box-sizing: border-box;
     &:hover {
       background-color: getFillColor('secondary');
     }

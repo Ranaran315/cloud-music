@@ -53,16 +53,16 @@ defineProps({
 
 @include b() {
   $size: 200px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(#{$size * 2}, 1fr));
-  gap: 20px;
+  @include grid() {
+    grid-template-columns: repeat(auto-fill, minmax(#{$size * 2}, 1fr));
+  }
   min-height: $size;
   @include e('card') {
-    display: flex;
-    align-items: center;
-    column-gap: 20px;
-    row-gap: 40px;
-    padding: 10px 20px;
+    @include flex($align: center) {
+      column-gap: 20px;
+      row-gap: 40px;
+      padding: 10px 20px;
+    }
     cursor: pointer;
     border-radius: 20px;
     transition: background-color 0.3s;
@@ -76,20 +76,18 @@ defineProps({
       box-shadow: getBoxShadow();
     }
     @include e('info') {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+      @include flex(column);
       max-width: $size;
       @include e('name') {
+        @include flex() {
+          width: fit-content;
+        }
         $identity-size: 20px;
         font-size: 1.1rem;
         font-weight: 700;
-        display: flex;
-        align-items: center;
         position: relative;
         padding-right: #{$identity-size + 10px};
-        @include ellipsis;
+        @include ellipsis();
         @include e('identity') {
           width: $identity-size;
           height: $identity-size;
@@ -99,16 +97,15 @@ defineProps({
         }
       }
       @include e('alias') {
+        @include ellipsis;
         font-size: 0.85rem;
         color: getTextColor('secondary');
-        @include ellipsis;
       }
       @include e('count') {
+        @include flex();
+        @include ellipsis;
         font-size: 0.85rem;
         color: getTextColor('secondary');
-        display: flex;
-        gap: 10px;
-        @include ellipsis;
       }
     }
   }

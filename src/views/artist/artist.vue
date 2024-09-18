@@ -150,8 +150,7 @@ const handleUpdateValue = (val: any) => {
   display: flex;
   flex-direction: column;
   @include e('header') {
-    display: flex;
-    gap: 20px;
+    @include flex($gap: 20px);
     @include e('cover') {
       width: 200px;
       height: 200px;
@@ -160,14 +159,10 @@ const handleUpdateValue = (val: any) => {
       flex-shrink: 0;
     }
     @include e('info') {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-start;
+      @include flex(column, flex-start, flex-start);
       flex: 1;
       @include e('name') {
-        display: flex;
-        alllign-items: flex-end;
+        @include flex($justify: flex-start, $align: flex-end);
         font-size: getFontSize('larger');
         font-weight: 700;
       }
@@ -177,8 +172,7 @@ const handleUpdateValue = (val: any) => {
         @include multiEllipsis(2);
       }
       @include e('meta-info') {
-        display: flex;
-        gap: 20px;
+        @include flex();
         @include e('meta-item') {
           display: flex;
           align-items: center;

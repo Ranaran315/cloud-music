@@ -62,10 +62,7 @@ const toPlaylistDetail = (id: number) => {
 @use '@/style/bem' as * with($block: 'playlist-card', $use-namespace: true);
 
 @include b() {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  @include flex($direction: column, $justify: flex-start);
   cursor: pointer;
   @include e('cover') {
     width: 200px;
@@ -97,32 +94,19 @@ const toPlaylistDetail = (id: number) => {
       border-top-right-radius: none;
       text-align: center;
       box-sizing: border-box;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      @include ellipsis();
     }
   }
   @include e('content') {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+    @include flex(column, center);
     padding: 10px;
-    box-sizing: border-box;
     @include e('name') {
+      @include multiEllipsis(3);
       flex-grow: 1;
       text-align: left;
-      word-break: break-all;
-      width: 100%;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3; // 显示的行数
-      overflow: hidden;
     }
     @include e('creator') {
-      display: flex;
-      align-items: center;
+      @include flex($align: center);
       &:hover {
         color: getColor('primary');
       }
@@ -132,15 +116,12 @@ const toPlaylistDetail = (id: number) => {
         border-radius: 50%;
       }
       @include e('creator-name') {
-        margin-left: 10px;
+        margin-left: 5px;
       }
     }
     @include e('meta') {
       width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      @include flex(row, space-between, center);
       font-size: 0.85rem;
       color: getTextColor('secondary');
     }

@@ -142,8 +142,7 @@ const rowProps = (row: any) => {
       background-color: getFillColor('secondary');
     }
     @include e('title') {
-      display: flex;
-      align-items: center;
+      @include flex($align: center);
       height: 100%;
       @include e('pic') {
         width: 40px;
@@ -171,16 +170,12 @@ const rowProps = (row: any) => {
       }
     }
     @include e('artist') {
+      @include ellipsis();
       width: 200px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     @include e('album') {
+      @include ellipsis();
       width: 200px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     @include e('duration') {
       white-space: nowrap;

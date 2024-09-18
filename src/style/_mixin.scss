@@ -6,9 +6,36 @@
 }
 
 @mixin multiEllipsis($line: 2) {
+  word-break: break-all;
   max-width: 100%;
   display: -webkit-box;
   -webkit-line-clamp: $line;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+@mixin flex(
+  $direction: row,
+  $justify: flex-start,
+  $align: flex-start,
+  $gap: 10px
+) {
+  width: 100%;
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: wrap;
+  gap: $gap;
+  box-sizing: border-box;
+  @content;
+}
+
+@mixin grid($gap: 20px, $minmax: 200px) {
+  display: grid;
+  grid-gap: $gap;
+  grid-template-columns: repeat(auto-fill, minmax(#{$minmax}, 1fr));
+  padding: 10px;
+  box-sizing: border-box;
+  @content;
 }
