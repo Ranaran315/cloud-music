@@ -1,7 +1,7 @@
 import { useMessage } from '@/components'
 import { ref } from 'vue'
 
-export const useTryCatch = async (
+export const useAsyncTryCatch = async (
   tryCallback: () => Promise<void>,
   catchCallback?: (() => void) | null,
   finallyCallback?: () => void
@@ -12,11 +12,14 @@ export const useTryCatch = async (
     loading.value = true
     await tryCallback()
   } catch (error) {
-    useMessage({
-      type: 'error',
-      content: `Error: ${error}`,
-    })
-    catchCallback?.()
+    if (catchCallback) {
+      catchCallback()
+    } else {
+      useMessage({
+        type: 'error',
+        content: `Error: ${error}`,
+      })
+    }
   } finally {
     finallyCallback?.()
     loading.value = false

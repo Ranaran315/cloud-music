@@ -2,6 +2,9 @@ import { defineStore } from 'pinia'
 import loginApi from '@/api/login'
 import { ref } from 'vue'
 import { LoginUser } from '@/utils/type'
+import { useAsyncTryCatch } from '@/utils/async'
+import { captchaApi } from '@/api'
+import { useMessage } from '@/components'
 
 export enum QRCodeStatus {
   WAIT_SCAN = 801,
@@ -48,9 +51,7 @@ export const useLoginStore = defineStore(
             console.log('授权成功')
             qrStatus.value = QRCodeStatus.AUTH_SUCCESS
             clearInterval(timer!)
-            const { cookie: result } = statusRes // 拿到 cookie
-            await getLoginStatus(result) // 获取登录状态
-            cookie.value = result // 持久化存储 cookie
+            loginSuccess(statusRes)
           } else if (code === 800) {
             console.log('二维码已过期')
             qrStatus.value = QRCodeStatus.EXPIRED
@@ -104,6 +105,33 @@ export const useLoginStore = defineStore(
       }
     }
 
+    // 手机验证码登录
+    const loginByPhone = (phone: string, captcha: string) => {
+      useAsyncTryCatch(
+        async () => {
+          await captchaApi.verifyCellPhoneCaptcha(phone, captcha)
+          const res = await loginApi.cellPhoneLogin(phone, captcha)
+          loginSuccess(res)
+        },
+        () => {
+          useMessage({
+            type: 'error',
+            content: '验证码错误',
+          })
+        }
+      )
+    }
+
+    // 登录成功后的逻辑
+    const loginSuccess = (result: any) => {
+      useAsyncTryCatch(async () => {
+        const { cookie: c } = result // 拿到 cookie
+        await getLoginStatus(c) // 获取登录状态
+        cookie.value = c // 持久化存储 cookie
+        window.location.reload() // 刷新页面
+      })
+    }
+
     return {
       qrImg,
       getQRCode,
@@ -114,6 +142,7 @@ export const useLoginStore = defineStore(
       logout,
       getLoginStatus,
       cookie,
+      loginByPhone,
     }
   },
   {

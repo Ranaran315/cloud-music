@@ -54,7 +54,7 @@ import { Prev, Next } from '@/icons'
 import { ref } from 'vue'
 import ColorThief from 'colorthief'
 import { rgbToHex } from '@/utils/color'
-import { useTryCatch } from '@/utils/error'
+import { useAsyncTryCatch } from '@/utils/async'
 
 defineOptions({
   name: 'Banner',
@@ -64,7 +64,7 @@ const bannerList = ref<any[]>([])
 
 // 获取banner列表
 async function getBannerList() {
-  useTryCatch(async () => {
+  useAsyncTryCatch(async () => {
     const res = (await bannerApi.getBannerList()) as any
     bannerList.value = res.banners
   })

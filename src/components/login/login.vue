@@ -57,7 +57,7 @@ function close() {
   show.value = false
 }
 
-const isQRLogin = ref(true)
+const isQRLogin = ref(false)
 </script>
 
 <style lang="scss">

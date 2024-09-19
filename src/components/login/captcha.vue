@@ -18,12 +18,14 @@
             :class="ucn.e('button')"
             type="primary"
             @click.stop="getCaptcha"
-            >{{ countDown == 0 ? '获取验证码' : countDown }}</cloud-button
+            >{{
+              countDown == 0 ? '获取验证码' : `重新获取(${countDown})`
+            }}</cloud-button
           >
         </div>
       </ra-form-item>
       <ra-form-item>
-        <cloud-button type="primary" block>登录</cloud-button>
+        <cloud-button type="primary" block @click="login">登录</cloud-button>
       </ra-form-item>
     </ra-form>
   </div>
@@ -34,7 +36,11 @@ import { useClassName } from '@/hooks'
 import { RaForm, RaFormItem } from '@capybara-plus/vue'
 import { CloudButton } from '../button'
 import { CloudInput } from '../input'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
+import { useAsyncTryCatch } from '@/utils/async'
+import { captchaApi } from '@/api'
+import { useMessage } from '@/components'
+import { useLoginStore } from '@/store'
 
 const ucn = useClassName('captcha-login', false)
 defineOptions({
@@ -47,18 +53,70 @@ const form = reactive({
   captcha: '',
 })
 
-// 验证码计时
-const countDown = ref(0)
-let timer: any = null
+/**
+ * @description 获取验证码
+ */
+const countDown = ref(0) // 验证码倒计时
+let timer: any = null // 定时器
+// 获取验证码
 const getCaptcha = () => {
+  console.log(timer)
   if (timer) return
-  countDown.value = 10
+  doGetCaptcha()
+  startCountDown()
+}
+const doGetCaptcha = () => {
+  useAsyncTryCatch(async () => {
+    const { code, message } = await captchaApi.getCellPhoneCaptcha(form.phone)
+    if (code === 400) {
+      useMessage({
+        type: 'error',
+        content: message,
+      })
+    } else {
+      useMessage({
+        type: 'success',
+        content: '验证码发送成功',
+      })
+    }
+  })
+}
+// 开始倒计时
+const startCountDown = () => {
+  countDown.value = 5
+  localStorage.setItem('captcha', Date.now().toString())
+  startInterval()
+}
+// 启用定时器
+const startInterval = () => {
   timer = setInterval(() => {
     countDown.value--
     if (countDown.value === 0) {
       clearInterval(timer)
+      timer = null
+      localStorage.removeItem('captcha')
     }
   }, 1000)
+}
+// 页面刷新缓存验证码倒计时
+onMounted(() => {
+  const countDownStart = localStorage.getItem('captcha')
+  if (countDownStart) {
+    const now = Date.now()
+    const elapsed = Math.floor((now - parseInt(countDownStart)) / 1000)
+    countDown.value = Math.max(0, 60 - elapsed)
+    if (countDown.value > 0) {
+      startInterval()
+    }
+  }
+})
+
+/**
+ * @description 登录
+ */
+const loginStore = useLoginStore()
+const login = () => {
+  loginStore.loginByPhone(form.phone, form.captcha)
 }
 </script>
 
@@ -81,7 +139,7 @@ const getCaptcha = () => {
       flex-wrap: nowrap;
     }
     @include e('button') {
-      min-width: 100px;
+      min-width: 150px;
     }
   }
 }

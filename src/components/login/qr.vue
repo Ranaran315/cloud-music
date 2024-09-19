@@ -31,7 +31,7 @@ import { CloudButton } from '../button'
 import { CloudImage } from '@/components'
 import { Refresh } from '@/icons'
 import { useLoginStore, QRCodeStatus } from '@/store'
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onActivated, onDeactivated, onUnmounted, ref } from 'vue'
 
 const ucn = useClassName('qr-login', false)
 defineOptions({
@@ -46,7 +46,6 @@ const qrImg = computed(() => loginStore.qrImg)
 async function getQRCode() {
   await loginStore.getQRCode()
 }
-getQRCode()
 
 // 根据二维码状态显示不同的提示信息
 const statusMessage = computed(() => {
@@ -56,7 +55,6 @@ const statusMessage = computed(() => {
     case QRCodeStatus.SCAN_SUCCESS:
       return '扫描成功，请在App中确认登录'
     case QRCodeStatus.AUTH_SUCCESS:
-      close()
       return '授权成功，正在登录'
     case QRCodeStatus.EXPIRED:
       return '二维码已过期，请刷新'
@@ -83,6 +81,13 @@ const refresh = async () => {
 
 onUnmounted(() => {
   // 停止轮询检查二维码状态
+  loginStore.stopCheck()
+})
+
+onActivated(() => {
+  getQRCode()
+})
+onDeactivated(() => {
   loginStore.stopCheck()
 })
 </script>

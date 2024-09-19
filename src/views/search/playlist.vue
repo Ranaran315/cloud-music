@@ -10,7 +10,7 @@ import { SearchContextKey } from './context'
 import { inject, ref, watchEffect } from 'vue'
 import { playlistApi } from '@/api'
 import { Playlist } from '@/utils/type'
-import { useTryCatch } from '@/utils/error'
+import { useAsyncTryCatch } from '@/utils/async'
 
 defineOptions({
   name: 'SearchPlaylist',
@@ -19,7 +19,7 @@ defineOptions({
 const data = ref<Playlist[]>([])
 const searchContext = inject(SearchContextKey, undefined)
 watchEffect(async () => {
-  useTryCatch(
+  useAsyncTryCatch(
     async () => {
       searchContext?.setLoading(true)
       data.value = []
