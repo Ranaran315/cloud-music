@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import loginApi from '@/api/login'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { LoginUser } from '@/utils/type'
 import { useAsyncTryCatch } from '@/utils/async'
 import { captchaApi } from '@/api'
@@ -125,7 +125,9 @@ export const useLoginStore = defineStore(
         const { cookie: c } = result // 拿到 cookie
         await getLoginStatus(c) // 获取登录状态
         cookie.value = c // 持久化存储 cookie
-        window.location.reload() // 刷新页面
+        nextTick(() => {
+          window.location.reload() // 刷新页面
+        })
       })
     }
 

@@ -109,7 +109,7 @@ const logout = async () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'navbar-user',
   $use-namespace: false

@@ -39,6 +39,7 @@ export default {
       data: {
         cookie,
       },
+      timestamp: true,
     })
   },
   // 退出登录

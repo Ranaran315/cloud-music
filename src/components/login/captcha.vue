@@ -68,7 +68,7 @@ const getCaptcha = () => {
 const doGetCaptcha = () => {
   useAsyncTryCatch(async () => {
     const { code, message } = await captchaApi.getCellPhoneCaptcha(form.phone)
-    if (code === 400) {
+    if (code !== 200) {
       useMessage({
         type: 'error',
         content: message,
