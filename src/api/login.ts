@@ -7,6 +7,7 @@ export default {
   getKey() {
     return request({
       url: 'qr/key',
+      timestamp: true,
     })
   },
   // 根据 unikey 获取二维码
@@ -17,6 +18,7 @@ export default {
         key,
         qrimg,
       },
+      timestamp: true,
     })
   },
   // 根据 unikey 检查二维码状态
@@ -26,6 +28,7 @@ export default {
       params: {
         key,
       },
+      timestamp: true,
     })
   },
   // 根据 cookie 获取登录状态
