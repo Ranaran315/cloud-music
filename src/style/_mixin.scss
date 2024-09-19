@@ -25,7 +25,7 @@
   flex-direction: $direction;
   justify-content: $justify;
   align-items: $align;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: $gap;
   box-sizing: border-box;
   @content;
