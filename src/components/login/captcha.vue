@@ -83,7 +83,7 @@ const doGetCaptcha = () => {
 }
 // 开始倒计时
 const startCountDown = () => {
-  countDown.value = 5
+  countDown.value = 60
   localStorage.setItem('captcha', Date.now().toString())
   startInterval()
 }
