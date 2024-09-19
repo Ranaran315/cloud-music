@@ -28,11 +28,10 @@
         :key="item.targetId"
       >
         <router-link to="#">
-          <img
+          <cloud-image
             class="banner__item__img"
             :src="item.imageUrl"
-            @load="(e) => getImageColor(index, e)"
-            crossorigin="anonymous"
+            @load="(e: Event) => getImageColor(index, e)"
           />
           <div
             class="type-title"

@@ -18,16 +18,20 @@ defineProps({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'loading'
 );
 
-:deep(.n-spin) {
+.n-spin {
   color: getTextColor();
 }
 
-:deep(.n-spin-body) {
+.n-spin-body {
   top: min(50%, 200px);
+}
+
+.n-spin-container {
+  min-height: 200px;
 }
 </style>

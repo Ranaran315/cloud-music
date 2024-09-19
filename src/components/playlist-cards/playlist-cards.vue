@@ -64,7 +64,7 @@ defineProps({
     row-gap: 40px;
   }
   @include e('item') {
-    @include flex($direction: column, $justify: flex-start);
+    @include flex($direction: column, $align: center);
     cursor: pointer;
     @include e('cover') {
       width: $size;

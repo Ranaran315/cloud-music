@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import { playlistApi, recommendApi } from '@/api'
 import { useClassName } from '@/hooks'
+import { useAsyncTryCatch } from '@/utils/async'
 import { Playlist } from '@/utils/type'
 import { onMounted, ref } from 'vue'
 
@@ -22,27 +23,38 @@ defineOptions({
 
 const recommendlist = ref<Playlist[]>([])
 const loading = ref(false)
-onMounted(async () => {
-  try {
-    loading.value = true
-    recommendlist.value = []
-    // 获取每日推荐歌曲
-    const {
-      data: { dailySongs },
-    } = (await recommendApi.getRecommendSongs()) as any
-    const first = dailySongs.shift()
-    recommendlist.value.push({
-      id: -1, // 用于区分每日推荐歌单
-      name: `每日推荐，从《${first.name}》 开始`,
-      coverImgUrl: first.al?.picUrl,
-      detailPageTitle: '每日推荐',
-    })
-    // 获取每日推荐歌单
-    const { recommend } = (await recommendApi.getRecommendPlaylist()) as any
-    await Promise.all(
-      recommend.map(async (item: any) => {
-        const {
-          playlist: {
+onMounted(() => {
+  useAsyncTryCatch(
+    async () => {
+      loading.value = true
+      recommendlist.value = []
+      // 获取每日推荐歌曲
+      const {
+        data: { dailySongs },
+      } = (await recommendApi.getRecommendSongs()) as any
+      const first = dailySongs.shift()
+      recommendlist.value.push({
+        id: -1, // 用于区分每日推荐歌单
+        name: `每日推荐，从《${first.name}》 开始`,
+        coverImgUrl: first.al?.picUrl,
+        detailPageTitle: '每日推荐',
+      })
+      // 获取每日推荐歌单
+      const { recommend } = (await recommendApi.getRecommendPlaylist()) as any
+      const result = await Promise.all(
+        recommend.map(async (item: any) => {
+          const {
+            playlist: {
+              id,
+              name,
+              coverImgUrl,
+              playCount,
+              detailPageTitle,
+              creator,
+              createTime,
+            },
+          } = (await playlistApi.getPlaylistDetail(item.id)) as any
+          return {
             id,
             name,
             coverImgUrl,
@@ -50,24 +62,16 @@ onMounted(async () => {
             detailPageTitle,
             creator,
             createTime,
-          },
-        } = (await playlistApi.getPlaylistDetail(item.id)) as any
-        recommendlist.value.push({
-          id,
-          name,
-          coverImgUrl,
-          playCount,
-          detailPageTitle,
-          creator,
-          createTime,
+          }
         })
-      })
-    )
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
-  }
+      )
+      recommendlist.value = result
+    },
+    null,
+    () => {
+      loading.value = false
+    }
+  )
 })
 </script>
 

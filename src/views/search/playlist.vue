@@ -27,12 +27,12 @@ watchEffect(async () => {
         (item: any) => item.id
       )
       if (ids) {
-        await Promise.all(
-          ids.map(async (id: number) => {
-            const { playlist } = await playlistApi.getPlaylistDetail(id)
-            data.value.push(playlist)
+        const result = await Promise.all(
+          ids.map((id: number) => {
+            return playlistApi.getPlaylistDetail(id)
           })
         )
+        data.value = result.map((item) => item.playlist)
       }
     },
     null,

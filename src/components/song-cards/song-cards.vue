@@ -31,6 +31,7 @@ import { useSongStore } from '@/store'
 import { formatAlias, formatDuration } from '@/utils/format'
 import { definePropType } from '@/utils/props'
 import { Song } from '@/utils/type'
+import { CloudImage } from '@/components/image'
 
 const ucn = useClassName('song-cards')
 defineOptions({
@@ -58,7 +59,9 @@ const handleClick = (song: Song) => {
     column-gap: 20px;
   }
   @include e('item') {
-    @include flex($align: center);
+    @include flex($align: center) {
+      flex-wrap: nowrap;
+    }
     min-width: 300px;
     height: 80px;
     cursor: pointer;
@@ -76,8 +79,9 @@ const handleClick = (song: Song) => {
       border-radius: inherit;
     }
     @include e('info') {
-      @include flex(column, center, $gap: 5px);
-      padding: 10px 0;
+      @include flex(column, center, $gap: 2px);
+      max-width: 220px;
+      padding: 5px 0;
       flex: 1;
       font-size: 0.8rem;
       color: getTextColor('secondary');

@@ -12,11 +12,10 @@
             ucn.is(playerContext?.state.isPlaying, 'playing'),
           ]"
         >
-          <img
+          <cloud-image
             :class="ucn.e('cover-image')"
             :src="song?.al?.picUrl"
             @load="handleImageLoad"
-            crossorigin="anonymous"
           />
         </div>
       </div>
