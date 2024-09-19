@@ -13,7 +13,7 @@
         <div :class="ucn.e('trigger')">
           <ra-input
             :placeholder="defaultKeyword.show"
-            v-model.trim="modelValue"
+            v-model="modelValue"
             ref="RaInputRef"
             clearable
             @focus="handleFocus"
