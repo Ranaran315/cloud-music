@@ -114,10 +114,7 @@ export const useLoginStore = defineStore(
           loginSuccess(res)
         },
         () => {
-          useMessage({
-            type: 'error',
-            content: '验证码错误',
-          })
+          useMessage.error('验证码错误')
         }
       )
     }

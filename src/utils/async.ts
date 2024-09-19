@@ -15,10 +15,7 @@ export const useAsyncTryCatch = async (
     if (catchCallback) {
       catchCallback()
     } else {
-      useMessage({
-        type: 'error',
-        content: `Error: ${error}`,
-      })
+      useMessage.error(`Error: ${error}`)
     }
   } finally {
     finallyCallback?.()
