@@ -69,20 +69,7 @@ watchEffect(async () => {
   z-index: var(--tab-nav-z-index);
   background-color: getFillColor();
 }
-:deep(.n-tabs-tab) {
-  .n-tabs-tab__label {
-    font-weight: 700;
-  }
-  &:hover {
-    color: getColor('primary') !important;
-  }
-}
-:deep(.n-tabs-tab--active) {
-  color: getColor('primary') !important;
-}
-:deep(.n-tabs-bar) {
-  background-color: getColor('primary');
-}
+
 @include b() {
   width: 100%;
   position: relative;

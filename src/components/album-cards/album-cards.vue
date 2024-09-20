@@ -52,13 +52,13 @@ defineProps({
   @include grid($gap: 10px);
   min-height: 200px;
   @include e('card') {
+    @include flex(column, center, center);
     $size: 200px;
     width: $size;
     padding: 10px;
     border-radius: getBorderRadius();
     background-color: getFillColor();
     transition: background-color 0.3s;
-    @include flex(row, center, center);
     cursor: pointer;
     &:hover {
       background-color: getFillColor('secondary');
