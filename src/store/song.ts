@@ -34,7 +34,7 @@ export const useSongStore = defineStore(
           newSong = songs[0] as Song
         }
         song.value = newSong
-        toPlaylistStore.addToPlaylist(song.value.id!)
+        toPlaylistStore.add(song.value.id!)
         getSong(newSong.id)
       } catch (error) {
         console.log(error)

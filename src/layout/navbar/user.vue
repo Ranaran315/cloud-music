@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { useLoginStore } from '@/store'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { NPopover } from 'naive-ui'
 import { useLogin } from '@/components'
 import { useUserStore } from '@/store'
@@ -100,9 +100,7 @@ const metas = computed(() => {
   ]
 })
 
-onMounted(() => {
-  userStore.getUserInfo()
-})
+userStore.getUserInfo()
 
 const logout = async () => {
   await loginStore.logout()

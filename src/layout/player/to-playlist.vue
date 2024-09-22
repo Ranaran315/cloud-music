@@ -79,7 +79,7 @@ const handleUpdateShow = async (show: boolean) => {
       try {
         loading.value = true
         const { songs: gotSongs } = await songApi.getSongDetail(
-          Array.from(toPlaylistStore.list)
+          toPlaylistStore.getList()
         )
         songs.value = gotSongs
       } catch (error) {
@@ -98,6 +98,8 @@ const handleUpdateShow = async (show: boolean) => {
     }
   })
 }
+
+toPlaylistStore.init()
 </script>
 
 <style scoped lang="scss">
