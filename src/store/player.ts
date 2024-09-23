@@ -5,7 +5,7 @@ import { SongWithUrl } from '@/utils/type'
 import { songApi } from '@/api'
 
 const playModes = ['listLoop', 'singleLoop', 'shuffle'] as const
-type PlayModes = (typeof playModes)[number]
+export type PlayModes = (typeof playModes)[number]
 interface LocalState {
   currentSongId: number
   currentTime: number

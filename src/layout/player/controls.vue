@@ -9,6 +9,7 @@
       @ended="handleEnded"
     />
     <div :class="ucn.e('group')">
+      <PlayerMode />
       <cloud-icon
         :icon="PrevSong"
         :class="ucn.e('prev-next-button')"
@@ -47,6 +48,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { usePlayerStore } from '@/store'
 import PlayerVolume from './volume.vue'
+import PlayerMode from './mode.vue'
 
 const ucn = useClassName('controls', false)
 defineOptions({
@@ -154,6 +156,7 @@ const handleEnded = () => {
     display: flex;
     align-items: center;
     gap: 15px;
+    cursor: pointer;
     @include e('play-button') {
       width: 40px;
       height: 40px;
@@ -162,13 +165,12 @@ const handleEnded = () => {
       background-color: getColor('primary');
       color: getFillColor() !important;
       border-radius: 50%;
-      cursor: pointer;
       padding: 10px;
       box-sizing: border-box;
       transition: opacity 0.3s;
       &:hover {
         opacity: 0.8;
-        :deep(.icon) {
+        .icon {
           color: getFillColor() !important;
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[ucn.b(), ucn.is(playerStore.getState().showFullScreen, 'views')]"
+    :class="[ucn.b(), ucn.is(playerStore.getState().showFullScreen, 'full')]"
   >
     <div :class="ucn.e('info')">
       <div
@@ -96,7 +96,7 @@ const song = computed(() => playerStore.getState().currentSong)
 }
 
 // 全屏样式
-@include is('views') {
+@include is('full') {
   background-color: transparent;
   color: getFillColor();
 }

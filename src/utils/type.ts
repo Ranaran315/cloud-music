@@ -163,3 +163,4 @@ export enum SearchType {
   MV = 1014,
   User = 1002,
 }
+
