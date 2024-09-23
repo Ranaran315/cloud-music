@@ -22,7 +22,7 @@ import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
 import { Like, Liked } from '@/icons'
-import { useSongStore } from '@/store'
+import { usePlayerStore, useSongStore } from '@/store'
 import { definePropType } from '@/utils/props'
 
 const ucn = useClassName('songlist')
@@ -36,6 +36,8 @@ defineProps({
 })
 
 const songStore = useSongStore()
+const playerStore = usePlayerStore()
+
 const likedlist = computed(() => songStore.likedlist)
 
 // 列渲染
@@ -110,11 +112,12 @@ const columns: DataTableColumns<Song> = [
 ]
 
 // 行属性
-const rowProps = (row: any) => {
+const rowProps = (row: Song) => {
   return {
     class: ucn.e('row'),
     onClick: () => {
       songStore.setCurrentSong(row)
+      playerStore.setCurrentSong(row.id)
     },
   }
 }

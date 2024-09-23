@@ -75,7 +75,7 @@ export const useToPlaylistStore = defineStore(key, () => {
     if (index >= ids.length - 1 || index === -1) {
       index = 0
     }
-    songStore.setCurrentSong(ids[++index])
+    return ids[++index]
   }
 
   // 下一首
@@ -89,7 +89,7 @@ export const useToPlaylistStore = defineStore(key, () => {
     if (index <= 0 || index === -1) {
       index = ids.length - 1
     }
-    songStore.setCurrentSong(ids[--index])
+    return ids[--index]
   }
 
   return {

@@ -9,18 +9,14 @@
 import { useClassName } from '@/hooks'
 import PlayerViwes from './viwes.vue'
 import Controller from './controller.vue'
-import { provide } from 'vue'
-import { playerContextKey, userPlayerContext } from './context'
 
 const ucn = useClassName('player', false)
 defineOptions({
   name: 'Player',
 })
-
-provide(playerContextKey, userPlayerContext())
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player',
   $use-namespace: false

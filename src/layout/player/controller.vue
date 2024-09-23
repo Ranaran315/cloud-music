@@ -1,10 +1,12 @@
 <template>
-  <div :class="[ucn.b(), ucn.is(playerContext?.state.showViwes, 'views')]">
+  <div
+    :class="[ucn.b(), ucn.is(playerStore.getState().showFullScreen, 'views')]"
+  >
     <div :class="ucn.e('info')">
       <div
         :class="[
           ucn.e('pic'),
-          ucn.is(playerContext?.state.isPlaying, 'playing'),
+          ucn.is(playerStore.getState().isPlaying, 'playing'),
         ]"
       >
         <cloud-image :src="song?.al?.picUrl"></cloud-image>
@@ -23,21 +25,21 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import Controls from './controls.vue'
 import PlayerMenu from './menu.vue'
-import { playerContextKey } from './context'
+import { usePlayerStore } from '@/store'
 
 const ucn = useClassName('controller', false)
 defineOptions({
   name: 'Controller',
 })
 
-const playerContext = inject(playerContextKey, undefined)
-const song = computed(() => playerContext?.state.song)
+const playerStore = usePlayerStore()
+const song = computed(() => playerStore.getState().currentSong)
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'controller',
   $use-namespace: false

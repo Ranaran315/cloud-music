@@ -6,8 +6,8 @@
     />
     <cloud-icon :icon="Comment" />
     <cloud-icon
-      @click.stop="changeFullScreen"
-      :icon="playerContext?.state.showViwes ? NoFullScreen : FullScreen"
+      @click.stop="playerStore.toggleFullScreen"
+      :icon="playerStore.getState().showFullScreen ? NoFullScreen : FullScreen"
     />
     <ToPlaylist />
   </div>
@@ -17,10 +17,8 @@
 import { useClassName } from '@/hooks'
 import ToPlaylist from './to-playlist.vue'
 import { Like, Comment, FullScreen, Liked } from '@/icons'
-import { inject } from 'vue'
-import { playerContextKey } from './context'
 import NoFullScreen from '@/icons/no-full-screen.vue'
-import { useSongStore } from '@/store'
+import { usePlayerStore, useSongStore } from '@/store'
 
 const ucn = useClassName('player-menu', false)
 defineOptions({
@@ -28,22 +26,15 @@ defineOptions({
 })
 
 const songStore = useSongStore()
-
-const playerContext = inject(playerContextKey, undefined)
-
-// 全屏或退出全屏
-const changeFullScreen = () => {
-  playerContext?.changeViwes()
-}
+const playerStore = usePlayerStore()
 
 // 喜欢音乐
 const like = () => {
-  if (!playerContext?.state.song?.id) return
-  songStore.like(playerContext.state.song.id)
+  songStore.like(playerStore.getState().currentSongId)
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player-menu',
   $use-namespace: false

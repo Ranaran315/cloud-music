@@ -102,7 +102,7 @@ const handleUpdateShow = async (show: boolean) => {
 toPlaylistStore.init()
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'to-playlist',
   $use-namespace: false

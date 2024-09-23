@@ -3,7 +3,7 @@
     <n-popover raw trigger="hover" to="#app">
       <template #trigger>
         <cloud-icon
-          @click="changeMuted"
+          @click.stop="changeMuted"
           :icon="isMuted ? VolumeOff : Volume"
           :class="ucn.e('volume-button')"
         ></cloud-icon>
@@ -26,41 +26,47 @@
 import { useClassName } from '@/hooks'
 import { Volume } from '@/icons'
 import { NPopover } from 'naive-ui'
-import { inject, ref, watch } from 'vue'
-import { playerContextKey } from './context'
+import { computed, onMounted, ref, watch } from 'vue'
 import VolumeOff from '@/icons/volume-off.vue'
+import { usePlayerStore } from '@/store'
 
 const ucn = useClassName('player-volume', false)
 defineOptions({
   name: 'PlayerVolume',
 })
 
-const volume = ref<number>(100) // 音量
-const isMuted = ref(false) // 是否静音
+const playerStore = usePlayerStore()
 
-const playerContext = inject(playerContextKey, undefined)
+const volume = ref<number>(100)
+const isMuted = computed(() => playerStore.getState().isMuted)
+
+/**
+ * @description 初始化音量
+ */
+function init() {
+  volume.value = playerStore.getState().volume * 100
+}
 
 // 监听音量变化并设置 audio 的真实音量
 watch(
   () => volume.value,
   (value: number) => {
-    isMuted.value = value <= 0
-    playerContext?.setVolume(value / 100)
-  },
-  {
-    immediate: true,
+    playerStore.toggleMuted(value <= 0)
+    playerStore.setVolume(value / 100)
   }
 )
 
 // 修改静音状态
 const changeMuted = () => {
-  isMuted.value = !isMuted.value
-  if (!playerContext?.state.audio) return
-  playerContext.state.audio.muted = isMuted.value
+  playerStore.toggleMuted()
 }
+
+onMounted(() => {
+  init()
+})
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player-volume',
   $use-namespace: false

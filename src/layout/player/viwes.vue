@@ -1,15 +1,15 @@
 <template>
-  <Transition name="views">
+  <Transition name="slide-top">
     <div
       :class="ucn.b()"
       :style="playerStyle"
-      v-show="playerContext?.state.showViwes"
+      v-show="playerStore.getState().showFullScreen"
     >
       <div :class="ucn.e('left')">
         <div
           :class="[
             ucn.e('cover'),
-            ucn.is(playerContext?.state.isPlaying, 'playing'),
+            ucn.is(playerStore.getState().isPlaying, 'playing'),
           ]"
         >
           <cloud-image
@@ -29,7 +29,7 @@
         </div>
         <div :class="ucn.e('lyric')">
           <div
-            @click.stop="playerContext?.changeCurrentTime(line.time / 1000)"
+            @click.stop="playerStore.updateAudioTime(line.time)"
             :class="[
               ucn.e('line'),
               ucn.is(isActive(line.time, index), 'active'),
@@ -59,24 +59,26 @@ import { formatDuration } from '@/utils/format'
 import { parseLyric } from '@/utils/parse'
 import { Lyric } from '@/utils/type'
 import ColorThief from 'colorthief'
-import { computed, type CSSProperties, inject, ref, watch } from 'vue'
-import { playerContextKey } from './context'
+import { computed, type CSSProperties, ref, watch } from 'vue'
 import { RaIcon } from '@capybara-plus/vue'
 import { Play } from '@/icons'
+import { usePlayerStore } from '@/store'
 
 const ucn = useClassName('player-viwes', false)
 defineOptions({
   name: 'PlayerViews',
 })
 
-const playerContext = inject(playerContextKey, undefined)
+const playerStore = usePlayerStore()
 
-const song = computed(() => playerContext?.state.song) // 当前播放歌曲
+const song = computed(() => playerStore.getState().currentSong) // 当前播放歌曲
 const lyrics = ref<Lyric[]>([]) // 歌词
-const currentTime = computed(() => playerContext?.state.currentTime) // 当前播放时间
+const currentTime = computed(() => playerStore.getState().currentTime) // 当前播放时间
 const currentIndex = ref(0) // 当前高亮的歌词
 
-// 当前播放歌词
+/**
+ * @description 计算当前歌词
+ */
 const isActive = computed(() => {
   return (time: number, index: number) => {
     if (!lyrics.value[index].content || !time) return false
@@ -113,7 +115,9 @@ watch(
   }
 )
 
-// 动态设置背景颜色
+/**
+ * @description 根据封面设置背景颜色
+ */
 const playerColor = ref<string>('#000')
 const playerStyle = computed<CSSProperties>(() => {
   return {
@@ -126,7 +130,9 @@ const handleImageLoad = (e: Event) => {
   playerColor.value = rgbToHex(result)
 }
 
-// 获取歌词
+/**
+ * @description 获取歌词
+ */
 watch(
   () => song.value?.id,
   (id: number | undefined) => {
@@ -141,7 +147,7 @@ watch(
 )
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'player-viwes',
   $use-namespace: false
@@ -266,13 +272,13 @@ watch(
   }
 }
 
-.views-enter-active,
-.views-leave-active {
+.slide-top-enter-active,
+.slide-top-leave-active {
   transition: transform 0.3s, opacity 0.3s;
 }
 
-.views-enter-from,
-.views-leave-to {
+.slide-top-enter-from,
+.slide-top-leave-to {
   transform: translateY(100%);
   opacity: 0;
 }

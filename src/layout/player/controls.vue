@@ -1,27 +1,29 @@
 <template>
-  <div :class="[ucn.b(), ucn.is(playerContext?.state.showViwes, 'views')]">
+  <div
+    :class="[ucn.b(), ucn.is(playerStore.getState().showFullScreen, 'full')]"
+  >
     <audio
       ref="audioRef"
-      :src="playerContext?.state.song.url"
+      :src="playerStore.getState().currentSong?.url"
       @loadedmetadata="handleLoadedmetadata"
       @timeupdate.stop="handleTimeUpdate"
       @ended="handleEnded"
-    ></audio>
-    <div :class="ucn.e('button-group')">
+    />
+    <div :class="ucn.e('group')">
       <cloud-icon
         :icon="PrevSong"
         :class="ucn.e('prev-next-button')"
-        @click="toPlaylistStore.prev()"
+        @click="playerStore.prev()"
       />
       <cloud-icon
-        :icon="playerContext?.state.isPlaying ? Stop : Play"
+        :icon="playerStore.getState().isPlaying ? Stop : Play"
         :class="ucn.e('play-button')"
         @click="play"
       />
       <cloud-icon
         :icon="NextSong"
         :class="ucn.e('prev-next-button')"
-        @click="toPlaylistStore.next()"
+        @click="playerStore.next()"
       />
       <PlayerVolume />
     </div>
@@ -47,12 +49,11 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  inject,
-  nextTick,
+  watchEffect,
+  watch,
 } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
-import { useToPlaylistStore } from '@/store'
-import { playerContextKey } from './context'
+import { usePlayerStore } from '@/store'
 import PlayerVolume from './volume.vue'
 
 const ucn = useClassName('controls', false)
@@ -60,26 +61,44 @@ defineOptions({
   name: 'Controls',
 })
 
-const playerContext = inject(playerContextKey, undefined)
+const playerStore = usePlayerStore()
 
-// 播放控制
-const audioRef = ref<HTMLAudioElement | null>(null)
-const duration = computed(() => playerContext?.state.song.dt) // 歌曲总时长
-const currentTime = ref(0) // 当前播放时间
-// 点击播放按钮
-const play = () => {
-  playerContext?.changePlaying()
-  nextTick(() => {
-    doPlay()
-  })
+const duration = computed(() => playerStore.getState().currentSong?.dt) // 歌曲总时长
+const audioRef = ref<HTMLAudioElement | null>(null) // audio 模板引用
+
+/**
+ * @description 响应式更新 audio 的音量和静音状态
+ */
+watchEffect(() => {
+  const audio = audioRef.value
+  if (!audio) return
+  audio.volume = playerStore.getState().volume
+  audio.muted = playerStore.getState().isMuted
+})
+
+/**
+ * @description 初始化设置
+ */
+function init() {
+  playerStore.init(audioRef.value!) // 设置 audio
 }
 
-// 执行播放，根据 isPlaying 控制音乐播放
+/**
+ * @description 点击播放按钮
+ */
+const play = () => {
+  playerStore.togglePlay()
+  // doPlay()
+}
+
+/**
+ * @description 执行播放，根据 isPlaying 控制音乐播放
+ */
 const doPlay = async () => {
   try {
     const audio = audioRef.value
     if (!audio) return
-    if (playerContext?.state.isPlaying) {
+    if (playerStore.getState().isPlaying) {
       await audio.play()
     } else {
       audio.pause()
@@ -89,42 +108,58 @@ const doPlay = async () => {
   }
 }
 
-// 当音乐加载完成时
+/**
+ * @description 当音乐加载完成时
+ */
 const handleLoadedmetadata = () => {
   console.log('加载音乐完成')
   doPlay()
 }
 
+/**
+ * @description 当前播放的时间
+ */
+const currentTime = ref<number>(0)
+watch(
+  () => currentTime.value,
+  (newVal) => {
+    if (userIsController.value) return
+    playerStore.recordCurrentTime(newVal)
+  }
+)
+
+/**
+ * @description 进度条组件相关钩子
+ */
 const progressBarWidth = ref(0) // 进度条宽度
-// 处理 audio 播放时间更新时
+const userIsController = ref(false) // 用户是否在拖动、点击进度条
+const handleBeforeTraggle = (rate: number) => {
+  userIsController.value = true
+  currentTime.value = (rate / 100) * duration.value!
+}
+const handleOnTraggle = (rate: number) => {
+  currentTime.value = (rate / 100) * duration.value!
+}
+const handleAftreTraggle = () => {
+  userIsController.value = false
+  playerStore.updateAudioTime(currentTime.value)
+}
+
+/**
+ * @description 处理 audio 播放时间更新时
+ * @param e
+ */
 const handleTimeUpdate = (e: Event) => {
-  playerContext?.recordCurrentTime((e.target as HTMLAudioElement).currentTime)
   // 拖动进度条时不处理
   if (userIsController.value) return
   currentTime.value = (e.target as HTMLAudioElement).currentTime * 1000
   progressBarWidth.value = (currentTime.value / duration.value!) * 100
 }
 
-// 进度条
-const userIsController = ref(false) // 用户是否在拖动、点击进度条
-
-const handleBeforeTraggle = (rate: number) => {
-  userIsController.value = true
-  currentTime.value = (rate / 100) * duration.value!
-}
-
-const handleOnTraggle = (rate: number) => {
-  currentTime.value = (rate / 100) * duration.value!
-}
-
-const handleAftreTraggle = () => {
-  // 更新 audio 的实际播放时间
-  // 因为 currentTime 是秒，然后这里的 currentTime 是毫秒
-  audioRef.value!.currentTime = currentTime.value / 1000
-  userIsController.value = false
-}
-
-// 空格播放
+/**
+ * @description 空格控制播放行为
+ * @param e
+ */
 const handleSpace = (e: KeyboardEvent) => {
   // 如果在输入框中按下空格键，则不触发
   if ((e.target as any)?.closest('input, textarea, [contenteditable="true"]'))
@@ -134,23 +169,24 @@ const handleSpace = (e: KeyboardEvent) => {
     play()
   }
 }
+
 onMounted(() => {
+  init()
   window.addEventListener('keydown', handleSpace)
-  playerContext?.setAudio(audioRef.value!)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleSpace)
 })
 
-// 播放结束
-const toPlaylistStore = useToPlaylistStore()
+/**
+ * @description 播放结束
+ */
 const handleEnded = () => {
-  console.log('播放完成')
-  toPlaylistStore.next()
+  playerStore.end()
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with($block: 'controls', $use-namespace: false);
 
 @include b() {
@@ -159,7 +195,7 @@ const handleEnded = () => {
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  @include e('button-group') {
+  @include e('group') {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -201,7 +237,7 @@ const handleEnded = () => {
   }
 }
 
-@include is('views') {
+@include is('full') {
   @include e('progress') {
     width: 100%;
     position: absolute;
