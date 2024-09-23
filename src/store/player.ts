@@ -48,10 +48,20 @@ export const usePlayerStore = defineStore(
      */
     async function init(audio: HTMLAudioElement) {
       state.audio = audio
+      audio.addEventListener('loadedmetadata', () => {
+        console.log('音乐加载完成')
+        doPlay()
+      })
       await getSongInfo()
       updateAudioTime(getState().currentTime)
+      setVolume(getState().volume)
     }
 
+    /**
+     * @description 处理 audio
+     * @param callback 一个函数，它会携带一个 audio
+     * @returns
+     */
     function handleAudio(callback: (audio: HTMLAudioElement) => void) {
       const audio = getState().audio
       if (!audio) return
@@ -126,15 +136,22 @@ export const usePlayerStore = defineStore(
       const { isPlaying } = toRefs(getState())
       if (play != undefined) isPlaying.value = play
       else isPlaying.value = !isPlaying.value
+      doPlay()
+      // 如果开始播放，可能需要从这里调用音频播放的 API
+      // 如果暂停，可能需要调用音频暂停的 API
+    }
+
+    /**
+     * @description audio 播放与暂停
+     */
+    function doPlay() {
       handleAudio(async (audio) => {
-        if (isPlaying.value) {
+        if (getState().isPlaying) {
           await audio.play()
         } else {
           audio.pause()
         }
       })
-      // 如果开始播放，可能需要从这里调用音频播放的 API
-      // 如果暂停，可能需要调用音频暂停的 API
     }
 
     /**
@@ -168,17 +185,44 @@ export const usePlayerStore = defineStore(
     }
 
     /**
-     * @description 下一首
+     * @description 获取当前歌曲在播放列表中的索引
+     * @returns
      */
-    function next() {
-      setCurrentSong(toPlaylistStore.next())
+    const getCurrentSongIndex = () => {
+      const ids = toPlaylistStore.getList()
+      let index: number = 0
+      if (ids.length > 1) {
+        const id = getState().currentSongId
+        if (id) {
+          index = ids.indexOf(id)
+        }
+      }
+      return {
+        ids,
+        index,
+      }
     }
 
     /**
-     * @description 上一首
+     * @description 下一首歌曲
      */
-    function prev() {
-      setCurrentSong(toPlaylistStore.prev())
+    const next = () => {
+      const { ids, index } = getCurrentSongIndex()
+      if (index >= ids.length - 1 || index === -1) {
+        setCurrentSong(ids[0])
+      }
+      setCurrentSong(ids[index + 1])
+    }
+
+    /**
+     * @description 上一首歌曲
+     */
+    const prev = () => {
+      const { ids, index } = getCurrentSongIndex()
+      if (index <= 0 || index === -1) {
+        setCurrentSong(ids.length - 1)
+      }
+      setCurrentSong(ids[index - 1])
     }
 
     /**

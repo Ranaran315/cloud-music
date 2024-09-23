@@ -9,7 +9,12 @@
       <template #trigger><cloud-icon :icon="Menu" /> </template>
       <div :class="ucn.e('popover')">
         <div :class="ucn.e('header')">
-          <div :class="ucn.e('title')">播放列表</div>
+          <div :class="ucn.e('title')">
+            播放列表
+            <span :class="ucn.e('count')">{{
+              toPlaylistStore.getList().length
+            }}</span>
+          </div>
           <div :class="ucn.e('operator')">
             <div
               :class="ucn.e('operator-item')"
@@ -26,7 +31,7 @@
               :class="[ucn.e('item'), ucn.is(isCurrent(song.id), 'active')]"
               v-for="song of songs"
               :key="song.id"
-              @click.stop="songStore.setCurrentSong(song)"
+              @click.stop="playerStore.setCurrentSong(song.id)"
             >
               <cloud-image
                 :class="ucn.e('cover')"
@@ -55,7 +60,7 @@ import { useClassName } from '@/hooks'
 import { Delete, Menu } from '@/icons'
 import { NPopover } from 'naive-ui'
 import { songApi } from '@/api'
-import { useSongStore, useToPlaylistStore } from '@/store'
+import { usePlayerStore, useToPlaylistStore } from '@/store'
 import { Song } from '@/utils/type'
 import { computed, ref, watchEffect } from 'vue'
 import { formatDuration, formatName } from '@/utils/format'
@@ -67,8 +72,11 @@ defineOptions({
 
 const songs = ref<Song[]>([])
 const toPlaylistStore = useToPlaylistStore()
-const songStore = useSongStore()
-const isCurrent = computed(() => (id: number) => songStore.song?.id === id)
+const playerStore = usePlayerStore()
+
+const isCurrent = computed(
+  () => (id: number) => playerStore.getState().currentSongId === id
+)
 
 const loading = ref(false)
 
@@ -108,9 +116,6 @@ toPlaylistStore.init()
   $use-namespace: false
 );
 
-@include b() {
-}
-
 @include e('popover') {
   $popover-height: 400px;
   $header-height: 30px;
@@ -120,22 +125,25 @@ toPlaylistStore.init()
   background-color: getFillColor();
   padding: 10px 0;
   @include e('header') {
+    @include flex($justify: space-between, $align: center);
     height: $header-height;
     margin-bottom: 20px;
     padding: 0 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     @include e('title') {
-      font-size: 1.2rem;
+      font-size: getFontSize('large');
       font-weight: 700;
+      @include flex($align: flex-start, $gap: 10px);
+      @include e('count') {
+        font-size: getFontSize('small');
+        color: getTextColor('secondary');
+      }
     }
     @include e('operator') {
-      display: flex;
-      gap: 10px;
+      @include flex();
+      width: fit-content;
+      white-space: nowrap;
       @include e('operator-item') {
-        display: flex;
-        align-items: center;
+        @include flex($align: center);
         cursor: pointer;
         color: getTextColor('secondary');
         &:hover {
@@ -145,17 +153,13 @@ toPlaylistStore.init()
     }
   }
   @include e('list') {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    @include flex(column);
     height: calc(#{$popover-height} - #{$header-height} - 20px);
     overflow-y: auto;
     @include e('item') {
-      $size: 40px;
-      height: $size;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      width: 100%;
+      height: 60px;
+      @include flex($align: center);
       padding: 10px 15px;
       cursor: pointer;
       &:hover {
@@ -165,8 +169,8 @@ toPlaylistStore.init()
         color: getColor('primary');
       }
       @include e('cover') {
-        width: $size;
-        height: $size;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
       }
       @include e('info') {
@@ -175,12 +179,12 @@ toPlaylistStore.init()
         overflow: hidden;
         text-overflow: ellipsis;
         @include e('artist') {
-          font-size: 0.8rem;
+          font-size: getFontSize('mini');
           color: getTextColor('secondary');
         }
       }
       @include e('duration') {
-        font-size: 0.8rem;
+        font-size: getFontSize('mini');
         color: getTextColor('secondary');
       }
     }

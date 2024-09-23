@@ -5,7 +5,6 @@
     <audio
       ref="audioRef"
       :src="playerStore.getState().currentSong?.url"
-      @loadedmetadata="handleLoadedmetadata"
       @timeupdate.stop="handleTimeUpdate"
       @ended="handleEnded"
     />
@@ -44,14 +43,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { formatDuration } from '@/utils/format'
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watchEffect,
-  watch,
-} from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { PrevSong, NextSong, Play, Stop } from '@/icons'
 import { usePlayerStore } from '@/store'
 import PlayerVolume from './volume.vue'
@@ -62,20 +54,6 @@ defineOptions({
 })
 
 const playerStore = usePlayerStore()
-
-const duration = computed(() => playerStore.getState().currentSong?.dt) // 歌曲总时长
-const audioRef = ref<HTMLAudioElement | null>(null) // audio 模板引用
-
-/**
- * @description 响应式更新 audio 的音量和静音状态
- */
-watchEffect(() => {
-  const audio = audioRef.value
-  if (!audio) return
-  audio.volume = playerStore.getState().volume
-  audio.muted = playerStore.getState().isMuted
-})
-
 /**
  * @description 初始化设置
  */
@@ -83,37 +61,14 @@ function init() {
   playerStore.init(audioRef.value!) // 设置 audio
 }
 
+const duration = computed(() => playerStore.getState().currentSong?.dt) // 歌曲总时长
+const audioRef = ref<HTMLAudioElement | null>(null) // audio 模板引用
+
 /**
  * @description 点击播放按钮
  */
 const play = () => {
   playerStore.togglePlay()
-  // doPlay()
-}
-
-/**
- * @description 执行播放，根据 isPlaying 控制音乐播放
- */
-const doPlay = async () => {
-  try {
-    const audio = audioRef.value
-    if (!audio) return
-    if (playerStore.getState().isPlaying) {
-      await audio.play()
-    } else {
-      audio.pause()
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-/**
- * @description 当音乐加载完成时
- */
-const handleLoadedmetadata = () => {
-  console.log('加载音乐完成')
-  doPlay()
 }
 
 /**

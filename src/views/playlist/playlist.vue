@@ -63,13 +63,14 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { useToPlaylistStore } from '@/store'
+import { usePlayerStore, useToPlaylistStore } from '@/store'
 import { formatCount, formatTime } from '@/utils/format'
 import { computed, ref, watchEffect } from 'vue'
 import { Play, Collect, Download } from '@/icons'
 import { PlaylistDetail, Song } from '@/utils/type'
 import { playlistApi, recommendApi } from '@/api'
 import { useRoute } from 'vue-router'
+import { useMessage } from '@/components'
 
 const ucn = useClassName('playlist', false)
 defineOptions({
@@ -78,6 +79,7 @@ defineOptions({
 
 const route = useRoute()
 const toPlaylistStore = useToPlaylistStore()
+const playerStore = usePlayerStore()
 
 // 是否是每日推荐歌单
 const isDailyRecommend = computed(() => playlist.value?.id === -1)
@@ -162,13 +164,15 @@ watchEffect(async () => {
 })
 
 // 播放全部
-const playAll = () => {
+const playAll = async () => {
   const ids = songs.value.map((item) => item.id)
-  toPlaylistStore.addToPlaylist(ids)
+  playerStore.setCurrentSong(ids[0])
+  await toPlaylistStore.add(ids)
+  useMessage.success('添加成功！')
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'playlist',
   $use-namespace: false
