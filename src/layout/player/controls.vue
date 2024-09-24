@@ -139,6 +139,7 @@ onBeforeUnmount(() => {
  * @description 播放结束
  */
 const handleEnded = () => {
+  console.log('播放结束')
   playerStore.end()
 }
 </script>

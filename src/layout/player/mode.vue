@@ -1,6 +1,13 @@
 <template>
-  <cloud-icon :class="ucn.b()" :icon="icon" size="1.2" @click.stop="toggleMode">
-  </cloud-icon>
+  <cloud-tooltip :content="mode.content">
+    <cloud-icon
+      :class="ucn.b()"
+      :icon="mode.icon"
+      size="1.2rem"
+      @click.stop="toggleMode"
+    >
+    </cloud-icon>
+  </cloud-tooltip>
 </template>
 
 <script setup lang="ts">
@@ -18,12 +25,21 @@ const playerStore = usePlayerStore()
 const playerModeMap: {
   [prop in PlayModes]: any
 } = {
-  singleLoop: SingalLoop,
-  listLoop: ListLoop,
-  shuffle: ShufflePlay,
+  singleLoop: {
+    icon: SingalLoop,
+    content: '单曲循环',
+  },
+  listLoop: {
+    icon: ListLoop,
+    content: '列表循环',
+  },
+  shuffle: {
+    icon: ShufflePlay,
+    content: '随机播放',
+  },
 }
 
-const icon = computed(() => {
+const mode = computed(() => {
   return playerModeMap[playerStore.getState().playMode]
 })
 

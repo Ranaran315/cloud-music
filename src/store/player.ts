@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useToPlaylistStore } from './to-playlist'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRef, toRefs } from 'vue'
 import { SongWithUrl } from '@/utils/type'
 import { songApi } from '@/api'
 
@@ -18,6 +18,7 @@ interface State {
   currentSong: SongWithUrl | null
   isMuted: boolean
   audio: HTMLAudioElement | null
+  shuffleIds: Set<number>
 }
 
 const key = 'PLAYER'
@@ -41,6 +42,7 @@ export const usePlayerStore = defineStore(
       currentSong: null, // 当前播放的歌曲
       isMuted: false, // 是否静音
       audio: null, // audio 模板引用
+      shuffleIds: new Set(), // 记录已经随机播放过的音乐 id
     })
 
     /**
@@ -108,8 +110,8 @@ export const usePlayerStore = defineStore(
      */
     async function setCurrentSong(id?: number) {
       if (!id) return
-      localState.currentSongId = id
-      localState.currentTime = 0 // 重置播放时长
+      getState().currentSongId = id
+      getState().currentTime = 0 // 重置播放时长
       getSongInfo()
     }
 
@@ -226,6 +228,31 @@ export const usePlayerStore = defineStore(
     }
 
     /**
+     * @description 单曲循环
+     */
+    const singleLoop = () => {
+      updateAudioTime(0)
+      doPlay()
+    }
+
+    /**
+     * @description 随机播放
+     */
+    const shuffleLoop = () => {
+      const list = toPlaylistStore.getList()
+      const targetId = list[Math.floor(Math.random() * list.length)]
+      const shuffleIds = toRef(getState(), 'shuffleIds')
+      if (shuffleIds.value.has(targetId)) {
+        return shuffleLoop()
+      }
+      shuffleIds.value.add(targetId)
+      if (shuffleIds.value.size === list.length) {
+        shuffleIds.value = new Set()
+      }
+      setCurrentSong(targetId)
+    }
+
+    /**
      * @description 音乐播放后的行为，例如根据播放方式决定下一首如何播放
      */
     function end() {
@@ -234,11 +261,13 @@ export const usePlayerStore = defineStore(
           next()
           break
         case 'singleLoop':
-          // @todo
+          singleLoop()
           break
         case 'shuffle':
-          // @todo
+          shuffleLoop()
           break
+        default:
+          return
       }
     }
 
