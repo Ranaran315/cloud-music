@@ -72,7 +72,7 @@ export const useLoginStore = defineStore(
             data: { account, profile },
           } = await loginApi.getLoginStatus(c)
           userInfo.value = { ...account, ...profile }
-          if (account || profile) isLogined.value = true
+          if (account && profile) isLogined.value = true
           else {
             isLogined.value = false
             throw new Error('登录状态异常')

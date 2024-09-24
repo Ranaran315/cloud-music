@@ -5,7 +5,7 @@
         v-for="item of data"
         :key="item.id"
         :class="ucn.e('item')"
-        @click.stop="handleClick(item)"
+        @click.stop="handleClick(item.id)"
       >
         <div :class="ucn.e('cover')">
           <cloud-image :src="item.al?.picUrl" />
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
-import { useSongStore } from '@/store'
+import { usePlayerStore } from '@/store'
 import { formatAlias, formatDuration } from '@/utils/format'
 import { definePropType } from '@/utils/props'
 import { Song } from '@/utils/type'
@@ -43,9 +43,9 @@ defineProps({
   loading: Boolean,
 })
 
-const songStore = useSongStore()
-const handleClick = (song: Song) => {
-  songStore.setCurrentSong(song)
+const playerStore = usePlayerStore()
+const handleClick = (id: number) => {
+  playerStore.setCurrentSong(id)
 }
 </script>
 
