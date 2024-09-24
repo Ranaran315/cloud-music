@@ -28,7 +28,7 @@ export const useLoginStore = defineStore(
     // 获取二维码及二维码登录逻辑
     async function getQRCode() {
       stopCheck() // 如果有则先停止上一次的检查
-      try {
+      await useAsyncTryCatch(async () => {
         // 获取 unikey
         const {
           data: { unikey },
@@ -60,30 +60,29 @@ export const useLoginStore = defineStore(
             throw new Error(statusRes)
           }
         }, 3000)
-      } catch (error) {
-        console.log(error)
-      }
+      })
     }
 
     // 获取登录状态
     async function getLoginStatus(c?: string) {
-      try {
-        c = c || cookie.value
-        const {
-          data: { account, profile },
-        } = await loginApi.getLoginStatus(c)
-        userInfo.value = { ...account, ...profile }
-        if (account || profile) {
-          isLogined.value = true
-        } else {
+      await useAsyncTryCatch(
+        async () => {
+          c = c || cookie.value
+          const {
+            data: { account, profile },
+          } = await loginApi.getLoginStatus(c)
+          userInfo.value = { ...account, ...profile }
+          if (account || profile) isLogined.value = true
+          else {
+            isLogined.value = false
+            throw new Error('登录状态异常')
+          }
+        },
+        () => {
+          qrStatus.value = QRCodeStatus.OTHER
           isLogined.value = false
-          throw new Error('登录状态异常')
         }
-      } catch (error) {
-        qrStatus.value = QRCodeStatus.OTHER
-        isLogined.value = false
-        console.log(error)
-      }
+      )
     }
 
     // 停止检查二维码状态

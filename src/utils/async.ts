@@ -11,10 +11,12 @@ export const useAsyncTryCatch = async (
   try {
     loading.value = true
     await tryCallback()
-  } catch (error) {
+  } catch (error: any) {
     if (catchCallback) {
       catchCallback()
     } else {
+      const { status } = error
+      if (status === 301) return // 未登录
       useMessage.error(`Error: ${error}`)
     }
   } finally {

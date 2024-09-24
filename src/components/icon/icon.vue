@@ -14,7 +14,7 @@ defineOptions({
 })
 
 defineProps({
-  size: Number,
+  size: [String, Number],
   icon: Object,
 })
 </script>

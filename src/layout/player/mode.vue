@@ -1,10 +1,5 @@
 <template>
-  <cloud-icon
-    :class="ucn.b()"
-    :icon="icon"
-    size="1.2rem"
-    @click.stop="toggleMode"
-  >
+  <cloud-icon :class="ucn.b()" :icon="icon" size="1.2" @click.stop="toggleMode">
   </cloud-icon>
 </template>
 
