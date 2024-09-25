@@ -104,7 +104,7 @@ const isActive = computed(() => {
 watch(
   () => currentIndex.value,
   () => {
-    const element = document.querySelector('.is-active')
+    const element = document.querySelector(`.${ucn.b()} .is-active`)
     element?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',

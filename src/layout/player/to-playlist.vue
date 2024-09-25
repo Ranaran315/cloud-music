@@ -99,7 +99,7 @@ const handleUpdateShow = async (show: boolean) => {
       /**
        * @todo 有 bug ，body 会跟着一起滚动
        */
-      // const element = document.querySelector('.to-playlist__item.is-active')
+      // const element = document.querySelector(`.${ucn.e('popover')} .is-active`)
       // element?.scrollIntoView({
       //   block: 'center',
       // })
