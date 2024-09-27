@@ -17,7 +17,7 @@
 import { useClassName } from '@/hooks'
 import { DataTableColumns, NDataTable } from 'naive-ui'
 import { computed, h } from 'vue'
-import { CloudImage } from '@/components'
+import { CloudImage, showContextMenu } from '@/components'
 import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
@@ -118,6 +118,9 @@ const rowProps = (row: Song) => {
     onClick: () => {
       songStore.setCurrentSong(row)
       playerStore.setCurrentSong(row.id)
+    },
+    oncontextmenu: (e: PointerEvent) => {
+      showContextMenu(e)
     },
   }
 }

@@ -2,7 +2,11 @@
   <router-view />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+})
+</script>
 
 <style lang="scss">
 body {
