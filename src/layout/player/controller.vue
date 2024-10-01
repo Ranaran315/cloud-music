@@ -49,7 +49,7 @@ const song = computed(() => playerStore.getState().currentSong)
   width: 100%;
   height: var(--player-controller-height);
   position: fixed;
-  z-index: var(--layout-z-index);
+  z-index: getZIndex('layout');
   bottom: 0;
   left: 0;
   background-color: getFillColor('secondary');

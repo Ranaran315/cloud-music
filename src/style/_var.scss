@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-$color: (
+$Variable: (
   'theme': (
     'default': #e4e8ec,
     'primary': #fc3d49,
@@ -34,28 +34,37 @@ $color: (
     'small': 0.85rem,
     'mini': 0.8rem,
   ),
+  zIndex: (
+    'layout': 1000,
+    'tabnav': 1000,
+    'contextmenu': 9999,
+  ),
 );
 
 @function getColor($type: 'default') {
-  @return map.get($color, 'theme', $type);
+  @return map.get($Variable, 'theme', $type);
 }
 
 @function getFillColor($type: 'primary') {
-  @return map.get($color, 'fill', $type);
+  @return map.get($Variable, 'fill', $type);
 }
 
 @function getTextColor($type: 'primary') {
-  @return map.get($color, 'text', $type);
+  @return map.get($Variable, 'text', $type);
 }
 
 @function getBoxShadow($type: 'primary') {
-  @return map.get($color, 'box-shadow', $type);
+  @return map.get($Variable, 'box-shadow', $type);
 }
 
 @function getBorderRadius($type: 'normal') {
-  @return map.get($color, 'border-radius', $type);
+  @return map.get($Variable, 'border-radius', $type);
 }
 
 @function getFontSize($type: 'normal') {
-  @return map.get($color, 'font-size', $type);
+  @return map.get($Variable, 'font-size', $type);
+}
+
+@function getZIndex($type) {
+  @return map.get($Variable, 'zIndex', $type);
 }

@@ -95,6 +95,7 @@ onBeforeUnmount(() => {
   width: 200px;
   height: auto;
   box-shadow: getBoxShadow('secondary');
+  z-index: getZIndex('contextmenu');
   cursor: pointer;
   @include e('item') {
     @include flex($align: center);

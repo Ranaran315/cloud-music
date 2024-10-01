@@ -76,7 +76,7 @@ const menuItem = [
 
 @include b() {
   position: fixed;
-  z-index: var(--layout-z-index);
+  z-index: getZIndex('layout');
   top: 0;
   left: 0;
   width: 100%;

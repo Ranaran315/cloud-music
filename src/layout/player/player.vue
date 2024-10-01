@@ -27,6 +27,6 @@ defineOptions({
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--layout-z-index);
+  z-index: getZIndex('layout');
 }
 </style>

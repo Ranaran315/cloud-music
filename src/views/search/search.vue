@@ -66,7 +66,7 @@ watchEffect(async () => {
   width: 100%;
   position: fixed;
   top: var(--navbar-height);
-  z-index: var(--tab-nav-z-index);
+  z-index: getZIndex('tabnav');
   background-color: getFillColor();
 }
 

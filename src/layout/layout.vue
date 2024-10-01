@@ -33,8 +33,6 @@ defineOptions({
   --navbar-height: 60px;
   --sidebar-width: 250px;
   --player-controller-height: 80px;
-  --layout-z-index: 1000;
-  --tab-nav-z-index: 1000;
   width: 100%;
   height: 100%;
   display: flex;
