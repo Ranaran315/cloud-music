@@ -14,10 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { useClassName } from '@/hooks'
+import { useClassName, useSongContextMenu } from '@/hooks'
 import { DataTableColumns, NDataTable } from 'naive-ui'
 import { computed, h } from 'vue'
-import { CloudImage, showContextMenu } from '@/components'
+import { CloudImage } from '@/components'
 import { Song } from '@/utils/type'
 import { formatDuration } from '@/utils/format'
 import { RaIcon } from '@capybara-plus/vue'
@@ -120,7 +120,7 @@ const rowProps = (row: Song) => {
       playerStore.setCurrentSong(row.id)
     },
     oncontextmenu: (e: PointerEvent) => {
-      showContextMenu(e)
+      useSongContextMenu(e, row)
     },
   }
 }

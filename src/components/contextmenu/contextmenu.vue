@@ -1,12 +1,25 @@
 <template>
   <Transition name="expand">
-    <div v-show="visible" :class="ucn.b()" :style="style">我是一个右键菜单</div>
+    <ul v-show="visible" :class="ucn.b()" :style="style">
+      <li
+        :class="ucn.e('item')"
+        v-for="(item, index) of menu"
+        :key="index"
+        @click.stop="item.onChoose?.()"
+      >
+        <cloud-icon :icon="item.icon" />
+        <span :class="ucn.e('text')">{{ item.text }}</span>
+      </li>
+    </ul>
   </Transition>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
+import { definePropType } from '@/utils/props'
 import { computed, CSSProperties, onBeforeUnmount, onMounted, ref } from 'vue'
+import { ContextMenus } from './instance'
+import { CloudIcon } from '../icon'
 
 const ucn = useClassName('contextmenu', false)
 defineOptions({
@@ -20,6 +33,7 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  menu: definePropType<Array<ContextMenus>>(Array),
 })
 
 const visible = ref(false)
@@ -48,15 +62,22 @@ const escDestory = (e: KeyboardEvent) => {
     destory()
   }
 }
-const scroll = () => {
+// 页面滚动时销毁
+const scrollDestory = () => {
+  destory()
+}
+// 点击页面销毁
+const clickDestory = () => {
   destory()
 }
 window.addEventListener('keydown', escDestory)
-window.addEventListener('scroll', scroll)
+window.addEventListener('scroll', scrollDestory)
+window.addEventListener('click', clickDestory, true)
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', escDestory)
-  window.removeEventListener('scroll', scroll)
+  window.removeEventListener('scroll', scrollDestory)
+  window.removeEventListener('click', clickDestory, true)
 })
 </script>
 
@@ -68,12 +89,24 @@ onBeforeUnmount(() => {
 
 @include b() {
   background-color: getFillColor();
-  padding: 10px;
+  padding: 10px 0;
   border-radius: getBorderRadius('mini');
   position: fixed;
   width: 200px;
-  height: 200px;
+  height: auto;
   box-shadow: getBoxShadow('secondary');
+  cursor: pointer;
+  @include e('item') {
+    @include flex($align: center);
+    padding: 5px;
+    transition: background-color 0.3s;
+    &:hover {
+      background-color: getFillColor('third');
+    }
+    @include e('text') {
+      margin-left: 10px;
+    }
+  }
 }
 
 .expand-enter-active,

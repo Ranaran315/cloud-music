@@ -1,9 +1,16 @@
-import { createVNode, render } from 'vue'
+import { type Component, createVNode, render } from 'vue'
 import ContextMenu from './contextmenu.vue'
 
-interface ContextMenuOptions {
+export interface ContextMenus {
+  icon: Component
+  text: string
+  onChoose?: () => void
+}
+
+export interface ContextMenuOptions {
   x: number
   y: number
+  menu: ContextMenus[]
 }
 
 let pending = false // 记录是否已经创建了一个右键菜单
