@@ -1,6 +1,6 @@
 <template>
   <Transition name="expand">
-    <ul v-show="visible" :class="ucn.b()" :style="style">
+    <ul ref="contextMenuRef" v-show="visible" :class="ucn.b()" :style="style">
       <li
         :class="ucn.e('item')"
         v-for="(item, index) of menu"
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
-import { computed, CSSProperties, onBeforeUnmount, onMounted, ref } from 'vue'
+import { CSSProperties, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { ContextMenus } from './instance'
 import { CloudIcon } from '../icon'
 
@@ -27,8 +27,14 @@ defineOptions({
 })
 
 const props = defineProps({
-  x: Number,
-  y: Number,
+  x: {
+    type: Number,
+    default: 0,
+  },
+  y: {
+    type: Number,
+    default: 0,
+  },
   onDestory: {
     type: Function,
     required: true,
@@ -36,17 +42,33 @@ const props = defineProps({
   menu: definePropType<Array<ContextMenus>>(Array),
 })
 
-const visible = ref(false)
+const visible = ref(false) // 是否显示，用于过渡动画
 onMounted(() => {
+  computedPosition()
   visible.value = true
 })
 
-const style = computed<CSSProperties>(() => {
-  return {
-    left: `${props.x}px`,
-    top: `${props.y}px`,
-  }
-})
+/**
+ * @description 动态计算右键菜单的位置
+ */
+const contextMenuRef = ref<HTMLUListElement | null>(null)
+const style = ref<CSSProperties>({})
+const computedPosition = () => {
+  nextTick(() => {
+    let x = props.x
+    let y = props.y
+    const clientWidth = contextMenuRef.value?.clientWidth || 0
+    const clientHeight = contextMenuRef.value?.clientHeight || 0
+    const left = window.innerWidth - props.x
+    const bottom = window.innerHeight - props.y
+    if (left <= clientWidth) x -= clientWidth + 10
+    if (bottom <= clientHeight) y -= clientHeight + 10
+    style.value = {
+      left: `${x}px`,
+      top: `${y}px`,
+    }
+  })
+}
 
 /**
  * @description 销毁组件的场景
@@ -112,11 +134,11 @@ onBeforeUnmount(() => {
 
 .expand-enter-active,
 .expand-leave-active {
-  transition: height 0.3s linear;
+  transition: opacity 0.3s linear;
 }
 
 .expand-enter-from,
 .expand-leave-to {
-  height: 0;
+  opacity: 0;
 }
 </style>
