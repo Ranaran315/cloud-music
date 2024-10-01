@@ -17,6 +17,9 @@ export const useSongContextMenu = (e: PointerEvent, data: Song) => {
     {
       icon: Play,
       text: '下一首播放',
+      onChoose: () => {
+        playerStore.addToNext(data.id)
+      },
     },
     {
       icon: Like,

@@ -116,6 +116,14 @@ export const usePlayerStore = defineStore(
     }
 
     /**
+     * @description 下一首播放
+     * @param id 下一首播放的歌曲 id
+     */
+    async function addToNext(id: number) {
+      toPlaylistStore.addNext(getState().currentSongId, id)
+    }
+
+    /**
      * @description 更新当前播放时长
      * @param time 播放时长（毫秒）
      */
@@ -277,6 +285,7 @@ export const usePlayerStore = defineStore(
       state,
       getState,
       setCurrentSong,
+      addToNext,
       setVolume,
       recordCurrentTime,
       updateAudioTime,
