@@ -26,12 +26,17 @@
           </div>
         </div>
         <cloud-loading :show="loading">
-          <div :class="ucn.e('list')">
+          <div :class="ucn.e('list')" @scroll.stop="handleScroll">
             <div
-              :class="[ucn.e('item'), ucn.is(isCurrent(song.id), 'active')]"
-              v-for="song of songs"
+              :class="[
+                ucn.e('item'),
+                ucn.is(isCurrent(song.id), 'active'),
+                ucn.is(currentContextmenuIndex == index, 'contextmenu'),
+              ]"
+              v-for="(song, index) of songs"
               :key="song.id"
               @click.stop="playerStore.setCurrentSong(song.id)"
+              @contextmenu.stop="handleContextmenu($event, song, index)"
             >
               <cloud-image
                 :class="ucn.e('cover')"
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { useClassName } from '@/hooks'
+import { useClassName, useToPlaylistContextMenu } from '@/hooks'
 import { Delete, Menu } from '@/icons'
 import { NPopover } from 'naive-ui'
 import { songApi } from '@/api'
@@ -64,6 +69,7 @@ import { usePlayerStore, useToPlaylistStore } from '@/store'
 import { Song } from '@/utils/type'
 import { computed, ref, watchEffect } from 'vue'
 import { formatDuration, formatName } from '@/utils/format'
+import { ContextMenuInstance } from '@/components'
 
 const ucn = useClassName('to-playlist', false)
 defineOptions({
@@ -108,6 +114,23 @@ const handleUpdateShow = async (show: boolean) => {
 }
 
 toPlaylistStore.init()
+
+// contextmenu
+const currentContextmenuIndex = ref<number>(-1) // 当前右键菜单的索引
+const contextmenuInstance = ref<ContextMenuInstance | null>(null)
+const handleContextmenu = (e: MouseEvent, song: Song, index: number) => {
+  contextmenuInstance.value = useToPlaylistContextMenu(e, song, {
+    onClose: () => {
+      currentContextmenuIndex.value = -1
+    },
+  })
+  currentContextmenuIndex.value = index
+}
+
+// 列表滚动时关闭 contextmenu
+const handleScroll = () => {
+  contextmenuInstance.value?.close()
+}
 </script>
 
 <style lang="scss">
@@ -167,6 +190,9 @@ toPlaylistStore.init()
       }
       &.is-active {
         color: getColor('primary');
+      }
+      &.is-contextmenu {
+        background-color: getFillColor('secondary');
       }
       @include e('cover') {
         width: 40px;

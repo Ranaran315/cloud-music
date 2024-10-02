@@ -8,9 +8,14 @@ export interface ContextMenus {
 }
 
 export interface ContextMenuOptions {
-  x: number
-  y: number
-  menu: ContextMenus[]
+  x?: number
+  y?: number
+  menu?: ContextMenus[]
+  onClose?: () => void
+}
+
+export interface ContextMenuInstance {
+  close: () => void
 }
 
 let pending = false // 记录是否已经创建了一个右键菜单
@@ -26,8 +31,13 @@ const createInstance = (options: ContextMenuOptions) => {
   pending = true
 
   function destory() {
+    options.onClose?.()
     render(null, container)
     pending = false
+  }
+
+  return {
+    close: () => destory(),
   }
 }
 

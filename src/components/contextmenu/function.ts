@@ -1,11 +1,21 @@
-import createInstance, { type ContextMenus } from './instance'
+import createInstance, {
+  ContextMenuOptions,
+  type ContextMenus,
+} from './instance'
 
-export const showContextMenu = (e: PointerEvent, menu: ContextMenus[]) => {
+export const showContextMenu = (
+  e: PointerEvent | MouseEvent,
+  menu: ContextMenus[],
+  options?: ContextMenuOptions
+) => {
   e.preventDefault()
   const { clientX: x, clientY: y } = e
-  createInstance({
+  return createInstance({
     x,
     y,
     menu,
+    ...options,
   })
 }
+
+export type { ContextMenuInstance, ContextMenuOptions } from './instance'

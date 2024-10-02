@@ -6,6 +6,7 @@
         :key="item.id"
         :class="ucn.e('item')"
         @click.stop="handleClick(item.id)"
+        @contextmenu.stop="handleContextmenu($event, item)"
       >
         <div :class="ucn.e('cover')">
           <cloud-image :src="item.al?.picUrl" />
@@ -26,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { useClassName } from '@/hooks'
+import { useClassName, useSongContextMenu } from '@/hooks'
 import { usePlayerStore } from '@/store'
 import { formatAlias, formatDuration } from '@/utils/format'
 import { definePropType } from '@/utils/props'
@@ -46,6 +47,10 @@ defineProps({
 const playerStore = usePlayerStore()
 const handleClick = (id: number) => {
   playerStore.setCurrentSong(id)
+}
+
+const handleContextmenu = (e: MouseEvent, item: Song) => {
+  useSongContextMenu(e, item)
 }
 </script>
 
