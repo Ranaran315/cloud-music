@@ -29,7 +29,7 @@ export function useSearchContext() {
   const router = useRouter()
   const state = reactive({
     result: {},
-    loading: false,
+    loading: true,
   })
   const tabs = [
     {

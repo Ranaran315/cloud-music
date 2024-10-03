@@ -1,6 +1,6 @@
 <template>
   <cloud-playlist-cards
-    :show="searchContext?.state.loading"
+    :loading="searchContext?.state.loading"
     :data="data"
   ></cloud-playlist-cards>
 </template>

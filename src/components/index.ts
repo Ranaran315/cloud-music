@@ -12,6 +12,7 @@ import { CloudAlbumCards } from './album-cards'
 import { CloudSongCards } from './song-cards'
 import { CloudArtistCards } from './artist-cards'
 import { CloudTab } from './tab'
+import { CloudSkeleton } from './skeleton'
 
 const components = [
   CloudButton,
@@ -27,6 +28,7 @@ const components = [
   CloudSongCards,
   CloudArtistCards,
   CloudTab,
+  CloudSkeleton,
 ]
 
 export default {
@@ -53,3 +55,4 @@ export * from './album-cards'
 export * from './song-cards'
 export * from './artist-cards'
 export * from './tab'
+export * from './skeleton'
