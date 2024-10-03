@@ -1,6 +1,6 @@
 <template>
-  <cloud-loading :show="loading">
-    <div :class="ucn.b()">
+  <div :class="ucn.b()">
+    <cloud-skeleton :show="loading" :count="5">
       <div :class="ucn.e('card')" v-for="item of data" :key="item.id">
         <div :class="ucn.e('cover')">
           <cloud-image :class="ucn.e('cover-image')" :src="item.picUrl" />
@@ -16,15 +16,15 @@
           <div :class="ucn.e('company')">{{ item.company }}</div>
         </div>
       </div>
-    </div>
-  </cloud-loading>
+    </cloud-skeleton>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { formatAlias } from '@/utils/format'
 import { definePropType } from '@/utils/props'
-import { Album } from '@/utils/type'
+import { Album } from '@/utils/interface'
 
 const ucn = useClassName('album-cards')
 defineOptions({

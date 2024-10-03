@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useToPlaylistStore } from './to-playlist'
 import { reactive, toRef, toRefs } from 'vue'
-import { SongWithUrl } from '@/utils/type'
+import { SongWithUrl } from '@/utils/interface'
 import { songApi } from '@/api'
 
 const playModes = ['listLoop', 'singleLoop', 'shuffle'] as const

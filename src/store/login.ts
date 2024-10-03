@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import loginApi from '@/api/login'
 import { ref, nextTick } from 'vue'
-import { LoginUser } from '@/utils/type'
+import { LoginUser } from '@/utils/interface'
 import { useAsyncTryCatch } from '@/utils/async'
 import { captchaApi } from '@/api'
 import { useMessage } from '@/components'

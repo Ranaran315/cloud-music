@@ -1,6 +1,9 @@
 <template>
-  <cloud-loading :show="loading">
-    <div :class="ucn.b()">
+  <div :class="ucn.b()">
+    <cloud-skeleton :show="loading">
+      <template #skeleton>
+        <Skeleton v-for="i of 2" :key="i"></Skeleton>
+      </template>
       <router-link
         v-for="item of data"
         :key="item.id"
@@ -27,15 +30,16 @@
           </div>
         </div>
       </router-link>
-    </div>
-  </cloud-loading>
+    </cloud-skeleton>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
-import { Artist } from '@/utils/type'
+import { Artist } from '@/utils/interface'
 import { formatAlias } from '@/utils/format'
+import Skeleton from './skeleton.vue'
 
 const ucn = useClassName('artist-cards')
 defineOptions({

@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
+import { isNumber } from '@/utils/type'
 import { computed, CSSProperties } from 'vue'
 
 const ucn = useClassName('skeleton-item')
@@ -17,18 +18,19 @@ const props = defineProps({
     type: definePropType<'square' | 'circle' | 'line'>(String),
     default: 'square',
   },
-  size: {
-    type: [String, Number],
-  },
+  size: [String, Number],
+  width: [String, Number],
+  height: [String, Number],
 })
 
 const style = computed<CSSProperties>(() => {
-  if (!props.size) return {}
-  const size = /\d+/.test(props.size + '') ? `${props.size}px` : props.size
+  const size = isNumber(props.size) ? `${props.size}px` : props.size
+  const width = isNumber(props.width) ? `${props.width}px` : props.width
+  const height = isNumber(props.height) ? `${props.height}px` : props.height
   if (props.type == 'line') {
     return {
-      width: '100%',
-      height: size,
+      width: width,
+      height: height,
     }
   }
   return {
@@ -62,6 +64,7 @@ const style = computed<CSSProperties>(() => {
 }
 
 @include m('line') {
+  width: 100%;
   height: 20px;
 }
 

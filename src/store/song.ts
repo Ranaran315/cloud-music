@@ -1,5 +1,5 @@
 import { songApi } from '@/api'
-import type { Song, SongWithUrl } from '@/utils/type'
+import type { Song, SongWithUrl } from '@/utils/interface'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useLoginStore, useToPlaylistStore } from '@/store'

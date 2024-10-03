@@ -1,6 +1,9 @@
 <template>
-  <cloud-loading :show="loading">
-    <div :class="ucn.b()">
+  <div :class="ucn.b()">
+    <cloud-skeleton :show="loading">
+      <template #skeleton>
+        <Skeleton v-for="i of 3" :key="i"></Skeleton>
+      </template>
       <div
         v-for="item of data"
         :key="item.id"
@@ -22,8 +25,8 @@
         </div>
         <div :class="ucn.e('duration')">{{ formatDuration(item.dt) }}</div>
       </div>
-    </div>
-  </cloud-loading>
+    </cloud-skeleton>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -31,8 +34,9 @@ import { useClassName, useSongContextMenu } from '@/hooks'
 import { usePlayerStore } from '@/store'
 import { formatAlias, formatDuration } from '@/utils/format'
 import { definePropType } from '@/utils/props'
-import { Song } from '@/utils/type'
+import { Song } from '@/utils/interface'
 import { CloudImage } from '@/components/image'
+import Skeleton from './skeleton.vue'
 
 const ucn = useClassName('song-cards')
 defineOptions({

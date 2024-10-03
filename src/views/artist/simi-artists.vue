@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { artistApi } from '@/api'
 import { useClassName } from '@/hooks'
-import { Artist } from '@/utils/type'
+import { Artist } from '@/utils/interface'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 

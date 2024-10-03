@@ -1,7 +1,7 @@
 <template>
-  <template v-if="loading">
+  <template v-if="show">
     <slot name="skeleton">
-      <div :class="ucn.b()">
+      <div :class="ucn.b()" v-for="i of count" :key="i">
         <SkeletonItem></SkeletonItem>
         <div :class="ucn.e('container')">
           <SkeletonItem type="circle" size="50"></SkeletonItem>
@@ -32,10 +32,16 @@ defineOptions({
 })
 
 defineProps({
-  loading: Boolean,
-  to: {
-    type: String,
-    default: 'body',
+  /**
+   * @description 是否显示骨架屏
+   */
+  show: Boolean,
+  /**
+   * @description 默认的骨架屏的数量
+   */
+  count: {
+    type: Number,
+    default: 1,
   },
 })
 </script>

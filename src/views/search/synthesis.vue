@@ -21,7 +21,7 @@
 import { useClassName } from '@/hooks'
 import { computed, inject } from 'vue'
 import { SearchContextKey } from './context'
-import { SearchType, Song } from '@/utils/type'
+import { SearchType, Song } from '@/utils/interface'
 import SearchSynthesisItem from './synthesis-item.vue'
 
 const ucn = useClassName('synthesis', false)

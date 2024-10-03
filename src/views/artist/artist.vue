@@ -1,6 +1,9 @@
 <template>
   <div :class="ucn.b()">
-    <cloud-loading :show="loading">
+    <cloud-skeleton :show="loading">
+      <template #skeleton>
+        <Skeleton></Skeleton>
+      </template>
       <div :class="ucn.e('header')">
         <div :class="ucn.e('cover')">
           <cloud-image :src="artist?.img1v1Url"></cloud-image>
@@ -47,7 +50,7 @@
           </div>
         </div>
       </div>
-    </cloud-loading>
+    </cloud-skeleton>
     <cloud-tab :tabs="tabs" @update-value="handleUpdateValue" :value="tabValue">
       <template #default="{ tab }">
         <component :is="tab.component" :songs="songs"></component>
@@ -61,7 +64,7 @@ import { artistApi, songApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { Play, SubScribe, SubScribed } from '@/icons'
 import { formatAlias, formatCount } from '@/utils/format'
-import { Artist, Song } from '@/utils/type'
+import { Artist, Song } from '@/utils/interface'
 import { computed, ref, watchEffect, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ArtistProducation from './producation.vue'
@@ -70,6 +73,7 @@ import ArtistAlbums from './albums.vue'
 import SimiArtist from './simi-artists.vue'
 import { usePlayerStore, useToPlaylistStore } from '@/store'
 import { useMessage } from '@/components'
+import Skeleton from './skeleton.vue'
 
 const ucn = useClassName('artist', false)
 defineOptions({

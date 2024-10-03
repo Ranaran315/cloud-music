@@ -1,5 +1,5 @@
 import { useSongStore } from '@/store'
-import { SongWithUrl } from '@/utils/type'
+import { SongWithUrl } from '@/utils/interface'
 import { InjectionKey, reactive, watchEffect } from 'vue'
 
 interface PlayerContext {

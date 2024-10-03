@@ -5,7 +5,7 @@ import Playlist from './playlist.vue'
 import Albums from './albums.vue'
 import Synthesis from './synthesis.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { SearchType } from '@/utils/type'
+import { SearchType } from '@/utils/interface'
 
 interface SearchContext {
   state: {

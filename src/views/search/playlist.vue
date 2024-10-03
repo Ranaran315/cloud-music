@@ -9,7 +9,7 @@
 import { SearchContextKey } from './context'
 import { inject, ref, watchEffect } from 'vue'
 import { playlistApi } from '@/api'
-import { Playlist } from '@/utils/type'
+import { Playlist } from '@/utils/interface'
 import { useAsyncTryCatch } from '@/utils/async'
 
 defineOptions({

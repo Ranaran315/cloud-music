@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
-import { Song } from '@/utils/type'
+import { Song } from '@/utils/interface'
 
 const ucn = useClassName('artist-songs', false)
 defineOptions({

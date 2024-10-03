@@ -12,7 +12,7 @@
 import { playlistApi, recommendApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { useAsyncTryCatch } from '@/utils/async'
-import { Playlist } from '@/utils/type'
+import { Playlist } from '@/utils/interface'
 import { onMounted, ref } from 'vue'
 
 const ucn = useClassName('recommend-playlist', false)

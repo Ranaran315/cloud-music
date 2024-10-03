@@ -1,6 +1,9 @@
 <template>
   <div :class="ucn.b()">
-    <cloud-skeleton :loading="loading" :to="ucn.b()">
+    <cloud-skeleton :show="loading">
+      <template #skeleton>
+        <PlaylistCardsSkeleton v-for="i of 5" :key="i" />
+      </template>
       <div
         v-for="item of data"
         :key="item.id"
@@ -40,29 +43,19 @@
 <script setup lang="ts">
 import { useClassName } from '@/hooks'
 import { definePropType } from '@/utils/props'
-import { Playlist } from '@/utils/type'
+import { Playlist } from '@/utils/interface'
 import { formatCount, formatTime } from '@/utils/format'
-import { watch } from 'vue'
+import PlaylistCardsSkeleton from './skeleton.vue'
 
 const ucn = useClassName('playlist-cards', true)
 defineOptions({
   name: 'CloudPlaylistCards',
 })
 
-const props = defineProps({
+defineProps({
   data: definePropType<Playlist[]>(Array),
   loading: Boolean,
 })
-
-watch(
-  () => props.loading,
-  (val) => {
-    console.log(val)
-  },
-  {
-    immediate: true,
-  }
-)
 </script>
 
 <style scoped lang="scss">

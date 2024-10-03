@@ -72,20 +72,16 @@ const handleLoad = (e: Event) => {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #efe8e8;
+    background: linear-gradient(
+      to right,
+      #{getFillColor('secondary')} 25%,
+      #{getFillColor('third')} 50%,
+      #{getFillColor('secondary')} 25%
+    );
+    background-size: 400% 100%;
+    animation: loading 1.4s ease infinite;
     border-radius: inherit;
     overflow: hidden;
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 20%;
-      height: 150%;
-      transform: translate(-50%, -50%) rotate(45deg);
-      background-color: #f0f0f0;
-      animation: loading 1.2s linear infinite;
-    }
   }
 }
 
@@ -95,10 +91,11 @@ img {
 
 @keyframes loading {
   from {
-    transform: translate(-100%, -100%) rotate(45deg);
+    background-position: 100% 50%;
   }
+
   to {
-    transform: translate(100%, 100%) rotate(45deg);
+    background-position: 0 50%;
   }
 }
 </style>

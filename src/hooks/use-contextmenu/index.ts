@@ -2,7 +2,7 @@ import { showContextMenu } from '@/components'
 import { ContextMenuOptions } from '@/components'
 import { Delete, Like, Play } from '@/icons'
 import { usePlayerStore, useSongStore, useToPlaylistStore } from '@/store'
-import { Song } from '@/utils/type'
+import { Song } from '@/utils/interface'
 
 /**
  * @description 单曲的 contextmenu
