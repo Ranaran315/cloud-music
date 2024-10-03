@@ -116,7 +116,6 @@ const rowProps = (row: Song) => {
   return {
     class: ucn.e('row'),
     onClick: () => {
-      songStore.setCurrentSong(row)
       playerStore.setCurrentSong(row.id)
     },
     oncontextmenu: (e: PointerEvent) => {

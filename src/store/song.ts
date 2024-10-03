@@ -26,6 +26,7 @@ export const useSongStore = defineStore(
     /**
      * 设置当前播放的歌曲
      * @param newSong 歌曲对象或歌曲 id
+     * @deprecated 将考虑在未来删除
      */
     const setCurrentSong = async (newSong: Song | number) => {
       try {
