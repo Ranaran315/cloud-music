@@ -167,7 +167,7 @@ watchEffect(async () => {
 const playAll = async () => {
   const ids = songs.value.map((item) => item.id)
   playerStore.setCurrentSong(ids[0])
-  await toPlaylistStore.add(ids)
+  toPlaylistStore.add(ids)
   useMessage.success('添加成功！')
 }
 </script>

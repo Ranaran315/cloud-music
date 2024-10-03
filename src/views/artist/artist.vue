@@ -36,43 +36,53 @@
             </div>
           </div>
           <div :class="ucn.e('operator')">
-            <cloud-button type="primary" :icon="Play">播放全部</cloud-button>
-            <cloud-button :icon="artist?.followed ? SubScribed : SubScribe">{{
-              artist?.followed ? '已关注' : '关注'
-            }}</cloud-button>
+            <cloud-button type="primary" :icon="Play" @click.stop="playAll"
+              >播放全部</cloud-button
+            >
+            <cloud-button
+              :icon="artist?.followed ? SubScribed : SubScribe"
+              @click="subscribe"
+              >{{ artist?.followed ? '已关注' : '关注' }}</cloud-button
+            >
           </div>
         </div>
       </div>
     </cloud-loading>
     <cloud-tab :tabs="tabs" @update-value="handleUpdateValue" :value="tabValue">
       <template #default="{ tab }">
-        <component :is="tab.component"></component>
+        <component :is="tab.component" :songs="songs"></component>
       </template>
     </cloud-tab>
   </div>
 </template>
 
 <script setup lang="ts">
-import { artistApi } from '@/api'
+import { artistApi, songApi } from '@/api'
 import { useClassName } from '@/hooks'
 import { Play, SubScribe, SubScribed } from '@/icons'
 import { formatAlias, formatCount } from '@/utils/format'
-import { Artist } from '@/utils/type'
+import { Artist, Song } from '@/utils/type'
 import { computed, ref, watchEffect, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ArtistProducation from './producation.vue'
 import ArtistSongs from './songs.vue'
 import ArtistAlbums from './albums.vue'
 import SimiArtist from './simi-artists.vue'
+import { usePlayerStore, useToPlaylistStore } from '@/store'
+import { useMessage } from '@/components'
 
 const ucn = useClassName('artist', false)
 defineOptions({
   name: 'Artist',
 })
 
+const playerStore = usePlayerStore()
+const toPlaylistStore = useToPlaylistStore()
+
 const router = useRouter()
 const route = useRoute()
 const artist = ref<Artist | null>(null)
+const songs = ref<Song[]>([])
 const loading = ref(false)
 // 获取歌手信息
 const getData = async () => {
@@ -88,16 +98,22 @@ const getData = async () => {
     } = await artistApi.getFans(id)
     artist.value!.fansCnt = fansCnt
     artist.value!.followCnt = followCnt
+    // 获取歌手的歌曲
+    let { songs: result } = await artistApi.getSongs(id)
+    const ids = result.map((item: Song) => item.id)
+    ;({ songs: result } = await songApi.getSongDetail(ids))
+    songs.value = result
   } catch (error) {
     console.log(error)
   } finally {
     loading.value = false
   }
 }
+
+// 监听路由变化
 watch(
   () => route.params.id,
   () => {
-    console.log('id change')
     getData()
   },
   {
@@ -116,6 +132,9 @@ const tabs = [
     name: 'music',
     tab: '音乐',
     component: ArtistSongs,
+    bind: {
+      songs,
+    },
   },
   {
     name: 'album',
@@ -133,16 +152,33 @@ const tabs = [
   },
 ]
 const tabValue = computed(() => route.query.tab as string)
+
+// 当路由没有 tab 时，默认跳转到 desc
 watchEffect(() => {
   if (!route.query || !route.query.tab)
     router.replace({ query: { tab: 'desc' } })
 })
+
+// 导航栏切换时
 const handleUpdateValue = (val: any) => {
   router.replace({ query: { tab: val } })
 }
+
+// 播放全部
+const playAll = () => {
+  const ids = songs.value.map((item) => item.id)
+  playerStore.setCurrentSong(ids[0])
+  toPlaylistStore.add(ids)
+  useMessage.success('添加成功！')
+}
+
+// 关注
+const subscribe = () => {
+  window.open(`https://music.163.com/#/artist?id=${route.params.id}`)
+}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with($block: 'artist', $use-namespace: false);
 
 @include b() {
