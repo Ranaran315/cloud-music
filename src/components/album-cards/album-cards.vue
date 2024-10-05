@@ -37,10 +37,12 @@ defineProps({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @use '@/style/bem' as * with (
   $block: 'album-cards'
 );
+
+$keyframes: album-cards-rotate;
 
 @mixin info() {
   font-size: 0.8rem;
@@ -49,19 +51,25 @@ defineProps({
 }
 
 @include b() {
-  @include grid($gap: 10px);
+  @include grid($gap: 10px, $minmax: 300px);
   min-height: 200px;
   @include e('card') {
     @include flex(column, center, center);
     $size: 200px;
-    width: $size;
+    $disc-size: ($size - 60px);
+    width: calc(#{$size} + 100px);
     padding: 10px;
     border-radius: getBorderRadius();
     background-color: getFillColor();
     transition: background-color 0.3s;
     cursor: pointer;
     &:hover {
-      background-color: getFillColor('secondary');
+      @include e('cover') {
+        padding-right: ($disc-size - 20px);
+      }
+      @include e('disc') {
+        animation-play-state: running !important;
+      }
     }
     @include e('cover') {
       $size: #{$size - 50px};
@@ -70,21 +78,37 @@ defineProps({
       height: $size;
       padding-right: 30px;
       border-radius: getBorderRadius('small');
-      @include e('disc') {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: $size;
-        height: $size;
-        border-radius: 50%;
-        background-color: #000;
+      transition: padding-right 0.3s;
+      @include e('cover-image') {
+        position: relative;
+        z-index: 1;
         box-shadow: getBoxShadow();
       }
-      @include e('cover-image') {
-        filter: blur(5px);
-        position: relative;
-        box-shadow: getBoxShadow();
-        transition: z-index 0.3s, filter 0.3s;
+      @include e('disc') {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        width: $disc-size;
+        height: $disc-size;
+        border-radius: 50%;
+        box-sizing: border-box;
+        background-color: #000;
+        transition: filter 0.3s;
+        animation: $keyframes 5s linear infinite;
+        animation-play-state: paused;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 20%;
+          height: 20%;
+          background-color: getFillColor();
+          border: 1px solid #000;
+          border-radius: 50%;
+        }
       }
     }
     @include e('info') {
@@ -101,6 +125,15 @@ defineProps({
         @include info();
       }
     }
+  }
+}
+
+@keyframes #{$keyframes} {
+  0% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50%) rotate(360deg);
   }
 }
 </style>
