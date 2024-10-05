@@ -1,6 +1,6 @@
 <template>
   <cloud-playlist-cards
-    :loading="searchContext?.state.loading"
+    :loading="searchContext?.state.type[SearchType.Playlist]"
     :data="data"
   ></cloud-playlist-cards>
 </template>
@@ -9,7 +9,7 @@
 import { SearchContextKey } from './context'
 import { inject, ref, watchEffect } from 'vue'
 import { playlistApi } from '@/api'
-import { Playlist } from '@/utils/interface'
+import { Playlist, SearchType } from '@/utils/interface'
 import { useAsyncTryCatch } from '@/utils/async'
 
 defineOptions({
@@ -21,7 +21,7 @@ const searchContext = inject(SearchContextKey, undefined)
 watchEffect(async () => {
   useAsyncTryCatch(
     async () => {
-      searchContext?.setLoading(true)
+      searchContext?.setLoading(SearchType.Playlist, true)
       data.value = []
       const ids = searchContext?.state.result?.playlists?.map?.(
         (item: any) => item.id
@@ -37,7 +37,7 @@ watchEffect(async () => {
     },
     null,
     () => {
-      searchContext?.setLoading(false)
+      searchContext?.setLoading(SearchType.Playlist, false)
     }
   )
 })

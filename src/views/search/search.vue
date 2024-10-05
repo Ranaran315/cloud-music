@@ -39,9 +39,9 @@ const handleUpdateTab = (value: number) => {
 
 // 搜索
 const search = async () => {
+  const { keywords, type } = route.query
   try {
-    searchContext.setLoading(true)
-    const { keywords, type } = route.query
+    searchContext.setLoading(type as unknown as number, true)
     const { result } = await searchApi.search({
       keywords: keywords as string,
       type: type as unknown as number,
@@ -50,7 +50,7 @@ const search = async () => {
   } catch (error) {
     console.log(error)
   } finally {
-    searchContext.setLoading(false)
+    searchContext.setLoading(type as unknown as number, false)
   }
 }
 

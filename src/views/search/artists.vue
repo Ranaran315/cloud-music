@@ -1,6 +1,6 @@
 <template>
   <cloud-artist-cards
-    :loading="searchContext?.state.loading"
+    :loading="searchContext?.state.type[SearchType.Artists]"
     :data="data"
   ></cloud-artist-cards>
 </template>
@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { SearchContextKey } from './context'
+import { SearchType } from '@/utils/interface'
 
 defineOptions({
   name: 'SearchArtists',

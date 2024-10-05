@@ -10,7 +10,9 @@ import { SearchType } from '@/utils/interface'
 interface SearchContext {
   state: {
     result: any
-    loading: boolean
+    type: {
+      [k in SearchType]: boolean
+    }
   }
   tabs: Array<{
     name: string
@@ -18,7 +20,7 @@ interface SearchContext {
     component?: Component
   }>
   setResult: (result: any) => void
-  setLoading: (loading: boolean) => void
+  setLoading: (type: SearchType, loading: boolean) => void
   changeTab: (type: SearchType) => void
 }
 
@@ -29,7 +31,18 @@ export function useSearchContext() {
   const router = useRouter()
   const state = reactive({
     result: {},
-    loading: true,
+    type: {
+      [SearchType.Synthesis]: false,
+      [SearchType.Songs]: false,
+      [SearchType.Playlist]: false,
+      [SearchType.Artists]: false,
+      [SearchType.Sound]: false,
+      [SearchType.Podcast]: false,
+      [SearchType.Lyrics]: false,
+      [SearchType.Album]: false,
+      [SearchType.MV]: false,
+      [SearchType.User]: false,
+    },
   })
   const tabs = [
     {
@@ -83,8 +96,8 @@ export function useSearchContext() {
     state.result = result
   }
 
-  const setLoading = (loading: boolean) => {
-    state.loading = loading
+  const setLoading = (type: SearchType, loading: boolean) => {
+    ;(state.type as any)[type] = loading
   }
 
   const changeTab = (type: SearchType) => {

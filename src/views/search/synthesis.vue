@@ -1,20 +1,30 @@
 <template>
-  <cloud-loading :show="searchContext?.state.loading">
-    <div :class="ucn.b()">
-      <SearchSynthesisItem title="歌曲" @more="handleMore(SearchType.Songs)">
-        <cloud-song-cards :data="songs" />
-      </SearchSynthesisItem>
-      <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
-        <cloud-artist-cards :data="artists" />
-      </SearchSynthesisItem>
-      <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
-        <cloud-playlist-cards :data="playlists" />
-      </SearchSynthesisItem>
-      <SearchSynthesisItem title="专辑" @more="handleMore(SearchType.Album)">
-        <cloud-album-cards :data="albums" />
-      </SearchSynthesisItem>
-    </div>
-  </cloud-loading>
+  <div :class="ucn.b()">
+    <SearchSynthesisItem title="歌曲" @more="handleMore(SearchType.Songs)">
+      <cloud-song-cards
+        :data="songs"
+        :loading="searchContext?.state.type[SearchType.Synthesis]"
+      />
+    </SearchSynthesisItem>
+    <SearchSynthesisItem title="歌手" @more="handleMore(SearchType.Artists)">
+      <cloud-artist-cards
+        :data="artists"
+        :loading="searchContext?.state.type[SearchType.Synthesis]"
+      />
+    </SearchSynthesisItem>
+    <SearchSynthesisItem title="歌单" @more="handleMore(SearchType.Playlist)">
+      <cloud-playlist-cards
+        :data="playlists"
+        :loading="searchContext?.state.type[SearchType.Synthesis]"
+      />
+    </SearchSynthesisItem>
+    <SearchSynthesisItem title="专辑" @more="handleMore(SearchType.Album)">
+      <cloud-album-cards
+        :data="albums"
+        :loading="searchContext?.state.type[SearchType.Synthesis]"
+      />
+    </SearchSynthesisItem>
+  </div>
 </template>
 
 <script setup lang="ts">
