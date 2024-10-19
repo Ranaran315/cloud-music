@@ -57,8 +57,8 @@ export const useToPlaylistStore = defineStore(key, () => {
    */
   const add = (id: number | number[]) => {
     useDB(async (store) => {
-      const ids = Array.isArray(id) ? id.reverse() : [id] // id.reverse() 是因为拿出来的时候会进行反转
-      list.value = Array.from(new Set([...list.value, ...ids]))
+      const ids = Array.isArray(id) ? id : [id]
+      list.value = Array.from(new Set([...ids, ...list.value]))
       await updateData(store)
     }, 'readwrite')
   }

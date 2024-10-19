@@ -230,7 +230,7 @@ export const usePlayerStore = defineStore(
     const prev = () => {
       const { ids, index } = getCurrentSongIndex()
       if (index <= 0 || index === -1) {
-        setCurrentSong(ids.length - 1)
+        setCurrentSong(ids[ids.length - 1])
       }
       setCurrentSong(ids[index - 1])
     }
