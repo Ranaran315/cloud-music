@@ -173,7 +173,7 @@ const routes: RouteRecordRaw[] = [
         path: '/artist/:id',
         name: 'Artist',
         component: () => import('@/views/artist/artist.vue'),
-      }
+      },
     ],
   },
 ]
