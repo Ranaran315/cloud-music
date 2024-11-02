@@ -32,15 +32,34 @@
       </template>
       <div :class="ucn.e('popover')">
         <div :class="ucn.e('search-history')">
-          <div :class="ucn.e('title')">搜索历史</div>
-          <div :class="ucn.e('search-history-list')">
-            <div
-              :class="ucn.e('search-history-item')"
-              v-for="(item, index) of searchHistoryStore.list"
-              :key="index"
-            >
-              <div class="word">{{ item }}</div>
+          <div :class="ucn.e('search-history-header')">
+            <div :class="ucn.e('title')">搜索历史</div>
+            <div :class="ucn.e('clear')" @click="searchHistoryStore.clear">
+              <cloud-icon :icon="Delete"></cloud-icon>
+              清空历史记录
             </div>
+          </div>
+          <div :class="ucn.e('search-history-list')">
+            <template v-if="searchHistoryStore.list.length > 0">
+              <div
+                :class="ucn.e('search-history-item')"
+                v-for="(item, index) of searchHistoryStore.list"
+                :key="index"
+              >
+                <div :class="ucn.e('word')" @click="doSearch(item)">
+                  {{ item }}
+                </div>
+                <cloud-icon
+                  :icon="Close"
+                  @click="searchHistoryStore.remove(item)"
+                ></cloud-icon>
+              </div>
+            </template>
+            <template v-else>
+              <div :class="ucn.e('search-history-no-data')">
+                暂无搜索历史记录
+              </div>
+            </template>
           </div>
         </div>
         <cloud-loading :show="loading">
@@ -86,7 +105,7 @@
 <script setup lang="ts">
 import { RaIcon, RaInput } from '@capybara-plus/vue'
 import { NPopover } from 'naive-ui'
-import { Album, Artist, Playlist, Search, Song } from '@/icons'
+import { Album, Artist, Close, Delete, Playlist, Search, Song } from '@/icons'
 import { useClassName } from '@/hooks'
 import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { searchApi } from '@/api'
@@ -254,7 +273,6 @@ const doSearch = async (keywords: string) => {
   $block: 'navbar-search',
   $use-namespace: false
 );
-@use '@/style/mixin' as *;
 
 $width: 400px;
 $size: 40px;
@@ -296,22 +314,58 @@ $size: 40px;
   }
 }
 
+@mixin title() {
+  width: 100%;
+  text-align: left;
+  padding: 5px 20px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-sizing: border-box;
+}
+
 @include e('popover') {
   width: $width;
   background-color: getFillColor();
   border-radius: 3px;
   @include e('search-history') {
-    @include e('title') {
-      width: 100%;
-      text-align: left;
-      padding: 5px 20px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      box-sizing: border-box;
+    @include e('search-history-header') {
+      @include flex($justify: space-between, $align: center);
+      padding: 0 20px;
+      white-space: nowrap;
+      @include e('title') {
+        @include title();
+        padding-left: 0;
+      }
+      @include e('clear') {
+        @include flex($align: center);
+        width: fit-content;
+        color: getTextColor('third');
+        cursor: pointer;
+        &:hover {
+          color: getColor('primary');
+        }
+      }
     }
     @include e('search-history-list') {
       @include flex();
+      flex-wrap: wrap;
       padding: 0 20px;
+    }
+    @include e('search-history-item') {
+      @include flex($align: center);
+      width: fit-content;
+      padding: 5px 10px;
+      background-color: getFillColor('secondary');
+      border-radius: getBorderRadius('round');
+      outline: 1px solid transparent;
+      cursor: pointer;
+      &:hover {
+        outline-color: getColor('primary');
+      }
+    }
+    @include e('search-history-no-data') {
+      @include flex($justify: center, $align: center);
+      padding: 20px;
     }
   }
   @include e('search-list') {
@@ -322,12 +376,7 @@ $size: 40px;
     margin: 0;
     overflow: auto;
     @include e('title') {
-      width: 100%;
-      text-align: left;
-      padding: 5px 20px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      box-sizing: border-box;
+      @include title();
     }
     @include e('subtitle') {
       width: 100%;

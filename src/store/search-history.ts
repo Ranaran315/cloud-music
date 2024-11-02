@@ -31,9 +31,27 @@ export const useSearchHistoryStore = defineStore(key, () => {
     }, 'readwrite')
   }
 
+  const remove = (keyword: string) => {
+    useDB(async (store) => {
+      const index = list.value.indexOf(keyword)
+      if (index === -1) return
+      list.value.splice(index, 1)
+      await store.put?.({ [primaryKey]: [...list.value] }, primaryKey)
+    }, 'readwrite')
+  }
+
+  const clear = () => {
+    useDB(async (store) => {
+      list.value = []
+      await store.put?.({ [primaryKey]: [] }, primaryKey)
+    }, 'readwrite')
+  }
+
   return {
     list,
     init,
     add,
+    remove,
+    clear,
   }
 })
