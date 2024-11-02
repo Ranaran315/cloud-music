@@ -19,6 +19,7 @@ export default {
         'chore', // 构建过程或辅助工具的变动
         'api', // 接口
         'optimize', // 优化
+        'other', // 其它
       ],
     ],
     'scope-enum': [
