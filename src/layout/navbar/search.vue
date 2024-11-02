@@ -14,7 +14,6 @@
           <ra-input
             :placeholder="defaultKeyword.show"
             v-model="modelValue"
-            ref="RaInputRef"
             clearable
             @focus="handleFocus"
             @keydown.tab="handleKeydownTab"
@@ -32,6 +31,18 @@
         </div>
       </template>
       <div :class="ucn.e('popover')">
+        <div :class="ucn.e('search-history')">
+          <div :class="ucn.e('title')">搜索历史</div>
+          <div :class="ucn.e('search-history-list')">
+            <div
+              :class="ucn.e('search-history-item')"
+              v-for="(item, index) of searchHistoryStore.list"
+              :key="index"
+            >
+              <div class="word">{{ item }}</div>
+            </div>
+          </div>
+        </div>
         <cloud-loading :show="loading">
           <div :class="ucn.e('search-list')">
             <template v-if="showHotlist">
@@ -81,6 +92,7 @@ import { computed, onMounted, reactive, ref, watch, nextTick } from 'vue'
 import { searchApi } from '@/api'
 import { useRoute, useRouter } from 'vue-router'
 import { onClickOutside } from '@vueuse/core'
+import { useSearchHistoryStore } from '@/store'
 
 const ucn = useClassName('navbar-search', false)
 
@@ -90,11 +102,13 @@ defineOptions({
 
 const modelValue = ref('')
 
-const RaInputRef = ref<typeof RaInput | null>(null)
+const router = useRouter()
+const route = useRoute()
 
 // 是否展示 popover
 const showPopover = ref(false)
 
+// 点击搜索框外关闭搜索框
 const searchRef = ref(null)
 onClickOutside(searchRef, () => {
   showPopover.value = false
@@ -112,6 +126,7 @@ async function getDefaultSearchKeywords() {
   defaultKeyword.show = showKeyword
   defaultKeyword.keyword = realkeyword
 }
+
 // 挂载时获取默认搜索
 onMounted(() => {
   getDefaultSearchKeywords()
@@ -132,8 +147,7 @@ const loading = ref(false) // 加载效果
 // 获取热搜列表
 const hotlist = ref<any[]>([])
 let throllte = 0 // 节流
-const handleFocus = async () => {
-  showPopover.value = true
+const getHotList = async () => {
   if (!showHotlist.value) return
   try {
     loading.value = true
@@ -146,6 +160,13 @@ const handleFocus = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// 打开搜索弹出框
+const handleFocus = () => {
+  showPopover.value = true // 打开搜索弹出框
+  searchHistoryStore.init() // 初始化搜索记录
+  getHotList() // 获取热搜列表
 }
 
 // 计算是否展示热搜列表
@@ -174,10 +195,12 @@ const searchlistMap: Record<string, any> = {
     component: Song,
   },
 }
+
 // 当值发生改变时搜索
 const handleChange = async () => {
   getSearchSuggest()
 }
+
 // 根据关键字搜索
 let searchShake: any = null // 防抖
 const getSearchSuggest = async () => {
@@ -210,12 +233,11 @@ watch(
   }
 )
 
-const router = useRouter()
-const route = useRoute()
-
-// 点击搜索列表项时搜索
+// 跳转至搜索页面
+const searchHistoryStore = useSearchHistoryStore()
 const doSearch = async (keywords: string) => {
-  showPopover.value = false
+  searchHistoryStore.add(keywords) // 添加进搜索记录
+  showPopover.value = false // 关闭搜索弹出框
   modelValue.value = keywords
   router.push({
     path: '/search',
@@ -232,6 +254,7 @@ const doSearch = async (keywords: string) => {
   $block: 'navbar-search',
   $use-namespace: false
 );
+@use '@/style/mixin' as *;
 
 $width: 400px;
 $size: 40px;
@@ -277,6 +300,20 @@ $size: 40px;
   width: $width;
   background-color: getFillColor();
   border-radius: 3px;
+  @include e('search-history') {
+    @include e('title') {
+      width: 100%;
+      text-align: left;
+      padding: 5px 20px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-sizing: border-box;
+    }
+    @include e('search-history-list') {
+      @include flex();
+      padding: 0 20px;
+    }
+  }
   @include e('search-list') {
     width: 100%;
     min-height: 300px;

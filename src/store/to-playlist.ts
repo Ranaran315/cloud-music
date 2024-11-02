@@ -1,37 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { openDB } from 'idb'
+import { useIndexDB } from '@/hooks'
+import { IDBPObjectStore } from 'idb'
 
-const dbName = 'music'
-const storeName = 'to-playlist'
-const dbPromise = openDB(dbName, 1, {
-  upgrade(db) {
-    if (!db.objectStoreNames.contains(storeName)) {
-      db.createObjectStore(storeName)
-    }
-  },
-})
+const useDB = useIndexDB('to-playlist')
 
 const key = 'TO_PLAYLIST'
 const stateKey = 'songlist'
 export const useToPlaylistStore = defineStore(key, () => {
   // 播放列表
   const list = ref<Array<number>>([])
-
-  /**
-   * @description 使用数据库的公共方法
-   * @param mode 事务模式
-   * @returns
-   */
-  const useDB = async (
-    callback: (store: any) => Promise<void>,
-    mode: IDBTransactionMode = 'readonly'
-  ) => {
-    const db = await dbPromise // 等待数据库打开
-    const tx = db.transaction(storeName, mode) // 创建事务并获取对象仓库
-    const store = tx.objectStore(storeName)
-    await callback(store)
-  }
 
   /**
    * @description 初始化
@@ -47,7 +25,9 @@ export const useToPlaylistStore = defineStore(key, () => {
    * @description 更新数据
    * @param store 对象仓库
    */
-  const updateData = async (store: any) => {
+  const updateData = async (
+    store: IDBPObjectStore<unknown, [string], string, IDBTransactionMode>
+  ) => {
     await store.put?.({ [stateKey]: [...list.value] }, stateKey)
   }
 
