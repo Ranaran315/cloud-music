@@ -6,7 +6,7 @@ import { IDBPObjectStore } from 'idb'
 const useDB = useIndexDB('to-playlist')
 
 const key = 'TO_PLAYLIST'
-const stateKey = 'songlist'
+const primaryKey = 'songlist'
 export const useToPlaylistStore = defineStore(key, () => {
   // 播放列表
   const list = ref<Array<number>>([])
@@ -16,8 +16,8 @@ export const useToPlaylistStore = defineStore(key, () => {
    */
   const init = () => {
     useDB(async (store) => {
-      const result = await store.get(stateKey)
-      list.value = result[stateKey] || []
+      const result = await store.get(primaryKey)
+      list.value = result?.[primaryKey] || []
     })
   }
 
@@ -28,7 +28,7 @@ export const useToPlaylistStore = defineStore(key, () => {
   const updateData = async (
     store: IDBPObjectStore<unknown, [string], string, IDBTransactionMode>
   ) => {
-    await store.put?.({ [stateKey]: [...list.value] }, stateKey)
+    await store.put?.({ [primaryKey]: [...list.value] }, primaryKey)
   }
 
   /**

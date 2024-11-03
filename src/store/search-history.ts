@@ -6,7 +6,7 @@ import { ref } from 'vue'
 const useDB = useIndexDB('search-history')
 
 const key = 'SEARCH_HISTORY'
-const primaryKey = 'search-history'
+const primaryKey = 'keywords'
 export const useSearchHistoryStore = defineStore(key, () => {
   const list = ref<Array<string>>([]) // 搜索记录列表
 
@@ -16,7 +16,7 @@ export const useSearchHistoryStore = defineStore(key, () => {
   const init = () => {
     useDB(async (store) => {
       const result = await store.get(primaryKey)
-      list.value = result[primaryKey] || []
+      list.value = result?.[primaryKey] || []
     })
   }
 

@@ -111,6 +111,7 @@ const handleContextmenu = (e: MouseEvent, item: Song) => {
       font-size: 0.8rem;
       color: getTextColor('secondary');
       margin-right: 20px;
+      margin-left: auto;
     }
   }
 }
