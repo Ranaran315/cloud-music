@@ -20,15 +20,11 @@ export function useIndexDB(
   if (!openDBCallbakcks) {
     openDBCallbakcks = {
       upgrade(db, oldVersion) {
-        switch (oldVersion) {
-          case 0:
-            updateVersionToV1(db)
-          // fall through
-          case 1:
-            updateVersionToV2(db)
-          // fall through
-          default:
-            console.warn('unknown indexdb version')
+        if (oldVersion < 1) {
+          updateVersionToV1(db)
+        }
+        if (oldVersion < 2) {
+          updateVersionToV2(db)
         }
       },
     }
